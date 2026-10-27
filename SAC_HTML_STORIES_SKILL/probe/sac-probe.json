@@ -1,0 +1,85 @@
+{
+  "id": "com.isitec.sacprobe",
+  "version": "1.0.0",
+  "name": "SAC Probe (sonda)",
+  "description": "Widget de diagnostico: muestra como llegan dimensiones, propiedades, medidas, metadata y jerarquias al widget.",
+  "newInstancePrefix": "SacProbe",
+  "icon": "",
+  "vendor": "ISITEC",
+  "eula": "",
+  "license": "",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-isitec-sacprobe",
+      "url": "{{BASE_URL}}/sac-probe.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-isitec-sacprobe-styling",
+      "url": "{{BASE_URL}}/sac-probe_styling.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "probeLabel": {
+      "type": "string",
+      "description": "Texto de prueba para verificar accesos de lectura/escritura de propiedades",
+      "default": "sonda"
+    },
+    "maxRows": {
+      "type": "integer",
+      "description": "Filas de muestra a mostrar en el reporte",
+      "default": 8
+    }
+  },
+  "methods": {
+    "getProbeReport": {
+      "description": "Devuelve el reporte completo de diagnostico como texto JSON",
+      "returnType": "string"
+    },
+    "getProbeObject": {
+      "description": "Prueba 6: devuelve un objeto (no un string) para ver como lo trata SAC",
+      "returnType": "string"
+    },
+    "getProbeBuild": {
+      "description": "Devuelve el identificador de build del JS cargado (prueba de cache)",
+      "returnType": "string"
+    },
+    "setProbeNote": {
+      "description": "Escribe una nota visible en el panel (prueba de metodos con parametros)",
+      "parameters": [
+        { "name": "note", "type": "string", "description": "Texto" }
+      ]
+    }
+  },
+  "events": {
+    "onProbeRendered": {
+      "description": "Se dispara tras cada render de la sonda"
+    }
+  },
+  "dataBindings": {
+    "myDataBinding": {
+      "feeds": [
+        {
+          "id": "dims",
+          "description": "Dimensiones (agregar en cualquier orden; anotar el orden)",
+          "type": "dimension"
+        },
+        {
+          "id": "props",
+          "description": "Propiedades de dimension, agregadas como dimension adicional (prueba 1)",
+          "type": "dimension"
+        },
+        {
+          "id": "measures",
+          "description": "Medidas (incluir una de unidad variable si existe)",
+          "type": "mainStructureMember"
+        }
+      ]
+    }
+  }
+}

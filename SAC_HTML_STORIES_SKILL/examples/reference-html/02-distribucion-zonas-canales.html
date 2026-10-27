@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-container":"#131b2e","on-tertiary-fixed":"#002113","surface-variant":"#d3e4fe","secondary-fixed":"#dbe1ff","on-primary":"#ffffff","on-secondary-container":"#fefcff","on-primary-container":"#7c839b","background":"#f8f9ff","on-secondary-fixed":"#00174b","surface-dim":"#cbdbf5","tertiary-fixed":"#6ffbbe","surface-tint":"#565e74","on-tertiary-fixed-variant":"#005236","on-primary-fixed-variant":"#3f465c","outline-variant":"#c6c6cd","secondary":"#0051d5","primary":"#000000","surface-container-lowest":"#ffffff","on-background":"#0b1c30","surface-container-highest":"#d3e4fe","error":"#ba1a1a","on-error-container":"#93000a","on-secondary-fixed-variant":"#003ea8","secondary-fixed-dim":"#b4c5ff","surface":"#f8f9ff","on-error":"#ffffff","on-secondary":"#ffffff","surface-container-low":"#eff4ff","error-container":"#ffdad6","secondary-container":"#316bf3","surface-container":"#e5eeff","outline":"#76777d","on-tertiary-container":"#009668","inverse-surface":"#213145","inverse-primary":"#bec6e0","on-surface-variant":"#45464d","tertiary-fixed-dim":"#4edea3","tertiary":"#000000","surface-bright":"#f8f9ff","tertiary-container":"#002113","on-tertiary":"#ffffff","on-surface":"#0b1c30","primary-fixed-dim":"#bec6e0","primary-fixed":"#dae2fd","inverse-on-surface":"#eaf1ff","surface-container-high":"#dce9ff","on-primary-fixed":"#131b2e"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xxs":"0.125rem","space-xl":"2rem","space-2xl":"3rem","gutter":"1rem","margin-desktop":"2rem","space-sm":"0.5rem","space-base":"1rem","space-md":"0.75rem","gutter-desktop":"1.5rem","space-xs":"0.25rem","space-lg":"1.5rem","margin":"1rem"},"fontFamily":{"display-kpi":["Plus Jakarta Sans"],"label-md":["Inter"],"body-md":["Inter"],"mono-data":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"body-sm":["Inter"]},"fontSize":{"display-kpi":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"mono-data":["13px",{"lineHeight":"18px","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="DistriPulse Analytics Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Vmg4VxSLlcf70xhom86Sxk41iOibMhuh4Z5u28UsxHq3lsY4d4nIHjwLeb8vxN57WgeJG-XWIhAF3dhXdeEYYml2vHjnnrZz1_KFega-CccRhJTETIbfl_VnETxLIotCv8C8iTqNSZyET5WnKG5hRyWbDVTzDInEd_ykUo-I5BOQRnk0t0hQiWATGheJTWI2JThlj1bFTNccQpUg4XOJgNTn1aa3ALnmYI8vhQjCE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">DistriPulse</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Intelligence SCM</span></div></div><div class="px-space-md py-space-sm"><div class="bg-surface-container-low px-space-md py-space-xs rounded-xl flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Red Logística Global</span><span class="h-2 w-2 rounded-full bg-secondary"></span></div></div><nav class="flex-1 px-space-md space-y-space-xxs overflow-y-auto mt-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm rounded-lg"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="tablero-general" href="#"><span class="material-symbols-outlined text-lg leading-none">dashboard</span><span>Tablero General</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="zonas-regionales" href="#"><span class="material-symbols-outlined text-lg leading-none">public</span><span>Zonas Regionales</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="canales-de-distribucion" href="#"><span class="material-symbols-outlined text-lg leading-none">hub</span><span>Canales de Distribución</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="marcas-y-lineas" href="#"><span class="material-symbols-outlined text-lg leading-none">category</span><span>Marcas y Líneas</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="inventario-y-rutas" href="#"><span class="material-symbols-outlined text-lg leading-none">local_shipping</span><span>Inventario y Rutas</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="reportes" href="#"><span class="material-symbols-outlined text-lg leading-none">bar_chart</span><span>Reportes</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="configuracion" href="#"><span class="material-symbols-outlined text-lg leading-none">settings</span><span>Configuración</span></a></nav><div class="p-space-md"><div class="bg-surface-container-low p-space-md rounded-xl flex items-center justify-between"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-on-surface-variant">SLA Cumplimiento</span><span class="font-mono-data text-mono-data text-on-surface font-semibold">99.4% On-Time</span></div><span class="material-symbols-outlined text-on-tertiary-container">verified</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-sm"><span class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-outline text-lg">search</span><input class="w-full h-9 pl-10 pr-space-md bg-surface-container-low rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-secondary" placeholder="Buscar nodo, SKU, lote o transportista..." type="text"/></div><div class="flex items-center gap-space-xs bg-surface-container-low rounded-lg p-space-xxs"><div class="flex items-center gap-space-xs px-space-sm py-1"><span class="material-symbols-outlined text-outline text-base">location_on</span><span class="font-label-sm text-label-sm text-on-surface">España / Nal.</span></div><div class="h-4 w-px bg-outline-variant"></div><div class="flex items-center gap-space-xs px-space-sm py-1"><span class="material-symbols-outlined text-outline text-base">calendar_month</span><span class="font-label-sm text-label-sm text-on-surface">Q1 / Mensual</span></div></div></div><div class="flex items-center gap-space-md"><div class="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-container-high cursor-pointer"><span class="material-symbols-outlined text-on-surface-variant text-xl">notifications</span><span class="absolute top-1.5 right-1.5 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span></span></div><div class="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-container-high cursor-pointer"><span class="material-symbols-outlined text-on-surface-variant text-xl">sync_alt</span><span class="absolute -top-1 -right-1 bg-secondary text-on-secondary font-label-sm text-[10px] px-1.5 py-0.5 rounded-full font-bold">12</span></div><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right hidden sm:flex"><span class="font-label-md text-label-md text-on-surface leading-tight">Elena Morales</span><span class="font-label-sm text-label-sm text-on-surface-variant">Dir. Operaciones SCM</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIDAScneyuI7JMXAk1mFipNpCCQrBRM6RCE1VuB3QX3IAL8lACU5RwUj7vJN4fgiDUT7TQKqWQdKhSlN_s8_RHj0zIgtjnLuEb9y7EMyUP0VSGlq2VnbdP4tqsWbYD8pGxobD1JDTVZvF-Ps7h4UArhKNt6F5WJkUkU3vFjDzXd6HXMVf00CRhzUiduEy8F1w-UCAKSD0-qU06qkZMHdh73LZ64mHfqx4kA8PWzl0"/></div></div></header><main class="relative pt-16 w-full px-space-lg pb-space-2xl min-h-screen bg-background"><div class="flex flex-col w-full">
+<!-- Sub-header & Channel Architecture Meta Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-base mb-space-lg">
+<div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm uppercase tracking-wider mb-space-xxs">
+<span>Ruta al Mercado (RTM)</span>
+<span>•</span>
+<span>Auditoría Multicanal</span>
+<span>•</span>
+<span class="text-secondary font-mono-data">Q1 Operativo</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Canales de Distribución &amp; Rendimiento Comercial</h1>
+</div>
+<!-- Live Channel Strategy Filter Toggle -->
+<div class="flex items-center gap-space-xs bg-surface-container-low p-space-xxs rounded-xl shadow-sm self-start lg:self-auto">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-label-md shadow-sm transition-all flex items-center gap-space-xs" onclick="setPeriod(this, 'ytd')">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>YTD Consolidado</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-on-surface-variant font-label-md hover:text-on-surface transition-all" onclick="setPeriod(this, 'q1')">
+<span>Último Mes</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-on-surface-variant font-label-md hover:text-on-surface transition-all" onclick="setPeriod(this, 'sim')">
+<span>Simulador Margen</span>
+</button>
+<div class="h-5 w-px bg-surface-container-high mx-space-xxs"></div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Descargar Dossier RTM">
+<span class="material-symbols-outlined text-lg leading-none">file_download</span>
+</button>
+</div>
+</div>
+<!-- Primary Executive Metric Bento -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-base mb-space-lg">
+<!-- KPI 1: Margen Bruto Ponderado -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-surface-container rounded-full opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
+<div class="flex items-center justify-between mb-space-sm relative">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Margen Bruto Ponderado</span>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded text-on-tertiary-fixed-variant bg-tertiary-fixed font-label-sm">
+<span class="material-symbols-outlined text-xs">trending_up</span>+1.8 pt
+        </span>
+</div>
+<div class="flex items-baseline gap-space-xs relative mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">24.6%</span>
+<span class="font-label-md text-on-surface-variant">vs 22.8% target</span>
+</div>
+<!-- Mini Sparkline inline -->
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm pt-space-xs">
+<span>Contribución Neta Mix</span>
+<span class="font-mono-data text-secondary">Opt. Farmacia + D2C</span>
+</div>
+</div>
+<!-- KPI 2: Coste Distribución s/ Venta -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-surface-container-high rounded-full opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
+<div class="flex items-center justify-between mb-space-sm relative">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Coste Distribución / Venta</span>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded text-on-tertiary-fixed-variant bg-tertiary-fixed font-label-sm">
+<span class="material-symbols-outlined text-xs">arrow_downward</span>-0.4 pt
+        </span>
+</div>
+<div class="flex items-baseline gap-space-xs relative mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">6.2%</span>
+<span class="font-label-md text-on-surface-variant">Opex Logístico</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 62%;"></div>
+</div>
+</div>
+<!-- KPI 3: B2B vs B2C Mix -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Volumen B2B vs D2C</span>
+<span class="font-mono-data text-label-sm text-secondary bg-surface-container-low px-space-xs py-0.5 rounded">RTM Ratio</span>
+</div>
+<div class="flex items-baseline gap-space-sm mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">88%</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">/ 12%</span>
+</div>
+<div class="flex items-center gap-1.5 pt-space-xs font-label-sm">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="text-on-surface-variant font-label-sm">Canal Institucional B2B</span>
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-secondary-container ml-auto"></span>
+<span class="text-on-surface-variant font-label-sm">Directo D2C</span>
+</div>
+</div>
+<!-- KPI 4: Cobertura POS -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Cobertura Puntos de Venta</span>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded text-on-tertiary-fixed-variant bg-tertiary-fixed font-label-sm">
+          98.2% Activos
+        </span>
+</div>
+<div class="flex items-baseline gap-space-xs mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">14,820</span>
+<span class="font-label-md text-on-surface-variant">POS auditados</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm pt-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">storefront</span>
+          Capilaridad Tradicional + Moderna
+        </span>
+<span class="font-mono-data text-on-surface font-semibold">+340 Q1</span>
+</div>
+</div>
+</div>
+<!-- Deep Strategic Analysis: Cuota de Canal & Rentabilidad vs Volumen -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-base mb-space-lg">
+<!-- 1. Cuota de Distribución por Canal (4 cols) -->
+<div class="lg:col-span-4 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-base">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Reparto de Cuota por Canal</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Participación porcentual en volumen despachado</p>
+</div>
+<span class="material-symbols-outlined text-outline text-xl">pie_chart</span>
+</div>
+<!-- Custom Donut Visual Graphic & Center Stat -->
+<div class="relative flex items-center justify-center py-space-md">
+<svg class="w-48 h-48 transform -rotate-90" viewbox="0 0 100 100">
+<!-- Mayorista: 38% -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#131b2e" stroke-dasharray="238.76" stroke-dashoffset="0" stroke-width="12"></circle>
+<!-- Cadenas Retail: 28% -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#0051d5" stroke-dasharray="238.76" stroke-dashoffset="90.72" stroke-width="12"></circle>
+<!-- Canal Tradicional: 18% -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#316bf3" stroke-dasharray="238.76" stroke-dashoffset="157.58" stroke-width="12"></circle>
+<!-- E-commerce / D2C: 10% -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#6ffbbe" stroke-dasharray="238.76" stroke-dashoffset="200.55" stroke-width="12"></circle>
+<!-- Farmacéutico: 6% -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#a3defe" stroke-dasharray="238.76" stroke-dashoffset="224.43" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-label-sm uppercase text-outline">Volumen Total</span>
+<span class="font-headline-lg text-headline-lg text-on-surface leading-tight font-bold">2.41M</span>
+<span class="font-mono-data text-label-sm text-on-surface-variant">Cajas / Q1</span>
+</div>
+</div>
+<!-- Channel Breakdown Legend List -->
+<div class="space-y-space-xs mt-space-sm">
+<div class="flex items-center justify-between p-space-xs hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" onclick="highlightChannel('mayorista')">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Mayorista Consolidado</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">38.0%</span>
+<span class="font-label-sm text-on-surface-variant">915K cjs</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-xs hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" onclick="highlightChannel('retail')">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Cadenas Retail / Super</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">28.0%</span>
+<span class="font-label-sm text-on-surface-variant">675K cjs</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-xs hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" onclick="highlightChannel('tradicional')">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Canal Tradicional / Detalle</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">18.0%</span>
+<span class="font-label-sm text-on-surface-variant">434K cjs</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-xs hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" onclick="highlightChannel('d2c')">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-tertiary-fixed"></span>
+<span class="font-body-sm text-body-sm text-on-surface">E-commerce / D2C</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">10.0%</span>
+<span class="font-label-sm text-on-surface-variant">241K cjs</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-xs hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" onclick="highlightChannel('farma')">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-surface-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Farmacéutico / Especializado</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">6.0%</span>
+<span class="font-label-sm text-on-surface-variant">145K cjs</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-md rounded-xl flex items-center justify-between">
+<span class="font-label-sm text-on-surface-variant">Índice Herfindahl-Hirschman (Concentración)</span>
+<span class="font-mono-data text-mono-data text-secondary font-bold">0.27 (Equilibrado)</span>
+</div>
+</div>
+<!-- 2. Scatter / Bubble Matrix: Rentabilidad vs Volumen (8 cols) -->
+<div class="lg:col-span-8 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mb-space-base">
+<div>
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Matriz Estratégica: Volumen vs. Margen Neto de Contribución</h2>
+<span class="material-symbols-outlined text-secondary text-sm" title="Eje X: Miles de cajas, Eje Y: % Margen Contribución, Tamaño: Facturación Bruta">info</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Diámetro de nodo ponderado por Facturación Total Bruta (€)</p>
+</div>
+<div class="flex items-center gap-space-md text-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>Canal Core</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>High Volume</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed"></span>Nicho Alto Margen</span>
+</div>
+</div>
+<!-- Analytical Scatter Visualization Surface -->
+<div class="relative w-full h-80 bg-surface-container-low rounded-xl p-space-lg flex flex-col justify-between overflow-hidden">
+<!-- Quadrant guidelines -->
+<div class="absolute inset-0 grid grid-cols-2 grid-rows-2 pointer-events-none opacity-40">
+<div class="bg-surface-container-high/20 flex items-start justify-start p-space-sm font-label-sm text-on-surface-variant">Bajo Vol / Alto Margen (Especializado)</div>
+<div class="bg-surface-container-high/40 flex items-start justify-end p-space-sm font-label-sm text-secondary font-semibold">Alto Vol / Alto Margen (Estrella)</div>
+<div class="bg-surface-container-high/10 flex items-end justify-start p-space-sm font-label-sm text-outline">Bajo Vol / Margen Diluido</div>
+<div class="bg-surface-container-high/30 flex items-end justify-end p-space-sm font-label-sm text-on-surface-variant">Alto Vol / Bajo Margen (Cash Cows)</div>
+</div>
+<!-- Y-Axis Target Reference Line (20% Margen Threshold) -->
+<div class="absolute left-0 right-0 top-1/2 h-px bg-outline-variant/60 flex items-center justify-end pr-space-md pointer-events-none">
+<span class="font-mono-data text-label-sm text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded shadow-sm">Target Margen: 20%</span>
+</div>
+<!-- Interactive Bubbles Placed Statistically -->
+<!-- Bubble 1: Mayorista (X: Alto 915k, Y: Bajo-Medio 14.2%, Size: 64px) -->
+<div class="absolute right-12 bottom-12 group cursor-pointer" onclick="showBubbleDetail('Mayorista', '915K Cajas', '14.2% Margen', '€14.8M')">
+<div class="w-20 h-20 rounded-full bg-primary-container/90 text-on-primary flex flex-col items-center justify-center p-1 text-center shadow-md group-hover:scale-110 transition-transform">
+<span class="font-label-sm font-bold truncate max-w-[70px]">Mayorista</span>
+<span class="font-mono-data text-[10px] leading-tight text-on-primary-container">14.2% Mg</span>
+<span class="font-mono-data text-[9px] text-surface-tint">€14.8M</span>
+</div>
+<!-- Tooltip -->
+<div class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-inverse-surface text-inverse-on-surface px-space-sm py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-20 text-label-sm">
+              Mayorista: 915K cjs | Margen: 14.2% | Fact: €14.8M
+            </div>
+</div>
+<!-- Bubble 2: Cadenas Retail (X: Med-Alto 675k, Y: Medio 22.4%, Size: 74px) -->
+<div class="absolute right-48 top-28 group cursor-pointer" onclick="showBubbleDetail('Cadenas Retail', '675K Cajas', '22.4% Margen', '€19.2M')">
+<div class="w-24 h-24 rounded-full bg-secondary text-on-secondary flex flex-col items-center justify-center p-2 text-center shadow-lg group-hover:scale-110 transition-transform">
+<span class="font-headline-sm text-xs font-bold leading-tight">Cadenas Retail</span>
+<span class="font-mono-data text-xs leading-none">22.4% Mg</span>
+<span class="font-mono-data text-[10px] opacity-80 mt-0.5">€19.2M</span>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-inverse-surface text-inverse-on-surface px-space-sm py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-20 text-label-sm">
+              Retail Moderno: 675K cjs | Margen: 22.4% | Fact: €19.2M
+            </div>
+</div>
+<!-- Bubble 3: Canal Tradicional / Detallista (X: Medio 434k, Y: Medio-Alto 28.5%, Size: 52px) -->
+<div class="absolute left-1/2 top-20 -translate-x-12 group cursor-pointer" onclick="showBubbleDetail('Tradicional', '434K Cajas', '28.5% Margen', '€9.8M')">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-on-secondary flex flex-col items-center justify-center p-1 text-center shadow-md group-hover:scale-110 transition-transform">
+<span class="font-label-sm font-semibold truncate max-w-[55px]">Tradicional</span>
+<span class="font-mono-data text-[10px]">28.5%</span>
+<span class="font-mono-data text-[9px] opacity-80">€9.8M</span>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-inverse-surface text-inverse-on-surface px-space-sm py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-20 text-label-sm">
+              Canal Tradicional: 434K cjs | Margen: 28.5% | Fact: €9.8M
+            </div>
+</div>
+<!-- Bubble 4: E-commerce / D2C (X: Bajo 241k, Y: Muy Alto 36.8%, Size: 44px) -->
+<div class="absolute left-32 top-8 group cursor-pointer" onclick="showBubbleDetail('E-commerce / D2C', '241K Cajas', '36.8% Margen', '€6.4M')">
+<div class="w-14 h-14 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex flex-col items-center justify-center p-1 text-center shadow-md group-hover:scale-110 transition-transform">
+<span class="font-label-sm font-bold">D2C</span>
+<span class="font-mono-data text-[10px] leading-none">36.8%</span>
+<span class="font-mono-data text-[8px] opacity-80">€6.4M</span>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-inverse-surface text-inverse-on-surface px-space-sm py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-20 text-label-sm">
+              D2C Digital: 241K cjs | Margen: 36.8% | Fact: €6.4M
+            </div>
+</div>
+<!-- Bubble 5: Farmacéutico / Especializado (X: Muy Bajo 145k, Y: Alto 41.2%, Size: 38px) -->
+<div class="absolute left-12 top-4 group cursor-pointer" onclick="showBubbleDetail('Farmacéutico', '145K Cajas', '41.2% Margen', '€4.1M')">
+<div class="w-12 h-12 rounded-full bg-surface-variant text-on-surface flex flex-col items-center justify-center p-0.5 text-center shadow group-hover:scale-110 transition-transform">
+<span class="font-label-sm text-[10px] font-bold">Farma</span>
+<span class="font-mono-data text-[9px] leading-tight">41.2%</span>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-inverse-surface text-inverse-on-surface px-space-sm py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-20 text-label-sm">
+              Farma / Especial: 145K cjs | Margen: 41.2% | Fact: €4.1M
+            </div>
+</div>
+<!-- Scatter Foot Axes -->
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm z-10">
+<span>← Menor Volumen Físico</span>
+<span class="font-mono-data text-on-surface bg-surface-container px-space-xs py-0.5 rounded">Eje X: Cajas Totales Despachadas (K) →</span>
+<span>Mayor Volumen Físico →</span>
+</div>
+</div>
+</div>
+<!-- Actionable Insight Footer -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs" id="scatterDetailBar">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary">insights</span>
+<span class="font-body-sm text-body-sm text-on-surface"><strong class="font-semibold">Hallazgo Estratégico:</strong> El canal Tradicional y Farma aportan el 47% del margen neto operativo a pesar de representar solo el 24% del volumen consolidado.</span>
+</div>
+<button class="text-secondary font-label-md hover:underline flex items-center gap-0.5 shrink-0" onclick="alert('Exportando modelo de elasticidad de canales...')">
+          Simular Desplazamiento Mix
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Desglose Cruzado: Penetración Regional de Canales (Zona Norte, Centro, Sur, Este, Canarias) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm mb-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
+<div>
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Penetración de Canales por Zona Regional</h2>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm">Georuta RTM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Composición porcentual de demanda por territorio operativo</p>
+</div>
+<div class="flex flex-wrap items-center gap-space-md text-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-primary-container"></span>Mayorista</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-secondary"></span>Cadenas Retail</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-secondary-container"></span>Tradicional</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-tertiary-fixed"></span>D2C / E-com</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-surface-variant"></span>Farma / Espec.</span>
+</div>
+</div>
+<!-- Stacked Region Bars Representation -->
+<div class="space-y-space-md">
+<!-- Región 1: Zona Sur (Tradicional líder) -->
+<div>
+<div class="flex items-center justify-between text-body-sm mb-space-xxs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-body-sm text-on-surface font-semibold">Zona Sur (Andalucía &amp; Extremadura)</span>
+<span class="font-label-sm text-tertiary-container bg-tertiary-fixed px-1.5 py-0.5 rounded font-mono-data">Capilaridad Alta</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">684,000 cajas • 38% Tradicional</span>
+</div>
+<div class="h-7 w-full bg-surface-container-low rounded-lg overflow-hidden flex shadow-inner">
+<div class="bg-primary-container h-full flex items-center justify-center text-on-primary font-mono-data text-label-sm" style="width: 25%;" title="Mayorista: 25%">25%</div>
+<div class="bg-secondary h-full flex items-center justify-center text-on-secondary font-mono-data text-label-sm" style="width: 22%;" title="Retail: 22%">22%</div>
+<div class="bg-secondary-container h-full flex items-center justify-center text-on-secondary-container font-mono-data text-label-sm font-bold" style="width: 38%;" title="Canal Tradicional: 38%">38% Tradic.</div>
+<div class="bg-tertiary-fixed h-full flex items-center justify-center text-on-tertiary-fixed font-mono-data text-label-sm" style="width: 8%;" title="D2C: 8%">8%</div>
+<div class="bg-surface-variant h-full flex items-center justify-center text-on-surface font-mono-data text-label-sm" style="width: 7%;" title="Farma: 7%">7%</div>
+</div>
+</div>
+<!-- Región 2: Zona Centro (Madrid / Castilla - Retail y D2C dominan) -->
+<div>
+<div class="flex items-center justify-between text-body-sm mb-space-xxs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-body-sm text-on-surface font-semibold">Zona Centro (Madrid &amp; Central)</span>
+<span class="font-label-sm text-on-secondary-fixed bg-secondary-fixed px-1.5 py-0.5 rounded font-mono-data">Alta Densidad Retail</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">812,000 cajas • 41% Cadenas Retail</span>
+</div>
+<div class="h-7 w-full bg-surface-container-low rounded-lg overflow-hidden flex shadow-inner">
+<div class="bg-primary-container h-full flex items-center justify-center text-on-primary font-mono-data text-label-sm" style="width: 20%;" title="Mayorista: 20%">20%</div>
+<div class="bg-secondary h-full flex items-center justify-center text-on-secondary font-mono-data text-label-sm font-bold" style="width: 41%;" title="Cadenas Retail: 41%">41% Retail</div>
+<div class="bg-secondary-container h-full flex items-center justify-center text-on-secondary-container font-mono-data text-label-sm" style="width: 14%;" title="Tradicional: 14%">14%</div>
+<div class="bg-tertiary-fixed h-full flex items-center justify-center text-on-tertiary-fixed font-mono-data text-label-sm font-bold" style="width: 19%;" title="D2C: 19%">19% D2C</div>
+<div class="bg-surface-variant h-full flex items-center justify-center text-on-surface font-mono-data text-label-sm" style="width: 6%;" title="Farma: 6%">6%</div>
+</div>
+</div>
+<!-- Región 3: Zona Norte (País Vasco, Galicia, Cantábrico - Mayorista Fuerte) -->
+<div>
+<div class="flex items-center justify-between text-body-sm mb-space-xxs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-body-sm text-on-surface font-semibold">Zona Norte (Cornisa Cantábrica &amp; Ebro)</span>
+<span class="font-label-sm text-on-surface bg-surface-container-high px-1.5 py-0.5 rounded font-mono-data">Mayorista Consolidado</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">510,000 cajas • 48% Mayoristas</span>
+</div>
+<div class="h-7 w-full bg-surface-container-low rounded-lg overflow-hidden flex shadow-inner">
+<div class="bg-primary-container h-full flex items-center justify-center text-on-primary font-mono-data text-label-sm font-bold" style="width: 48%;" title="Mayorista: 48%">48% Mayorista</div>
+<div class="bg-secondary h-full flex items-center justify-center text-on-secondary font-mono-data text-label-sm" style="width: 25%;" title="Retail: 25%">25%</div>
+<div class="bg-secondary-container h-full flex items-center justify-center text-on-secondary-container font-mono-data text-label-sm" style="width: 15%;" title="Tradicional: 15%">15%</div>
+<div class="bg-tertiary-fixed h-full flex items-center justify-center text-on-tertiary-fixed font-mono-data text-label-sm" style="width: 7%;" title="D2C: 7%">7%</div>
+<div class="bg-surface-variant h-full flex items-center justify-center text-on-surface font-mono-data text-label-sm" style="width: 5%;" title="Farma: 5%">5%</div>
+</div>
+</div>
+<!-- Región 4: Zona Este & Levante (Cataluña, Valencia, Baleares) -->
+<div>
+<div class="flex items-center justify-between text-body-sm mb-space-xxs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-body-sm text-on-surface font-semibold">Zona Este &amp; Arco Mediterráneo</span>
+<span class="font-label-sm text-on-tertiary-container bg-surface-container-low px-1.5 py-0.5 rounded font-mono-data">Mix Omnicanal</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">404,000 cajas • Balance Equilibrado</span>
+</div>
+<div class="h-7 w-full bg-surface-container-low rounded-lg overflow-hidden flex shadow-inner">
+<div class="bg-primary-container h-full flex items-center justify-center text-on-primary font-mono-data text-label-sm" style="width: 32%;" title="Mayorista: 32%">32%</div>
+<div class="bg-secondary h-full flex items-center justify-center text-on-secondary font-mono-data text-label-sm" style="width: 31%;" title="Retail: 31%">31%</div>
+<div class="bg-secondary-container h-full flex items-center justify-center text-on-secondary-container font-mono-data text-label-sm" style="width: 18%;" title="Tradicional: 18%">18%</div>
+<div class="bg-tertiary-fixed h-full flex items-center justify-center text-on-tertiary-fixed font-mono-data text-label-sm" style="width: 11%;" title="D2C: 11%">11%</div>
+<div class="bg-surface-variant h-full flex items-center justify-center text-on-surface font-mono-data text-label-sm" style="width: 8%;" title="Farma: 8%">8%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Channel Efficiency Grid (DOH, Devoluciones, Frecuencia, Ciclo de Orden) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-base mb-space-lg">
+<!-- Card 1: Días de Inventario en Canal (DOH) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">DOH en Canal (Pipeline)</span>
+<span class="material-symbols-outlined text-secondary text-lg">warehouse</span>
+</div>
+<div class="flex items-baseline gap-space-xs mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">18.4</span>
+<span class="font-label-md text-on-surface-variant">días promedio</span>
+</div>
+<div class="space-y-1.5 pt-space-xs text-label-sm font-mono-data">
+<div class="flex justify-between text-on-surface-variant">
+<span>Mayorista:</span>
+<span class="text-on-surface font-semibold">24.5 d</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Cadenas Retail:</span>
+<span class="text-on-surface font-semibold">12.1 d (VMI)</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>D2C / Hub Central:</span>
+<span class="text-secondary font-semibold">4.8 d</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Devoluciones y Mermas -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Tasa Mermas &amp; Devolución</span>
+<span class="material-symbols-outlined text-error text-lg">assignment_return</span>
+</div>
+<div class="flex items-baseline gap-space-xs mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">1.18%</span>
+<span class="font-label-md text-on-surface-variant">del despacho bruto</span>
+</div>
+<div class="space-y-1.5 pt-space-xs text-label-sm font-mono-data">
+<div class="flex justify-between text-on-surface-variant">
+<span>Retail (Rechazo Muelle):</span>
+<span class="text-error font-semibold">1.84%</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Canal Tradicional:</span>
+<span class="text-on-surface font-semibold">0.92%</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Farmacéutico:</span>
+<span class="text-on-tertiary-container font-semibold">0.14% (Óptimo)</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Frecuencia de Despacho Semanal -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Frecuencia de Despacho</span>
+<span class="material-symbols-outlined text-secondary text-lg">sync_alt</span>
+</div>
+<div class="flex items-baseline gap-space-xs mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">3.4x</span>
+<span class="font-label-md text-on-surface-variant">envíos / sem / nodo</span>
+</div>
+<div class="space-y-1.5 pt-space-xs text-label-sm font-mono-data">
+<div class="flex justify-between text-on-surface-variant">
+<span>Hipermercados / DC:</span>
+<span class="text-on-surface font-semibold">5.8x / sem</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Rutas Tradicionales:</span>
+<span class="text-on-surface font-semibold">2.0x / sem fija</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>E-commerce D2C:</span>
+<span class="text-secondary font-semibold">Diario (Next-Day)</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Order Cycle Time (OCT) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Tiempo Ciclo Pedido (OCT)</span>
+<span class="material-symbols-outlined text-secondary text-lg">timer</span>
+</div>
+<div class="flex items-baseline gap-space-xs mb-space-xs">
+<span class="font-display-kpi text-display-kpi text-on-surface tracking-tight">28.6</span>
+<span class="font-label-md text-on-surface-variant">horas promedio</span>
+</div>
+<div class="space-y-1.5 pt-space-xs text-label-sm font-mono-data">
+<div class="flex justify-between text-on-surface-variant">
+<span>EDI Cadenas Retail:</span>
+<span class="text-on-surface font-semibold">18h (Slotting)</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Preventa Tradicional:</span>
+<span class="text-on-surface font-semibold">36h</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>D2C Domicilio:</span>
+<span class="text-on-tertiary-container font-semibold">22h SLA cumplido</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Logistics & Commercial Contracts Master Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden mb-space-lg">
+<div class="p-space-lg flex flex-col sm:flex-row sm:items-center justify-between gap-space-base bg-surface-container-lowest">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Acuerdos Comerciales &amp; Operadores Logísticos por Canal</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Condiciones de entrega, nivel de servicio (OTIF pactado) y operador asignado</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md transition-colors flex items-center gap-space-xs" onclick="filterTable('all')">
+<span class="material-symbols-outlined text-base">tune</span>
+<span>Todos los Canales</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-label-md hover:bg-primary/90 transition-colors flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-base">add</span>
+<span>Nuevo SLA Canal</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm uppercase tracking-wider">
+<th class="py-space-md px-space-lg">Canal / Sub-Canal</th>
+<th class="py-space-md px-space-md">Operador / Flota Partner</th>
+<th class="py-space-md px-space-md">Modelo Comercial</th>
+<th class="py-space-md px-space-md">Ventana de Descarga</th>
+<th class="py-space-md px-space-md">OTIF Contractual</th>
+<th class="py-space-md px-space-md">Coste Logístico Unit.</th>
+<th class="py-space-md px-space-lg text-right">Acción Operativa</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low text-body-sm text-on-surface font-body-sm">
+<!-- Row 1: Mayoristas -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">inventory_2</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-sm text-on-surface font-semibold">Mayoristas &amp; Plataformas Cash&amp;Carry</div>
+<div class="font-label-sm text-on-surface-variant">Lotes Palet Completo (FTL)</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-headline-sm text-body-sm text-on-surface font-medium">Primafrio / Sesé</span>
+<div class="font-label-sm text-on-surface-variant">Flota FTL Dedicada</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data text-label-sm bg-surface-container px-2 py-0.5 rounded">Rappel Trimestral 4.5%</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+              04:00 - 08:00 (Ventana Fija)
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-data font-semibold text-on-surface">97.8%</span>
+<span class="font-label-sm text-on-surface-variant">(Min 96%)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data font-semibold text-on-surface">€0.42 / caja</span>
+</td>
+<td class="py-space-md px-space-lg text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="Auditar Contrato">
+<span class="material-symbols-outlined text-lg">launch</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Cadenas Retail -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">store</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-sm text-on-surface font-semibold">Cadenas Retail / Gran Consumo</div>
+<div class="font-label-sm text-on-surface-variant">Entregas Cross-Docking Centros Reguladores</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-headline-sm text-body-sm text-on-surface font-medium">DHL Supply Chain / Carreras</span>
+<div class="font-label-sm text-on-surface-variant">LTL &amp; Cross-dock</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data text-label-sm bg-surface-container px-2 py-0.5 rounded">VMI + EDI Orden 850</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+              Slot por Cita (±15 min)
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-data font-semibold text-on-surface">99.1%</span>
+<span class="font-label-sm text-on-tertiary-container bg-tertiary-fixed px-1 rounded">SLA Cumplido</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data font-semibold text-on-surface">€0.78 / caja</span>
+</td>
+<td class="py-space-md px-space-lg text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="Auditar Contrato">
+<span class="material-symbols-outlined text-lg">launch</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Canal Tradicional -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">local_convenience_store</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-sm text-on-surface font-semibold">Canal Tradicional / Detallistas</div>
+<div class="font-label-sm text-on-surface-variant">14,820 Puntos de Venta (Ruta Preventa)</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-headline-sm text-body-sm text-on-surface font-medium">Flota Propia Capilar + Red Distribuidores</span>
+<div class="font-label-sm text-on-surface-variant">Furgón 3.5T Urbano</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data text-label-sm bg-surface-container px-2 py-0.5 rounded">Cobro Directo / 15 Días</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+              08:30 - 13:30 (Ruta Abierta)
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-data font-semibold text-on-surface">94.3%</span>
+<span class="font-label-sm text-error bg-error-container px-1 rounded">Ruta Crítica</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data font-semibold text-on-surface">€1.45 / caja</span>
+</td>
+<td class="py-space-md px-space-lg text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="Auditar Contrato">
+<span class="material-symbols-outlined text-lg">launch</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: E-commerce / D2C -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">shopping_cart</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-sm text-on-surface font-semibold">E-Commerce &amp; D2C Directo</div>
+<div class="font-label-sm text-on-surface-variant">Picking Unitario y Entrega Paquetería</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-headline-sm text-body-sm text-on-surface font-medium">Correos Express / SEUR</span>
+<div class="font-label-sm text-on-surface-variant">Integración API Courier</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data text-label-sm bg-surface-container px-2 py-0.5 rounded">Tarifa Plana Paquete + Escalado</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+              Ventana Selección Cliente (2h)
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-data font-semibold text-on-surface">96.5%</span>
+<span class="font-label-sm text-on-surface-variant">First Attempt</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data font-semibold text-on-surface">€3.20 / env</span>
+</td>
+<td class="py-space-md px-space-lg text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="Auditar Contrato">
+<span class="material-symbols-outlined text-lg">launch</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Farmacéutico / Especializado -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-variant text-on-surface flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">medication</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-sm text-on-surface font-semibold">Farmacéutico / Especializado</div>
+<div class="font-label-sm text-on-surface-variant">Control Térmico GDP (15°C - 25°C)</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-headline-sm text-body-sm text-on-surface font-medium">Logista Pharma / Cofares</span>
+<div class="font-label-sm text-on-surface-variant">Red Certificada GDP</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data text-label-sm bg-surface-container px-2 py-0.5 rounded">Depósito Consignación + Fijo</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+              Doble Reparto (Mañana / Tarde)
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-data font-semibold text-on-surface">99.7%</span>
+<span class="font-label-sm text-on-tertiary-container bg-tertiary-fixed px-1 rounded">Alta Precisión</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-mono-data font-semibold text-on-surface">€2.15 / bulto</span>
+</td>
+<td class="py-space-md px-space-lg text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="Auditar Contrato">
+<span class="material-symbols-outlined text-lg">launch</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Operational Distribution Dispatch Notes & Route Summary Drawer -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-base">
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-sm text-secondary">
+<span class="material-symbols-outlined">alt_route</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Optimización de Enrutamiento</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-base">
+        Consolidación de pedidos tradicionales con plataformas retail para entrega conjunta en núcleos urbanos de alta densidad (Zona Centro y Valencia).
+      </p>
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-lg font-label-sm">
+<span>Ahorro proyectado Q2:</span>
+<span class="font-mono-data text-on-tertiary-container font-bold">-8.4% Coste Última Milla</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-sm text-secondary">
+<span class="material-symbols-outlined">hub</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Reasignación de Inventario VMI</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-base">
+        Los almacenes nodales Mayoristas de la Zona Norte registran un stock excesivo (+6 días sobre target). Se activa reenvío dinámico al hub D2C Madrid.
+      </p>
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-lg font-label-sm">
+<span>Capital circulante liberado:</span>
+<span class="font-mono-data text-on-surface font-bold">€340,000 en 14 días</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-sm text-secondary">
+<span class="material-symbols-outlined">verified_user</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Compliance &amp; Contratos 2025</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-base">
+        4 contratos de operadores logísticos clave vencen en los próximos 60 días (Primafrio y SEUR). Se propone indexación por combustible tipo CNG.
+      </p>
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-lg font-label-sm">
+<span>Estatus de renegociación:</span>
+<span class="font-mono-data text-secondary font-bold">En Revisión Jurídica</span>
+</div>
+</div>
+</div>
+<script>
+    function setPeriod(button, period) {
+      const parent = button.parentElement;
+      parent.querySelectorAll('button').forEach(btn => {
+        btn.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        btn.classList.add('text-on-surface-variant');
+      });
+      button.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+      button.classList.remove('text-on-surface-variant');
+    }
+
+    function showBubbleDetail(channel, volume, margin, rev) {
+      const bar = document.getElementById('scatterDetailBar');
+      if (bar) {
+        bar.innerHTML = `
+          <div class="flex items-center gap-space-sm">
+            <span class="w-3 h-3 rounded-full bg-secondary"></span>
+            <span class="font-body-sm text-body-sm text-on-surface"><strong>Canal Seleccionado: ${channel}</strong> — Despachado: <span class="font-mono-data font-semibold">${volume}</span> | Margen de Contribución: <span class="font-mono-data font-semibold text-secondary">${margin}</span> | Facturación Bruta: <span class="font-mono-data font-semibold">${rev}</span></span>
+          </div>
+          <button class="text-on-surface-variant hover:text-on-surface text-label-sm underline" onclick="resetScatterDetail()">Restablecer Resumen</button>
+        `;
+      }
+    }
+
+    function resetScatterDetail() {
+      const bar = document.getElementById('scatterDetailBar');
+      if (bar) {
+        bar.innerHTML = `
+          <div class="flex items-center gap-space-xs">
+            <span class="material-symbols-outlined text-secondary">insights</span>
+            <span class="font-body-sm text-body-sm text-on-surface"><strong class="font-semibold">Hallazgo Estratégico:</strong> El canal Tradicional y Farma aportan el 47% del margen neto operativo a pesar de representar solo el 24% del volumen consolidado.</span>
+          </div>
+          <button class="text-secondary font-label-md hover:underline flex items-center gap-0.5 shrink-0" onclick="alert('Exportando modelo de elasticidad de canales...')">
+            Simular Desplazamiento Mix
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+          </button>
+        `;
+      }
+    }
+
+    function highlightChannel(channelName) {
+      console.log("Canal enfocado:", channelName);
+    }
+
+    function filterTable(type) {
+      console.log("Filtrando tabla por tipo:", type);
+    }
+  </script>
+</div></main></div></body></html>

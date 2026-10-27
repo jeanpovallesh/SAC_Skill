@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.0",
+  "model": {
+    "id": "MODELO_RH",
+    "name": "Planeación Recursos Humanos",
+    "type": "planning",
+    "description": "Plantilla, movimientos y retención por departamento, género y edad"
+  },
+  "dimensions": [
+    {
+      "id": "Version",
+      "description": "Versión",
+      "type": "version",
+      "synonyms": ["escenario"],
+      "properties": [
+        { "id": "Estado", "description": "Estado de la versión", "type": "string" }
+      ],
+      "hierarchies": [],
+      "members": [
+        { "id": "V_REAL", "description": "Real", "synonyms": ["actual"] },
+        { "id": "V_PPTO", "description": "Presupuesto", "synonyms": ["plan"] }
+      ],
+      "members_complete": true
+    },
+    {
+      "id": "Periodo",
+      "description": "Periodo",
+      "type": "time",
+      "ordered": true,
+      "granularity": "month",
+      "synonyms": ["fecha", "mes"],
+      "properties": [
+        { "id": "Anio", "description": "Año", "type": "string" },
+        { "id": "Trimestre", "description": "Trimestre", "type": "string" }
+      ],
+      "hierarchies": [
+        {
+          "id": "Anio_Trimestre_Mes",
+          "description": "Año > Trimestre > Mes",
+          "kind": "level",
+          "default": true,
+          "levels": [
+            { "id": "Anio", "description": "Año" },
+            { "id": "Trimestre", "description": "Trimestre" },
+            { "id": "Mes", "description": "Mes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Cuenta",
+      "description": "Cuenta",
+      "type": "account",
+      "synonyms": ["concepto", "rubro"],
+      "properties": [
+        { "id": "Tipo_Cuenta", "description": "Tipo de cuenta", "type": "string" }
+      ],
+      "hierarchies": [
+        { "id": "Plan_Cuentas", "description": "Plan de cuentas", "kind": "parent-child", "default": true }
+      ]
+    },
+    {
+      "id": "Departamento",
+      "description": "Departamento",
+      "type": "generic",
+      "synonyms": ["área", "gerencia", "unidad"],
+      "properties": [
+        { "id": "Responsable", "description": "Responsable", "type": "string" }
+      ],
+      "hierarchies": [
+        { "id": "Estructura_Org", "description": "Estructura organizacional", "kind": "parent-child", "default": true },
+        { "id": "Por_Direccion", "description": "Por dirección", "kind": "parent-child" }
+      ]
+    },
+    {
+      "id": "Genero",
+      "description": "Género",
+      "type": "generic",
+      "synonyms": ["sexo"],
+      "hierarchies": [],
+      "members": [
+        { "id": "F", "description": "Mujeres", "synonyms": ["femenino", "mujer"] },
+        { "id": "M", "description": "Hombres", "synonyms": ["masculino", "hombre"] }
+      ],
+      "members_complete": true
+    },
+    {
+      "id": "Grupo_Etario",
+      "description": "Grupo etario",
+      "type": "generic",
+      "ordered": true,
+      "synonyms": ["edad", "cohorte", "rango de edad"],
+      "hierarchies": [],
+      "members": [
+        { "id": "G1", "description": "< 25" },
+        { "id": "G2", "description": "25 - 34" },
+        { "id": "G3", "description": "35 - 44" },
+        { "id": "G4", "description": "45 - 54" },
+        { "id": "G5", "description": "> 55" }
+      ],
+      "members_complete": true
+    },
+    {
+      "id": "Sede",
+      "description": "Sede",
+      "type": "generic",
+      "synonyms": ["oficina", "ubicación"],
+      "hierarchies": [
+        { "id": "Pais_Sede", "description": "País > Sede", "kind": "parent-child", "default": true }
+      ]
+    },
+    {
+      "id": "Tipo_Contrato",
+      "description": "Tipo de contrato",
+      "type": "generic",
+      "synonyms": ["contrato", "modalidad"],
+      "hierarchies": []
+    },
+    {
+      "id": "Nivel_Jerarquico",
+      "description": "Nivel jerárquico",
+      "type": "generic",
+      "ordered": true,
+      "synonyms": ["nivel", "jerarquía organizacional"],
+      "hierarchies": [],
+      "members": [
+        { "id": "DIR", "description": "Dirección" },
+        { "id": "GER", "description": "Gerencia" },
+        { "id": "JEF", "description": "Jefatura" },
+        { "id": "ANA", "description": "Analista" },
+        { "id": "OPE", "description": "Operativo" }
+      ],
+      "members_complete": true
+    },
+    {
+      "id": "Empleado",
+      "description": "Empleado",
+      "type": "generic",
+      "synonyms": ["colaborador", "persona", "trabajador"],
+      "properties": [
+        { "id": "Cargo", "description": "Cargo", "type": "string" },
+        { "id": "Fecha_Ingreso", "description": "Fecha de ingreso", "type": "date" }
+      ],
+      "hierarchies": []
+    },
+    {
+      "id": "Centro_de_Costos",
+      "description": "Centro de costos",
+      "type": "generic",
+      "synonyms": ["ceco", "centro de costo"],
+      "properties": [
+        { "id": "Responsable_CeCo", "description": "Responsable", "type": "string" }
+      ],
+      "hierarchies": [
+        { "id": "Jerarquia_CeCo", "description": "Jerarquía de centros de costos", "kind": "parent-child", "default": true }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "id": "Headcount",
+      "description": "Headcount",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "personas",
+      "decimals": 0,
+      "synonyms": ["plantilla", "dotación"]
+    },
+    {
+      "id": "Suma_Edad",
+      "description": "Suma de edades",
+      "unit": "number",
+      "type": "fixed",
+      "unit_value": "años",
+      "decimals": 0
+    },
+    {
+      "id": "Retenidos",
+      "description": "Empleados retenidos",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "personas",
+      "decimals": 0,
+      "good_direction": "up"
+    },
+    {
+      "id": "Headcount_Inicial",
+      "description": "Headcount inicial del periodo",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "personas",
+      "decimals": 0
+    },
+    {
+      "id": "Costo_Nomina",
+      "description": "Costo de nómina",
+      "unit": "currency",
+      "type": "variable",
+      "unit_value": null,
+      "decimals": 2,
+      "good_direction": "down",
+      "synonyms": ["gasto de personal"]
+    }
+  ]
+}

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed-dim":"#b6c4ff","inverse-on-surface":"#eaf1ff","surface-container-lowest":"#ffffff","inverse-primary":"#b6c4ff","background":"#f8f9ff","primary":"#00236f","surface-container":"#e5eeff","surface-bright":"#f8f9ff","outline-variant":"#c5c5d3","on-secondary-fixed-variant":"#920028","secondary-container":"#e21e49","surface-container-highest":"#d3e4fe","on-tertiary-fixed-variant":"#005049","primary-fixed":"#dce1ff","surface":"#f8f9ff","on-tertiary-fixed":"#00201d","secondary-fixed":"#ffdada","on-primary-fixed":"#00164e","on-primary":"#ffffff","on-tertiary-container":"#4ebdb0","tertiary":"#00312c","on-primary-fixed-variant":"#264191","on-error-container":"#93000a","on-secondary-container":"#fffbff","error-container":"#ffdad6","surface-container-high":"#dce9ff","surface-variant":"#d3e4fe","surface-tint":"#4059aa","primary-container":"#1e3a8a","secondary":"#ba0035","on-tertiary":"#ffffff","tertiary-fixed":"#89f5e7","inverse-surface":"#213145","secondary-fixed-dim":"#ffb3b6","error":"#ba1a1a","surface-container-low":"#eff4ff","surface-dim":"#cbdbf5","tertiary-container":"#004942","on-secondary-fixed":"#40000c","outline":"#757682","on-background":"#0b1c30","on-error":"#ffffff","on-secondary":"#ffffff","on-primary-container":"#90a8ff","tertiary-fixed-dim":"#6bd8cb","on-surface-variant":"#444651","on-surface":"#0b1c30"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"space-2xl":"2.5rem","gutter-lg":"2rem","margin-mobile":"1rem","gutter":"1.5rem","gutter-sm":"0.75rem","space-xl":"1.75rem","margin":"2rem","space-xs":"0.25rem","space-lg":"1.25rem","space-md":"0.875rem","space-sm":"0.5rem"},fontFamily:{"body-md":["Inter"],"data-mono":["Inter"],"metric-numeral-md":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"table-header":["Inter"],"headline-md":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-lg":["Plus Jakarta Sans"],"metric-numeral-lg":["Plus Jakarta Sans"],"body-sm":["Inter"]},fontSize:{"body-md":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"data-mono":["0.8125rem",{"lineHeight":"1.125rem","letterSpacing":"-0.01em","fontWeight":"500"}],"metric-numeral-md":["1.5rem",{"lineHeight":"1.75rem","letterSpacing":"-0.02em","fontWeight":"600"}],"display-hero":["2.5rem",{"lineHeight":"3rem","letterSpacing":"-0.03em","fontWeight":"700"}],"display-hero-mobile":["1.875rem",{"lineHeight":"2.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"table-header":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg-mobile":["1.375rem",{"lineHeight":"1.75rem","letterSpacing":"-0.015em","fontWeight":"600"}],"body-lg":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"headline-lg":["1.75rem",{"lineHeight":"2.25rem","letterSpacing":"-0.02em","fontWeight":"600"}],"metric-numeral-lg":["2rem",{"lineHeight":"2.25rem","letterSpacing":"-0.025em","fontWeight":"700"}],"body-sm":["0.75rem",{"lineHeight":"1rem","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-space-lg flex items-center gap-space-sm bg-surface-container-low"><img alt="TalentPulse HR Analytics Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UFgX6BkwjIKf1LFk4UAZA6-YMZ_UURodDQR3TFeoJ8uVdWPv4gbf0a2av5sU2hsFmAIWOhfb9DvaBaCaBArH2mY--F-OKY8NDYVSby4X8XzQ91nqNV61ESQ6fQDjeVrzKOiPPyI35iM8b3mioxf7mpFAytRIcO2rs84G_YSpj-wivJRNfn0JesXUagPmhe8JKvltoRnDZAm5Sg6TsQJQFjAoBKX8j89AsYzKZuwTQ0"/><span class="font-headline-md text-headline-md font-bold tracking-tight text-primary">TalentPulse<span class="text-secondary font-headline-md text-headline-md">.</span></span></div><div class="px-space-md py-space-sm text-on-surface-variant font-table-header text-table-header uppercase tracking-wider">Módulos Analíticos</div><nav class="flex-1 px-space-sm space-y-space-xs" data-active-classes="bg-primary-container text-on-primary font-semibold rounded-lg"><a class="flex items-center px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all gap-space-md" data-path="vision-general" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Visión General</span></a><a aria-current="page" class="flex items-center px-space-md py-space-sm transition-all gap-space-md bg-primary-container text-on-primary font-semibold rounded-lg" data-path="demografia-y-genero" href="#"><span class="material-symbols-outlined text-[20px]">pie_chart</span><span class="font-body-md text-body-md">Demografía y Género</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all gap-space-md" data-path="compensacion-y-brecha" href="#"><span class="material-symbols-outlined text-[20px]">payments</span><span class="font-body-md text-body-md">Compensación y Brecha</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all gap-space-md" data-path="rotacion-y-retencion" href="#"><span class="material-symbols-outlined text-[20px]">change_circle</span><span class="font-body-md text-body-md">Rotación y Retención</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all gap-space-md" data-path="rendimiento-y-talento" href="#"><span class="material-symbols-outlined text-[20px]">trending_up</span><span class="font-body-md text-body-md">Rendimiento y Talento</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all gap-space-md" data-path="configuracion" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-md text-body-md">Configuración</span></a></nav><div class="p-space-md bg-surface-container-low"><div class="p-space-sm rounded-lg bg-surface-container-lowest flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><span class="font-table-header text-table-header text-on-surface-variant uppercase">Estado del Motor</span><span class="font-body-sm text-body-sm text-tertiary-container font-semibold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary-container inline-block"></span> Sincronizado</span></div><span class="font-data-mono text-data-mono text-on-surface-variant">v4.2</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl z-40 px-space-lg flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-lg flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full h-9 pl-10 pr-space-md rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-on-surface-variant outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" placeholder="Buscar empleados, puestos o departamentos..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg text-on-surface"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">calendar_today</span><select class="bg-transparent font-body-sm text-body-sm text-on-surface outline-none cursor-pointer pr-1"><option>Q3 2024 (Jul - Sep)</option><option>Q2 2024 (Abr - Jun)</option><option>Q1 2024 (Ene - Mar)</option><option>FY 2023 Consolidado</option></select></div><button class="h-9 px-space-md rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">file_download</span><span>Exportar</span></button><button aria-label="Notificaciones" class="h-9 w-9 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center relative transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-secondary"></span></button><div class="h-6 w-[1px] bg-surface-container-high mx-space-xs"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-tight">Elena Vance</span><span class="font-table-header text-table-header text-on-surface-variant leading-tight">Directora de RRHH</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0hCk-ZrD-1DfS347CS6JhiEL2QvU4GHaZWFR88BZr8tKOpzL-pLQDwjo95RGxRNl66-TYL24nkHFOti0SjdVxGEH48exPyisd1nT3KAjKHaH44SeRhpdS7q5VUP4FTSyMdoS14Kk2J7KCn4wUkyFzLXs_TYPl3gB4_LRq3ncNmLdOLtVl5ALH9HhrfiIF7p2EU2_FaSJw0MilU9tqHxg7aQK4mp15W9h_R2GPHcM"/></div></div></header><main class="relative pt-16 w-full min-h-screen bg-background"><div class="flex flex-col w-full">
+<!-- Sub-header & Action Ribbon -->
+<div class="px-gutter py-space-lg bg-surface-container-lowest shadow-sm flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-data-mono text-data-mono mb-1">
+<span>TALENT INTELLIGENCE</span>
+<span>/</span>
+<span class="text-primary font-semibold">DIVERSIDAD, EQUIDAD E INCLUSIÓN (DEI)</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Demografía y Equidad de Género</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Distribución analítica de plantilla por cohortes etarias, departamentos operativos y métricas de paridad estructural.</p>
+</div>
+<!-- Filters and Primary Export Trigger -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="flex items-center bg-surface-container-low rounded-lg px-space-sm py-1.5 shadow-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-1.5">public</span>
+<select class="bg-transparent font-body-sm text-body-sm text-on-surface outline-none cursor-pointer">
+<option>Sede: Global (Todas)</option>
+<option>Madrid Tech Hub</option>
+<option>Barcelona Labs</option>
+<option>LATAM Regional (México / Colombia)</option>
+<option>Remoto Internacional</option>
+</select>
+</div>
+<div class="flex items-center bg-surface-container-low rounded-lg px-space-sm py-1.5 shadow-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-1.5">badge</span>
+<select class="bg-transparent font-body-sm text-body-sm text-on-surface outline-none cursor-pointer">
+<option>Contrato: Todos</option>
+<option>Indefinido / Tiempo Completo</option>
+<option>Temporal / Obra &amp; Servicio</option>
+<option>Prácticas &amp; Formación</option>
+</select>
+</div>
+<div class="flex items-center bg-surface-container-low rounded-lg px-space-sm py-1.5 shadow-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-1.5">date_range</span>
+<select class="bg-transparent font-body-sm text-body-sm text-on-surface outline-none cursor-pointer">
+<option>Q3 2024 (Activo)</option>
+<option>Q2 2024</option>
+<option>Q1 2024</option>
+<option>Consolidado Anual FY23</option>
+</select>
+</div>
+<button class="h-9 px-space-md rounded-lg bg-primary-container hover:bg-primary text-on-primary font-body-sm text-body-sm font-medium flex items-center gap-space-xs shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Descargar Reporte ESG &amp; Auditoría</span>
+</button>
+</div>
+</div>
+<div class="p-gutter space-y-gutter">
+<!-- KPI Metric Cards Grid (4 Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
+<!-- Card 1: Headcount Total & Gender Split -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-table-header text-table-header uppercase text-on-surface-variant tracking-wider">Total Plantilla Global</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-metric-numeral-lg text-metric-numeral-lg font-bold text-on-surface">1,480</span>
+<span class="inline-flex items-center text-tertiary-container font-data-mono text-data-mono font-semibold bg-tertiary-fixed/30 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span>+5.2%
+              </span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">groups</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="flex justify-between font-table-header text-table-header mb-1.5">
+<span class="text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> 54% Mujeres (799)
+            </span>
+<span class="text-primary-container font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container inline-block"></span> 46% Hombres (681)
+            </span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 54%"></div>
+<div class="bg-primary-container h-full" style="width: 46%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-2 block">Delta interanual: +42 incorporaciones netas</span>
+</div>
+</div>
+<!-- Card 2: Average Age -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-table-header text-table-header uppercase text-on-surface-variant tracking-wider">Edad Promedio General</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-metric-numeral-lg text-metric-numeral-lg font-bold text-on-surface">34.6</span>
+<span class="font-body-md text-body-md text-on-surface-variant">años</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">cake</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs space-y-1.5">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> Promedio Mujeres
+            </span>
+<span class="font-data-mono font-semibold text-on-surface">33.8 años</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container inline-block"></span> Promedio Hombres
+            </span>
+<span class="font-data-mono font-semibold text-on-surface">35.4 años</span>
+</div>
+<div class="w-full bg-surface-container-low px-2 py-1 rounded text-center font-data-mono text-[11px] text-on-surface-variant">
+            Divergencia generacional: 1.6 años
+          </div>
+</div>
+</div>
+<!-- Card 3: Leadership Parity -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-table-header text-table-header uppercase text-on-surface-variant tracking-wider">Mujeres en Liderazgo</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-metric-numeral-lg text-metric-numeral-lg font-bold text-on-surface">48.5%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dirección &amp; Mgt</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">military_tech</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="flex justify-between font-table-header text-table-header mb-1 text-on-surface-variant">
+<span>Objetivo Estratégico ESG</span>
+<span class="font-semibold text-tertiary-container">Meta: 50.0%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden relative">
+<div class="bg-secondary h-full rounded-full" style="width: 48.5%"></div>
+<div class="absolute top-0 bottom-0 w-0.5 bg-on-surface" style="left: 50%" title="Meta ESG: 50%"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-2">
+<span>Brecha actual: -1.5%</span>
+<span class="text-tertiary-container font-semibold">En trayectoria</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Retention Rate by Gender -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-table-header text-table-header uppercase text-on-surface-variant tracking-wider">Tasa Retención / Estabilidad</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-metric-numeral-lg text-metric-numeral-lg font-bold text-on-surface">94.0%</span>
+<span class="font-body-sm text-body-sm text-tertiary-container font-semibold">Tasa Global</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">health_and_safety</span>
+</div>
+</div>
+<div class="mt-space-md space-y-2">
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-0.5">
+<span class="text-on-surface-variant">Mujeres</span>
+<span class="font-data-mono font-semibold text-secondary">94.2%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 94.2%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-0.5">
+<span class="text-on-surface-variant">Hombres</span>
+<span class="font-data-mono font-semibold text-primary-container">93.8%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 93.8%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Editorial Contextual Metric Strip / Executive Callout -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[20px]">insights</span>
+</div>
+<div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface uppercase tracking-wider block">Observación Clave del Comité de Talento</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">La mayor concentración de talento femenino se ubica en el segmento estratégico de 25 a 34 años con 318 colaboradoras (61% del total en dicha cohorte). El balance en áreas STEM muestra un crecimiento del +6% interanual.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface font-data-mono text-data-mono shadow-sm">Índice Gini de Género: 0.12 (Paridad Alta)</span>
+</div>
+</div>
+<!-- Core Data Visualizations Section (2-Column Grid) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Left Column (7 Cols): Population Pyramid & Age Brackets Breakdown -->
+<div class="xl:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md gap-2">
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Distribución por Grupo Etario y Género</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pirámide comparativa de plantilla activa por tramos generacionales</p>
+</div>
+<!-- Legend Indicators -->
+<div class="flex items-center gap-space-md bg-surface-container-low px-space-md py-1.5 rounded-lg shrink-0">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-secondary"></span>
+<span class="font-table-header text-table-header text-on-surface">Mujeres (M)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-primary-container"></span>
+<span class="font-table-header text-table-header text-on-surface">Hombres (H)</span>
+</div>
+</div>
+</div>
+<!-- Butterfly / Bi-directional Age Bracket Visualizer -->
+<div class="space-y-space-md pt-space-sm">
+<!-- Age Cohort 1: < 25 años -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-center mb-1.5 font-body-sm text-body-sm">
+<span class="font-semibold text-secondary font-data-mono">112 (56%)</span>
+<span class="font-semibold text-on-surface px-2 py-0.5 rounded bg-surface-container-high font-data-mono text-[11px]">&lt; 25 años (Talento Junior / Entry)</span>
+<span class="font-semibold text-primary-container font-data-mono">88 (44%)</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 items-center">
+<!-- Female Bar (Right to Left) -->
+<div class="w-full bg-surface-container flex justify-end h-6 rounded-l">
+<div class="bg-secondary h-full rounded-l transition-all duration-500 hover:opacity-90 flex items-center justify-start pl-2" style="width: 56%">
+<span class="text-on-secondary font-data-mono text-[11px] font-bold">112 M</span>
+</div>
+</div>
+<!-- Male Bar (Left to Right) -->
+<div class="w-full bg-surface-container flex justify-start h-6 rounded-r">
+<div class="bg-primary-container h-full rounded-r transition-all duration-500 hover:opacity-90 flex items-center justify-end pr-2" style="width: 44%">
+<span class="text-on-primary font-data-mono text-[11px] font-bold">88 H</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between text-[11px] text-on-surface-variant font-data-mono mt-1">
+<span>Total cohorte: 200 colabs</span>
+<span>Proporción s/ total: 13.5%</span>
+</div>
+</div>
+<!-- Age Cohort 2: 25 - 34 años (Peak Cohort) -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/70 hover:bg-surface-container-low transition-colors ring-1 ring-secondary/20">
+<div class="flex justify-between items-center mb-1.5 font-body-sm text-body-sm">
+<span class="font-bold text-secondary font-data-mono">318 (61%)</span>
+<div class="flex items-center gap-1">
+<span class="font-bold text-on-surface px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed-variant font-data-mono text-[11px]">25 - 34 años (Mid-Senior)</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">star</span>
+</div>
+<span class="font-semibold text-primary-container font-data-mono">204 (39%)</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 items-center">
+<div class="w-full bg-surface-container flex justify-end h-7 rounded-l">
+<div class="bg-secondary h-full rounded-l transition-all duration-500 hover:opacity-90 flex items-center justify-start pl-2" style="width: 61%">
+<span class="text-on-secondary font-data-mono text-[11px] font-bold">318 M</span>
+</div>
+</div>
+<div class="w-full bg-surface-container flex justify-start h-7 rounded-r">
+<div class="bg-primary-container h-full rounded-r transition-all duration-500 hover:opacity-90 flex items-center justify-end pr-2" style="width: 39%">
+<span class="text-on-primary font-data-mono text-[11px] font-bold">204 H</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between text-[11px] text-on-surface-variant font-data-mono mt-1">
+<span class="text-secondary font-semibold">Mayor volumen de plantilla femenina</span>
+<span>Total cohorte: 522 colabs (35.3%)</span>
+</div>
+</div>
+<!-- Age Cohort 3: 35 - 44 años -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-center mb-1.5 font-body-sm text-body-sm">
+<span class="font-semibold text-secondary font-data-mono">205 (49%)</span>
+<span class="font-semibold text-on-surface px-2 py-0.5 rounded bg-surface-container-high font-data-mono text-[11px]">35 - 44 años (Liderazgo &amp; Especialistas)</span>
+<span class="font-semibold text-primary-container font-data-mono">215 (51%)</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 items-center">
+<div class="w-full bg-surface-container flex justify-end h-6 rounded-l">
+<div class="bg-secondary h-full rounded-l transition-all duration-500 hover:opacity-90 flex items-center justify-start pl-2" style="width: 49%">
+<span class="text-on-secondary font-data-mono text-[11px] font-bold">205 M</span>
+</div>
+</div>
+<div class="w-full bg-surface-container flex justify-start h-6 rounded-r">
+<div class="bg-primary-container h-full rounded-r transition-all duration-500 hover:opacity-90 flex items-center justify-end pr-2" style="width: 51%">
+<span class="text-on-primary font-data-mono text-[11px] font-bold">215 H</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between text-[11px] text-on-surface-variant font-data-mono mt-1">
+<span class="text-tertiary-container font-medium">Equilibrio paritario exacto (+/-1%)</span>
+<span>Total cohorte: 420 colabs (28.4%)</span>
+</div>
+</div>
+<!-- Age Cohort 4: 45 - 54 años -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-center mb-1.5 font-body-sm text-body-sm">
+<span class="font-semibold text-secondary font-data-mono">118 (47%)</span>
+<span class="font-semibold text-on-surface px-2 py-0.5 rounded bg-surface-container-high font-data-mono text-[11px]">45 - 54 años (Dirección Senior)</span>
+<span class="font-semibold text-primary-container font-data-mono">132 (53%)</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 items-center">
+<div class="w-full bg-surface-container flex justify-end h-6 rounded-l">
+<div class="bg-secondary h-full rounded-l transition-all duration-500 hover:opacity-90 flex items-center justify-start pl-2" style="width: 47%">
+<span class="text-on-secondary font-data-mono text-[11px] font-bold">118 M</span>
+</div>
+</div>
+<div class="w-full bg-surface-container flex justify-start h-6 rounded-r">
+<div class="bg-primary-container h-full rounded-r transition-all duration-500 hover:opacity-90 flex items-center justify-end pr-2" style="width: 53%">
+<span class="text-on-primary font-data-mono text-[11px] font-bold">132 H</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between text-[11px] text-on-surface-variant font-data-mono mt-1">
+<span>Total cohorte: 250 colabs</span>
+<span>Proporción s/ total: 16.9%</span>
+</div>
+</div>
+<!-- Age Cohort 5: > 55 años -->
+<div class="p-space-sm rounded-lg bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-center mb-1.5 font-body-sm text-body-sm">
+<span class="font-semibold text-secondary font-data-mono">46 (52%)</span>
+<span class="font-semibold text-on-surface px-2 py-0.5 rounded bg-surface-container-high font-data-mono text-[11px]">&gt; 55 años (Ejecutivos &amp; Asesores)</span>
+<span class="font-semibold text-primary-container font-data-mono">42 (48%)</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 items-center">
+<div class="w-full bg-surface-container flex justify-end h-6 rounded-l">
+<div class="bg-secondary h-full rounded-l transition-all duration-500 hover:opacity-90 flex items-center justify-start pl-2" style="width: 52%">
+<span class="text-on-secondary font-data-mono text-[11px] font-bold">46 M</span>
+</div>
+</div>
+<div class="w-full bg-surface-container flex justify-start h-6 rounded-r">
+<div class="bg-primary-container h-full rounded-r transition-all duration-500 hover:opacity-90 flex items-center justify-end pr-2" style="width: 48%">
+<span class="text-on-primary font-data-mono text-[11px] font-bold">42 H</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between text-[11px] text-on-surface-variant font-data-mono mt-1">
+<span>Total cohorte: 88 colabs</span>
+<span>Proporción s/ total: 5.9%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-sm rounded-lg flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">analytics</span>
+<span class="text-on-surface font-medium">Índice de Diversidad Generacional (Blau Index): <strong class="font-data-mono">0.78 / 1.0</strong></span>
+</div>
+<span class="text-on-surface-variant font-data-mono text-data-mono">Muestreo: 100% Censado</span>
+</div>
+</div>
+<!-- Right Column (5 Cols): Distribution by Operational Department -->
+<div class="xl:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Distribución por Departamentos</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Paridad por función y volumen por unidad de negocio</p>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-lg" type="button">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+<!-- Department Stacks List -->
+<div class="space-y-space-md">
+<!-- Tech / Engineering -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">terminal</span>
+                  Tecnología e Ingeniería
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">340</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 41%" title="Mujeres: 139 (41%)"></div>
+<div class="bg-primary-container h-full" style="width: 59%" title="Hombres: 201 (59%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">41% M (139) | 59% H (201)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold text-[10px]">Oportunidad de Balance</span>
+</div>
+</div>
+<!-- Sales / Commercial -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">trending_up</span>
+                  Ventas y Comercial
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">280</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 52%" title="Mujeres: 145 (52%)"></div>
+<div class="bg-primary-container h-full" style="width: 48%" title="Hombres: 135 (48%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">52% M (145) | 48% H (135)</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed/40 text-on-tertiary-fixed-variant font-semibold text-[10px]">Paridad Óptima</span>
+</div>
+</div>
+<!-- Operations & Logistics -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">local_shipping</span>
+                  Operaciones y Logística
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">260</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 44%" title="Mujeres: 114 (44%)"></div>
+<div class="bg-primary-container h-full" style="width: 56%" title="Hombres: 146 (56%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">44% M (114) | 56% H (146)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold text-[10px]">Alineado a Mercado</span>
+</div>
+</div>
+<!-- Product & UX Design -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">draw</span>
+                  Producto y Diseño UX
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">190</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 58%" title="Mujeres: 110 (58%)"></div>
+<div class="bg-primary-container h-full" style="width: 42%" title="Hombres: 80 (42%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">58% M (110) | 42% H (80)</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed/40 text-on-tertiary-fixed-variant font-semibold text-[10px]">Paridad Saludable</span>
+</div>
+</div>
+<!-- Finance & Legal -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">account_balance</span>
+                  Finanzas y Legal
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">170</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 53%" title="Mujeres: 90 (53%)"></div>
+<div class="bg-primary-container h-full" style="width: 47%" title="Hombres: 80 (47%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">53% M (90) | 47% H (80)</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed/40 text-on-tertiary-fixed-variant font-semibold text-[10px]">Paridad Óptima</span>
+</div>
+</div>
+<!-- HR / Talent -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">diversity_3</span>
+                  Personas y Talento (RRHH)
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">140</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 68%" title="Mujeres: 95 (68%)"></div>
+<div class="bg-primary-container h-full" style="width: 32%" title="Hombres: 45 (32%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">68% M (95) | 32% H (45)</span>
+<span class="px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed-variant font-semibold text-[10px]">Sesgo Femenino (+18%)</span>
+</div>
+</div>
+<!-- Marketing & Communications -->
+<div class="space-y-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">campaign</span>
+                  Marketing y Comunicación
+                </span>
+<span class="text-on-surface-variant font-data-mono">Total: <strong class="text-on-surface">100</strong></span>
+</div>
+<div class="w-full h-3 rounded bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 62%" title="Mujeres: 62 (62%)"></div>
+<div class="bg-primary-container h-full" style="width: 38%" title="Hombres: 38 (38%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono">
+<span class="text-secondary font-medium">62% M (62) | 38% H (38)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold text-[10px]">Paridad Aceptable</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs text-center border-t border-surface-container-high/40">
+<span class="font-body-sm text-body-sm text-on-surface-variant">5 de 7 áreas cumplen el estándar de rango paritario (40%-60%)</span>
+</div>
+</div>
+</div>
+<!-- Detailed Cross-Analysis Matrix Table Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Table Header & Controls -->
+<div class="p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-lowest">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Matriz Cruzada: Departamentos vs Grupo Etario por Género</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-data-mono text-[11px] font-bold">Q3 2024 Audit</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Desglose granular para auditoría de planes de sucesión, pipelines de contratación y brechas departamentales.</p>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-8 pl-8 pr-3 rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-on-surface-variant outline-none focus:bg-surface-container-lowest transition-all" id="matrixSearchInput" placeholder="Filtrar departamento..." type="text"/>
+</div>
+<button class="h-8 px-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filtros</span>
+</button>
+</div>
+</div>
+<!-- Responsive Table Grid -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse" id="matrixDataTable">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-table-header text-table-header uppercase tracking-wider">
+<th class="py-space-sm px-space-lg">Departamento</th>
+<th class="py-space-sm px-space-md text-center">&lt; 25 años<br/><span class="font-data-mono lowercase text-[10px] text-on-surface-variant">M / H</span></th>
+<th class="py-space-sm px-space-md text-center">25 - 34 años<br/><span class="font-data-mono lowercase text-[10px] text-on-surface-variant">M / H</span></th>
+<th class="py-space-sm px-space-md text-center">35 - 44 años<br/><span class="font-data-mono lowercase text-[10px] text-on-surface-variant">M / H</span></th>
+<th class="py-space-sm px-space-md text-center">45 - 54 años<br/><span class="font-data-mono lowercase text-[10px] text-on-surface-variant">M / H</span></th>
+<th class="py-space-sm px-space-md text-center">&gt; 55 años<br/><span class="font-data-mono lowercase text-[10px] text-on-surface-variant">M / H</span></th>
+<th class="py-space-sm px-space-md text-right">Headcount</th>
+<th class="py-space-sm px-space-lg text-center">Alerta / Plan Pipeline</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm text-on-surface">
+<!-- Row 1: Tecnología -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span>Tecnología e Ingeniería</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">28</span> / <span class="text-primary-container">32</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">58</span> / <span class="text-primary-container">82</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">32</span> / <span class="text-primary-container">54</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">16</span> / <span class="text-primary-container">25</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">5</span> / <span class="text-primary-container">8</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">340</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-high text-on-surface">
+                  Impulsar STEM Femenino (+15%)
+                </span>
+</td>
+</tr>
+<!-- Row 2: Ventas -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container"></span>
+<span>Ventas y Comercial</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">24</span> / <span class="text-primary-container">16</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">62</span> / <span class="text-primary-container">58</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">35</span> / <span class="text-primary-container">37</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">18</span> / <span class="text-primary-container">16</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">6</span> / <span class="text-primary-container">8</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">280</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed/50 text-on-tertiary-fixed-variant">
+                  Distribución Balanceada
+                </span>
+</td>
+</tr>
+<!-- Row 3: Operaciones -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+<span>Operaciones y Logística</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">18</span> / <span class="text-primary-container">18</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">44</span> / <span class="text-primary-container">50</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">30</span> / <span class="text-primary-container">48</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">15</span> / <span class="text-primary-container">22</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">7</span> / <span class="text-primary-container">8</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">260</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container-high text-on-surface">
+                  Monitoreo de Reemplazo Senior
+                </span>
+</td>
+</tr>
+<!-- Row 4: Producto y UX -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span>Producto y Diseño UX</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">16</span> / <span class="text-primary-container">10</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">50</span> / <span class="text-primary-container">34</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">28</span> / <span class="text-primary-container">22</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">12</span> / <span class="text-primary-container">10</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">4</span> / <span class="text-primary-container">4</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">190</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed/50 text-on-tertiary-fixed-variant">
+                  Alta Retención en Liderazgo
+                </span>
+</td>
+</tr>
+<!-- Row 5: Finanzas y Legal -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span>Finanzas y Legal</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">12</span> / <span class="text-primary-container">8</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">36</span> / <span class="text-primary-container">32</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">24</span> / <span class="text-primary-container">22</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">12</span> / <span class="text-primary-container">14</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">6</span> / <span class="text-primary-container">4</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">170</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed/50 text-on-tertiary-fixed-variant">
+                  Estabilidad Estructural
+                </span>
+</td>
+</tr>
+<!-- Row 6: Recursos Humanos -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>
+<span>Personas y Talento (RRHH)</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">8</span> / <span class="text-primary-container">4</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">42</span> / <span class="text-primary-container">18</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">26</span> / <span class="text-primary-container">12</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">13</span> / <span class="text-primary-container">8</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">6</span> / <span class="text-primary-container">3</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">140</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-fixed text-on-secondary-fixed-variant">
+                  Atracción Masculina Inversa
+                </span>
+</td>
+</tr>
+<!-- Row 7: Marketing -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-lg font-semibold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-fixed-dim"></span>
+<span>Marketing y Comunicación</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">6</span> / <span class="text-primary-container">0</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">26</span> / <span class="text-primary-container">10</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">18</span> / <span class="text-primary-container">18</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">8</span> / <span class="text-primary-container">7</span>
+</td>
+<td class="py-space-md px-space-md text-center font-data-mono text-data-mono">
+<span class="text-secondary font-semibold">4</span> / <span class="text-primary-container">3</span>
+</td>
+<td class="py-space-md px-space-md text-right font-data-mono font-bold">100</td>
+<td class="py-space-md px-space-lg text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed/50 text-on-tertiary-fixed-variant">
+                  Paridad en Mandos Medios
+                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination & Aggregate Footer -->
+<div class="p-space-md bg-surface-container-lowest flex flex-col sm:flex-row items-center justify-between gap-space-sm border-t border-surface-container-low">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span>Mostrando 7 de 7 departamentos activos</span>
+<span>•</span>
+<span class="font-data-mono font-semibold text-on-surface">1,480 colaboradores consolidados</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded flex items-center justify-center bg-surface-container-low text-on-surface-variant cursor-not-allowed opacity-50" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="px-3 py-1 rounded bg-primary-container text-on-primary font-data-mono text-[12px] font-bold">1</span>
+<button class="w-8 h-8 rounded flex items-center justify-center bg-surface-container-low text-on-surface-variant cursor-not-allowed opacity-50" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Executive Audit & Compliance Footnote -->
+<div class="flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-table-header text-table-header uppercase tracking-wider py-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span>Conforme a Ley 15/2022 de Igualdad y Estándares GRI 405 (Diversidad e Igualdad de Oportunidades)</span>
+</div>
+<span class="font-data-mono">Último corte de nómina: 30 de Septiembre de 2024</span>
+</div>
+</div>
+<!-- Inline Script for Filter Micro-interactions -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('matrixSearchInput');
+      const table = document.getElementById('matrixDataTable');
+      
+      if (searchInput && table) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          const rows = table.querySelectorAll('tbody tr');
+          
+          rows.forEach(row => {
+            const deptText = row.querySelector('td:first-child')?.textContent.toLowerCase() || '';
+            if (deptText.includes(query)) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+      }
+    });
+  </script>
+</div></main></div></body></html>

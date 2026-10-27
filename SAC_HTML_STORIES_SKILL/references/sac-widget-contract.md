@@ -1,0 +1,405 @@
+# Contrato de un widget custom de SAC
+
+Referencia para SAC_HTML_STORIES_SKILL. Describe las reglas que deben cumplir, a la vez, los tres archivos de un widget: el **manifiesto JSON**, el **JS principal** y el **JS de styling**. Si una sola regla de este documento se rompe, SAC no carga el widget o lo carga roto.
+
+Leyenda de confianza usada en todo el documento:
+
+- ✅ **Observado**: se ve en los archivos reales de Jean Poul (Generador de Combinaciones, v1.0.0, v2.2.0 y v3).
+- 📘 **Framework**: conocimiento general del framework de widgets custom de SAC. Es estable, pero debe confirmarse en el tenant.
+- ⚠ **Por verificar**: depende del comportamiento real de SAC. Se confirma con el widget sonda antes de darlo por regla.
+
+---
+
+## 1. Los tres archivos y cómo se relacionan
+
+| Archivo | Rol | Se carga cuando |
+|---|---|---|
+| `<nombre>.json` | Manifiesto: declara identidad, componentes, propiedades, métodos, eventos y bindings de datos | Al subir el widget a SAC |
+| `<nombre>.js` | Web Component principal: dibuja el widget, lee datos, expone métodos | Al añadir el widget a una story o aplicación |
+| `<nombre>_styling.js` | Web Component del panel de propiedades (Builder/Styling) | Al seleccionar el widget en modo edición |
+
+El manifiesto es el que manda. Los dos JS solo cumplen lo que el manifiesto declara.
+
+Regla de oro: **todo nombre declarado en el manifiesto debe existir con exactamente ese nombre en el JS, y todo lo que el JS lee de SAC debe estar declarado en el manifiesto.**
+
+---
+
+## 2. Manifiesto JSON
+
+### 2.1 Estructura mínima (✅ 📘)
+
+```json
+{
+  "id": "com.empresa.nombrewidget",
+  "version": "1.0.0",
+  "name": "Nombre visible",
+  "description": "Qué hace el widget",
+  "newInstancePrefix": "NombreWidget",
+  "icon": "",
+  "vendor": "Empresa",
+  "webcomponents": [ ... ],
+  "properties": { ... },
+  "methods": { ... },
+  "events": { ... },
+  "dataBindings": { ... }
+}
+```
+
+| Campo | Regla |
+|---|---|
+| `id` | Identificador único global, estilo dominio inverso, en minúsculas. Es la identidad del widget en el tenant. No cambiarlo entre versiones: SAC lo trataría como otro widget y las stories existentes se romperían. |
+| `version` | Semántica `mayor.menor.parche`. Aquí vive la versión, no en el tag. |
+| `name` | Texto que ve el usuario en el Builder. |
+| `newInstancePrefix` | Prefijo del nombre de cada instancia en scripts (`NombreWidget_1`). Sin espacios ni símbolos. |
+| `vendor`, `eula`, `license` | Opcionales. Estaban en v1.0.0 y se omitieron en v2.2.0. |
+
+### 2.2 `webcomponents` (✅ 📘)
+
+```json
+"webcomponents": [
+  {
+    "kind": "main",
+    "tag": "com-empresa-nombrewidget",
+    "url": "https://host.ejemplo.com/ruta/nombre-widget.js",
+    "integrity": "",
+    "ignoreIntegrity": true
+  },
+  {
+    "kind": "styling",
+    "tag": "com-empresa-nombrewidget-styling",
+    "url": "https://host.ejemplo.com/ruta/nombre-widget_styling.js",
+    "integrity": "",
+    "ignoreIntegrity": true
+  }
+]
+```
+
+- `kind: "main"` es obligatorio. `kind: "styling"` es opcional pero necesario si hay propiedades editables en el Builder. Existe también `kind: "builder"` para el panel de configuración del Builder (📘, no usado en estos archivos).
+- `tag`: minúsculas, con al menos un guion, único en el tenant. Convención: `com-<empresa>-<nombre>` para el principal y el mismo tag más `-styling` para el panel.
+- **El tag debe ser estable.** No lleva sufijo de versión. (✅ El JS v3 registró `com-sac-datacombinationbuilder-v3` mientras el manifiesto 2.2.0 declaraba `com-sac-datacombinationbuilder`: con esa diferencia SAC no carga el widget.)
+- `url`: HTTPS, accesible desde el navegador del usuario, con cabeceras CORS que permitan el origen de SAC. En los archivos observados se alojan en un servidor de widgets propio (`cfapps.eu12.hana.ondemand.com`, `resources.kiplan.io`). La URL base es un **parámetro de entrada** del skill, no un valor fijo.
+- `ignoreIntegrity: true` con `integrity: ""` desactiva la verificación (✅ lo que usan los archivos). Si se quiere verificar, `ignoreIntegrity: false` y `integrity` con el hash SHA de cada archivo.
+- Los archivos JS pueden cachearse: al republicar, cambiar la URL (por ejemplo con `?v=2.3.0`) o subir la `version` ayuda a que SAC tome la versión nueva. ⚠
+
+### 2.3 `properties` (✅ 📘)
+
+```json
+"properties": {
+  "title": {
+    "type": "string",
+    "description": "Título del widget",
+    "default": "Generador de Combinaciones"
+  }
+}
+```
+
+- Tipos habituales: `string`, `integer`, `number`, `boolean`, y arreglos como `string[]`. 📘
+- Cada propiedad debe tener `description` y, idealmente, `default`.
+- Una propiedad solo sirve si **las tres piezas** la respetan: el manifiesto la declara, el JS principal la aplica en `onCustomWidgetBeforeUpdate`/`render`, y el styling ofrece un control para editarla. (✅ En el widget observado `title` está declarada y el styling la edita, pero el JS la guarda y nunca la usa: es el patrón que el skill debe evitar.)
+- SAC puede generar accesos de lectura y escritura en SAC Script para cada propiedad declarada. ⚠ Confirmar nombres exactos (`getX` / `setX`) en el tenant antes de documentarlos como regla.
+
+### 2.4 `methods` (✅ 📘)
+
+```json
+"methods": {
+  "getJsonString": {
+    "returnType": "string",
+    "description": "Retorna el JSON como cadena de texto"
+  },
+  "setFiltro": {
+    "description": "Aplica un filtro",
+    "parameters": [
+      { "name": "valor", "type": "string", "description": "Valor a filtrar" }
+    ]
+  }
+}
+```
+
+- Cada método declarado es invocable desde SAC Script (`Widget_1.getJsonString()`).
+- Debe existir un método con **el mismo nombre** en la clase del JS principal. (✅ Patrón observado: los métodos del manifiesto no llevan `body` y se resuelven contra la clase.) ⚠ Confirmar en el tenant; la alternativa del framework es declarar `body` con el código en el propio manifiesto.
+- Tipos de retorno y de parámetro: tipos simples (`string`, `integer`, `number`, `boolean`) y sus arreglos. **No se debe devolver un objeto JS a SAC Script**: serializar con `JSON.stringify` y declarar `returnType: "string"`. (✅ `getJsonData` figura como `string` en el manifiesto pero el JS devuelve un objeto: es una inconsistencia a evitar.) ⚠ Verificar qué ocurre con objetos en el tenant.
+- Un método que no devuelve nada omite `returnType`.
+
+### 2.5 `events` (✅ 📘)
+
+```json
+"events": {
+  "onSeleccion": { "description": "Se dispara cuando el usuario confirma una selección" }
+}
+```
+
+- Cada evento declarado aparece en el Builder como un evento en el que el usuario puede escribir script.
+- El widget lo dispara desde el JS principal (ver 3.5). Los widgets observados declaran `events: {}`, es decir, no disparan eventos: la story consulta los resultados llamando a los métodos. Un widget de captura que debe avisar a la story "ya hay datos" **debería declarar un evento**.
+
+### 2.6 `dataBindings` (✅ 📘)
+
+```json
+"dataBindings": {
+  "myDataBinding": {
+    "feeds": [
+      { "id": "dimensions", "description": "Agregar en orden: 1) Version 2) Periodo ...", "type": "dimension" },
+      { "id": "measures",   "description": "Medidas (opcional)", "type": "mainStructureMember" }
+    ]
+  }
+}
+```
+
+- La clave (`myDataBinding`) es el nombre del binding. SAC lo publica en el elemento como propiedad con ese mismo nombre (ver 3.4). Es **libre pero debe coincidir** con el nombre que el JS lee.
+- Cada `feed` es una "ranura" que el usuario llena en el Builder:
+  - `type: "dimension"`: admite una o varias dimensiones.
+  - `type: "mainStructureMember"`: admite medidas (o miembros de la estructura principal, como cuentas).
+- **El orden en que el usuario agrega las dimensiones define los índices** `dimensions_0`, `dimensions_1`, … en cada fila de datos. Por eso la `description` del feed debe indicar el orden esperado.
+- Un feed de dimensiones nunca sabe qué dimensión recibió; el JS asume el orden. De ahí la necesidad del **mapa de roles** (sección 4).
+
+---
+
+## 3. JS principal (Web Component)
+
+### 3.1 Esqueleto obligatorio (✅ 📘)
+
+```js
+(function () {
+  const template = document.createElement('template');
+  template.innerHTML = `<style>:host{display:block}</style><div id="root"></div>`;
+
+  class MiWidget extends HTMLElement {
+    constructor() {
+      super();
+      this._shadowRoot = this.attachShadow({ mode: 'open' });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this._props = {};
+    }
+
+    onCustomWidgetBeforeUpdate(changedProperties) {
+      this._props = Object.assign({}, this._props, changedProperties);
+    }
+
+    onCustomWidgetAfterUpdate(changedProperties) {
+      this.render();
+    }
+
+    render() { /* leer this.myDataBinding y dibujar */ }
+  }
+
+  if (!customElements.get('com-empresa-miwidget')) {
+    customElements.define('com-empresa-miwidget', MiWidget);
+  }
+})();
+```
+
+Reglas:
+
+1. Todo dentro de una función autoejecutable (IIFE): no contaminar el ámbito global.
+2. **Shadow DOM siempre** (`attachShadow`). El CSS del widget no debe filtrarse a la story ni al revés.
+3. `customElements.define` con el **tag exacto** del manifiesto, protegido con `customElements.get` para evitar el error si el archivo se carga dos veces.
+4. La clase extiende `HTMLElement`.
+
+### 3.2 Ciclo de vida (✅ 📘)
+
+| Gancho | Cuándo lo llama SAC | Uso |
+|---|---|---|
+| `constructor()` | Al crear el elemento | Crear shadow DOM, estado interno, eventos del DOM propio |
+| `onCustomWidgetBeforeUpdate(changed)` | Antes de aplicar cambios de propiedades | Acumular `changed` en `this._props`; no dibujar aún |
+| `onCustomWidgetAfterUpdate(changed)` | Después de aplicar propiedades y/o datos | Llamar a `render()` |
+| `onCustomWidgetResize(w, h)` | Al cambiar el tamaño | Opcional: reajustar |
+| `onCustomWidgetDestroy()` | Al eliminar el widget | Opcional: limpiar listeners y timers |
+
+`render()` puede ejecutarse muchas veces: debe ser **idempotente** y conservar el estado del usuario (selecciones, lista de combinaciones) entre ejecuciones. (✅ `_setComboOptions` mantiene la selección previa si sigue siendo válida: es el patrón correcto.)
+
+### 3.3 Aplicar propiedades (📘)
+
+`changedProperties` trae solo las propiedades que cambiaron. Patrón:
+
+```js
+onCustomWidgetBeforeUpdate(changed) { this._props = { ...this._props, ...changed }; }
+onCustomWidgetAfterUpdate()         { this._applyProps(); this.render(); }
+_applyProps() {
+  const t = this._shadowRoot.getElementById('title');
+  if (t && this._props.title) t.textContent = this._props.title;
+}
+```
+
+### 3.4 Leer el data binding (✅ 📘 ⚠)
+
+SAC deja el binding en `this.<nombreBinding>` (en los archivos observados, `this.myDataBinding`).
+
+```js
+const b = this.myDataBinding;
+if (b && b.data && b.data.length > 0) {
+  b.data.forEach(row => {
+    const d0 = row.dimensions_0;   // { id, label, ... }
+    const d1 = row.dimensions_1;
+    const m0 = row.measures_0;     // { raw, formatted }
+  });
+}
+```
+
+- ✅ Cada celda de dimensión se usa como `{ id, label }`. El widget observado construye con ellas los pares id/descripción.
+- 📘 Cada celda de medida es `{ raw, formatted }`. ⚠ Confirmar con la sonda.
+- 📘 Los nombres de columna son `<id del feed>_<índice>`, así que un feed con `id: "dimensions"` produce `dimensions_0…`, y uno con `id: "measures"` produce `measures_0…`.
+- 📘 `b.metadata` describe las columnas (nombres y etiquetas de dimensiones y medidas). ⚠ Estructura exacta por confirmar con la sonda.
+- **Las opciones disponibles salen de las filas devueltas, no del maestro del modelo.** Un selector solo ve miembros que aparecen en el resultado (los que pasan los filtros de la story y tienen datos). Es una limitación de diseño que hay que respetar y, cuando importe, comunicar al usuario.
+- Antes de usar el binding: validar `b`, `b.data` y cada celda (`d && d.id`). Puede llegar vacío o en carga. (✅ el `render` observado lo hace.)
+- Recorrer las filas una vez y construir los mapas por dimensión (`{ id: label }`), no recorrer por cada selector.
+
+### 3.5 Disparar eventos y actualizar propiedades (📘)
+
+Evento declarado en el manifiesto:
+
+```js
+this.dispatchEvent(new Event('onSeleccion'));
+```
+
+Cambiar una propiedad desde el widget y que SAC lo sepa:
+
+```js
+this.dispatchEvent(new CustomEvent('propertiesChanged', {
+  detail: { properties: { title: 'Nuevo título' } }
+}));
+```
+
+### 3.6 Métodos públicos (✅ 📘)
+
+Cada método del manifiesto es un método de la clase:
+
+```js
+getJsonString()     { return this._jsonOutput; }          // string
+getIsJsonSynced()   { return this._jsonCount === this._items.length; }  // boolean
+clearCombinations() { this._clearAll(); }
+```
+
+Los resultados estructurados se entregan como **cadena JSON**. Si el widget guarda un objeto, expone una versión `...String()` para SAC Script.
+
+### 3.7 Higiene del JS (✅)
+
+- Escapar todo texto que viene de datos antes de insertarlo como HTML (`_escape`, `_escapeAttr`). Nada de `innerHTML` con datos sin escapar.
+- No depender de librerías externas salvo que el host las sirva; el widget debe funcionar con un solo archivo.
+- No usar `localStorage`/cookies para estado del modelo: el estado vive en memoria del widget o en SAC.
+- Parseo de CSV: `split(',')` falla con valores entre comillas o con comas. Usar un parser que respete comillas. (✅ defecto del widget observado.)
+
+---
+
+## 4. Mapa de roles de feeds (decisión de diseño del skill)
+
+Una propiedad de una dimensión **entra como un feed más de tipo `dimension`** (decisión confirmada por Jean Poul; ⚠ forma exacta de la celda por verificar con la sonda).
+
+Para que manifiesto, `render()` y filtros no se desincronicen, el skill genera una sola tabla y todo se deriva de ella:
+
+```json
+"feedRoles": [
+  { "index": 0, "role": "dimension", "id": "Version",  "description": "Versión" },
+  { "index": 1, "role": "dimension", "id": "Empleado", "description": "Empleado" },
+  { "index": 2, "role": "property",  "id": "Cargo",    "of": "Empleado" }
+]
+```
+
+De esa tabla salen:
+
+1. La `description` del feed `dimensions` del manifiesto (orden esperado, para que el usuario agregue en el orden correcto).
+2. El mapeo `dimensions_N → rol` dentro de `render()`.
+3. Los filtros por `id`, por `descripción` o por valor de propiedad (filtrar `Empleado` por `Cargo` = quedarse con las filas cuyo `dimensions_2` cumple y tomar su `dimensions_1`).
+
+Límites a respetar:
+
+- Cada propiedad usada consume un feed. El skill agrega solo los necesarios y avisa si el pedido implica muchos.
+- El orden de los feeds es una **instrucción para el usuario**: SAC no la fuerza. El skill debe escribirla clara en la `description` y, de ser posible, el widget debe validar que los datos recibidos tienen sentido (por ejemplo, avisar si faltan columnas).
+
+---
+
+## 5. JS de styling (panel de propiedades)
+
+### 5.1 Esqueleto (✅ 📘)
+
+```js
+(function () {
+  const template = document.createElement('template');
+  template.innerHTML = `
+    <form id="form">
+      <fieldset>
+        <legend>Configuración del Widget</legend>
+        <label for="title">Título</label>
+        <input id="title" type="text" />
+        <button type="submit">Aplicar</button>
+      </fieldset>
+    </form>`;
+
+  class MiWidgetStyling extends HTMLElement {
+    constructor() {
+      super();
+      this._shadowRoot = this.attachShadow({ mode: 'open' });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this._shadowRoot.getElementById('form').addEventListener('submit', this._submit.bind(this));
+    }
+
+    _submit(e) {
+      e.preventDefault();
+      this.dispatchEvent(new CustomEvent('propertiesChanged', {
+        detail: { properties: { title: this._shadowRoot.getElementById('title').value } }
+      }));
+    }
+
+    set title(value) { this._shadowRoot.getElementById('title').value = value; }
+  }
+
+  if (!customElements.get('com-empresa-miwidget-styling')) {
+    customElements.define('com-empresa-miwidget-styling', MiWidgetStyling);
+  }
+})();
+```
+
+### 5.2 Reglas
+
+- Mismo patrón: IIFE, shadow DOM, `customElements.define` con el tag `-styling` del manifiesto.
+- **Por cada propiedad del manifiesto**: un control en el formulario y un `set <propiedad>(value)` en la clase. SAC llama a esos setters para mostrar el valor actual; sin ellos el panel aparece vacío.
+- El panel avisa del cambio con el evento `propertiesChanged` y `detail.properties` con las propiedades modificadas (solo las que cambian, con el tipo correcto: números como número, booleanos como booleano, no como texto).
+- Tipos de control sugeridos: `string` → input de texto; `boolean` → checkbox; `integer`/`number` → input numérico; lista cerrada → select.
+- (✅ El styling observado solo cubre `title`; la propiedad `displayMode` del manifiesto v1.0.0 no tenía ni control ni uso. Es el tipo de propiedad huérfana que el validador debe detectar.)
+
+---
+
+## 6. Reglas de coherencia entre los tres archivos (base del validador)
+
+Cada regla se convierte en una verificación de `validate_bundle.py`.
+
+| # | Regla | Origen |
+|---|---|---|
+| R1 | `webcomponents[kind=main].tag` == tag en `customElements.define` del JS principal | ✅ falló en v3 |
+| R2 | `webcomponents[kind=styling].tag` == tag en `customElements.define` del styling | ✅ |
+| R3 | Los tags cumplen: minúsculas, al menos un guion, el de styling termina en `-styling` | 📘 |
+| R4 | Todo método de `methods` existe como método de la clase principal | ✅ |
+| R5 | Todo `returnType` es simple (`string`, `integer`, `number`, `boolean` o arreglo de ellos) y el método devuelve un valor de ese tipo | ✅ falló en `getJsonData` |
+| R6 | Todo evento de `events` se dispara al menos una vez con `dispatchEvent` en el JS principal | 📘 |
+| R7 | Toda propiedad de `properties` se **usa** en el JS principal (no solo se guarda) | ✅ falló en `title` y `displayMode` |
+| R8 | Toda propiedad de `properties` tiene control y setter en el styling | ✅ |
+| R9 | Todo setter y `propertiesChanged` del styling corresponde a una propiedad declarada | 📘 |
+| R10 | El nombre del binding en `dataBindings` es el mismo que el JS lee (`this.<nombre>`) | ✅ |
+| R11 | Los `dimensions_N` / `measures_N` que lee el JS caben en los feeds declarados y en el `feedRoles` | ✅ |
+| R12 | El `id`, el `version` y las URLs del manifiesto están presentes, y las URLs son HTTPS | 📘 |
+| R13 | Los nombres de los archivos referenciados en las `url` coinciden con los archivos entregados | ✅ |
+| R14 | Todo texto de datos va escapado antes de insertarse como HTML | ✅ |
+
+---
+
+## 7. Checklist de entrega
+
+1. Los tres archivos generados desde **una sola especificación** (nunca editados a mano por separado).
+2. El validador (R1–R14) sin errores.
+3. El manifiesto con la URL base correcta del host del usuario.
+4. Una nota de instalación para el usuario con el **orden de los feeds** que debe agregar en el Builder (sale de `feedRoles`).
+5. Si el widget usa propiedades como filtro: aviso de cuántos feeds consume.
+
+---
+
+## 8. Pendientes de verificación (se cierran con el widget sonda)
+
+1. Forma exacta de una celda de **propiedad** dentro de `myDataBinding.data` cuando se agrega como dimensión adicional.
+2. Estructura real de `myDataBinding.metadata` (nombres y etiquetas de columnas).
+3. Forma de las celdas de **medida** (`raw`, `formatted`) y el manejo de medidas con unidad variable.
+4. Si los métodos sin `body` en el manifiesto se resuelven siempre contra la clase.
+5. Nombres de los accesos de lectura y escritura que SAC genera para cada propiedad.
+6. Comportamiento de SAC ante un método que devuelve un objeto.
+7. Caché de los archivos JS al republicar.
+8. **Jerarquías:** qué campos trae cada celda de una dimensión con jerarquía activa (padre, nivel, si es nodo u hoja) y si las filas incluyen nodos y hojas a la vez (riesgo de doble conteo).
+9. **Cómo se aplica una jerarquía elegida:** si la define solo el Builder, o si desde la story se puede cambiar con el origen de datos del widget (por ejemplo `getDataSource()` y el cambio de jerarquía) en el tipo de story del tenant.
+10. **Expansión de nodos:** si SAC entrega todos los nodos o solo los expandidos, y cómo se pide la expansión de un nodo.
+11. **Selección múltiple:** nada que verificar en SAC (se resuelve dentro del widget), pero comprobar el rendimiento con listas largas.
