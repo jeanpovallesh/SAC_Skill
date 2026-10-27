@@ -417,6 +417,8 @@ Cada regla se convierte en una verificación de `validate_bundle.py`.
 
 ## 8. Pendientes de verificación (se cierran con el widget sonda)
 
+**Entorno de las pruebas ✅:** story **Optimized Experience** (la confirmó el usuario el 2026-10-27), modelo con cuentas `Modelo_Costructora`. Todo lo marcado ✅ en este contrato vale para ese entorno; en una story Classic o en Analytics Designer puede diferir.
+
 1. ✅ (2026-10-27) Celda de **propiedad**: `{ id, label }` (con valor: `{ id: "2024", label: "2024" }`; vacía: `{ id: "", label: "" }`). En `metadata.dimensions` su id es `<Dimension>.<propiedad>` con **el nombre que usa SAC** (`Periodo.YEAR`, descripción `Year`), que puede diferir en mayúsculas del JSON del modelo (`year`): el widget compara sin distinguir mayúsculas. La propiedad **agrupa**: aunque su dimensión no esté en los feeds, SAC devuelve una fila por valor de propiedad.
 2. ✅ (2026-10-27) `metadata`: `feeds`, `dimensions`, `mainStructureMembers` (ver 3.4).
 3. ✅ (2026-10-27) Celda de **medida**: `{ raw, formatted, unit }`; la unidad variable llega resuelta en `unit` (`"USD"`).
