@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.sacprobe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "SAC Probe (sonda)",
   "description": "Widget de diagnostico: muestra como llegan dimensiones, propiedades, medidas, metadata y jerarquias al widget.",
   "newInstancePrefix": "SacProbe",
