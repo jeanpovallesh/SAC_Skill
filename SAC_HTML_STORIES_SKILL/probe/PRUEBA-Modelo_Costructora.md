@@ -61,7 +61,9 @@ Tabla de referencia: antes de empezar, crea en la misma story una **tabla normal
 2. Pulsa **Las 4 lecturas** (`getHierarchies`, `getHierarchyLevel`, `getDimensions`, `getMembers`, todas sobre `Entidad`). Pulsa **Copiar reporte** y pégame el resultado: el `invokeLog` trae la respuesta de cada llamada.
 3. Los métodos devuelven promesas: cada entrada del `invokeLog` trae el valor en `resolved` (o el error en `rejected`) cuando SAC responde. Pulsa **Actualizar** si no lo ves.
 4. Para ver la expansión, **una acción a la vez** y copiando el reporte después de cada una: **Nivel 2** → Actualizar → copiar; **Expandir CIA_A_TOT** → esperar 2 segundos → Actualizar → copiar; **Colapsar CIA_A_TOT** → Actualizar → copiar.
-5. Para otros métodos o dimensiones, escribe el método (por ejemplo `ds.getHierarchies`) y los argumentos en JSON (por ejemplo `["Interco"]`) en las dos cajas y pulsa **Ejecutar**.
+5. **Cambio de jerarquía:** pulsa **Jerarquía plana**, espera, **Actualizar** y copia el reporte; después **Jerarquía del modelo**, **Actualizar** y copia otra vez. `getHierarchies` ya mostró que `Entidad` ofrece `Jerraquia_Entidad` y `@FlatHierarchy`.
+6. **Niveles:** pulsa **Leer: niveles** y **Leer: info nivel**; sus valores salen en `resolved`.
+7. Para otros métodos o dimensiones, escribe el método (por ejemplo `ds.getHierarchies`) y los argumentos en JSON (por ejemplo `["Interco"]`) en las dos cajas y pulsa **Ejecutar**.
 
 Si una llamada da `"ok":false`, copia el `error` tal cual.
 

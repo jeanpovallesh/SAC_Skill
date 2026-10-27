@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27g'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27h'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
 
   var PRESETS = [
@@ -12,7 +12,13 @@
     ['Nivel 2', 'ds.setHierarchyLevel', '["Entidad",2]'],
     ['Nivel 3', 'ds.setHierarchyLevel', '["Entidad",3]'],
     ['Expandir CIA_A_TOT', 'ds.expandNode', '["Entidad",{"Entidad":"CIA_A_TOT"}]'],
-    ['Colapsar CIA_A_TOT', 'ds.collapseNode', '["Entidad",{"Entidad":"CIA_A_TOT"}]']
+    ['Colapsar CIA_A_TOT', 'ds.collapseNode', '["Entidad",{"Entidad":"CIA_A_TOT"}]'],
+    ['Jerarquía plana', 'ds.setHierarchy', '["Entidad","@FlatHierarchy"]'],
+    ['Jerarquía del modelo', 'ds.setHierarchy', '["Entidad","Jerraquia_Entidad"]'],
+    ['Leer: niveles', 'ds.fetchHierarchyLevels', '["Entidad"]'],
+    ['Leer: info nivel', 'ds.getHierarchyLevelInfo', '["Entidad"]'],
+    ['Leer: medidas', 'ds.getMeasures', '[]'],
+    ['Leer: props Periodo', 'ds.getDimensionProperties', '["Periodo"]']
   ];
   var presetHtml = PRESETS.map(function (p, i) { return '<button data-i="' + i + '">' + p[0] + '</button>'; }).join('');
 

@@ -254,6 +254,20 @@ Lo que este archivo **no dice** y el skill debe pedir o declarar:
 
 Campos informativos que el skill admite y no valida: `source`, `system_properties` (en la dimensión) y `_inferred` (qué se dedujo y con qué confianza). Ejemplo convertido: `model-metadata-C8v8dk17.json`.
 
+### 5.5 Ids que SAC usa en tiempo de ejecución (✅ sonda, 2026-10-27)
+
+El JSON canónico y SAC no siempre usan los mismos ids. El widget debe emparejarlos así:
+
+| Elemento | En el JSON canónico | En SAC (ejecución) |
+|---|---|---|
+| Dimensión de cuentas | `Concepto` | `@MeasureDimension` (descripción `Concepto`); sus miembros llegan por el feed de medidas como `[Concepto].[parentId].&[<cuenta>]` |
+| Propiedad de una dimensión | `year`, `quarter`, `date` | `Periodo.YEAR`, `Periodo.CALQUARTER`, `Periodo.DATE` (mayúsculas; el tiempo ofrece además `CALWEEK`, `DATE2`, `YEARDESC`, `HALFYEARDESC`, `QUARTERDESC`, `MONTHDESC`, `WEEK`, `DAY`, `MONTHDAYDESC`, `DAYNAME`) |
+| Miembro en una dimensión **plana** | `public.Actual` | `public.Actual` |
+| Miembro en una dimensión **con jerarquía** | `CIA_A` | `[Entidad].[Jerraquia_Entidad].&[CIA_A]` (el widget extrae lo que va dentro de `&[...]`) |
+| Jerarquía | `Jerraquia_Entidad` | `Jerraquia_Entidad` (igual, con la errata del modelo) y además `@FlatHierarchy` (presentación plana) |
+
+Reglas del adaptador: comparar ids **sin distinguir mayúsculas**; quitar el prefijo `[Dim].[Jer].&[` y el cierre `]` de los ids de miembro antes de enlazar con `members[]`; tratar `@MeasureDimension` como la dimensión de tipo `account`. Se prevé un campo opcional `sac_id` en dimensiones y propiedades para registrar el nombre exacto cuando difiera (⚠ pendiente).
+
 ---
 
 ## 6. Ejemplo mínimo
