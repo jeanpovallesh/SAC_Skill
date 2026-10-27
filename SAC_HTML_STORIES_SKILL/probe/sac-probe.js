@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27f'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27g'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
 
   var PRESETS = [
@@ -135,8 +135,10 @@
     _pushLog(method, args, txt) {
       var t = String(txt);
       if (t.length > 6000) t = t.slice(0, 6000) + '...[truncado ' + (t.length - 6000) + ']';
-      this._invokeLog.push({ at: new Date().toISOString(), method: method, args: args, out: t });
+      var entry = { at: new Date().toISOString(), method: method, args: args, out: t };
+      this._invokeLog.push(entry);
       if (this._invokeLog.length > 30) this._invokeLog.shift();
+      return entry;
     }
 
     _onCtl(e) {
@@ -157,6 +159,7 @@
     // Llamada genérica desde el script de la story: probeInvoke("ds.setHierarchyLevel", '["Entidad",2]')
     probeInvoke(methodName, argsJson) {
       var out = { method: methodName };
+      var holder = {}, self = this;
       try {
         var o = this._getBindingObjects();
         var name = String(methodName || '');
@@ -169,9 +172,16 @@
         var args = argsJson ? JSON.parse(argsJson) : [];
         var res = target[fn].apply(target, Array.isArray(args) ? args : [args]);
         if (res && typeof res.then === 'function') {
-          out.result = '[promesa] ver consola';
-          res.then(function (v) { try { console.log('[SacProbe] ' + name + ' resolvió', v); } catch (e) { /* nada */ } },
-                   function (e) { try { console.log('[SacProbe] ' + name + ' rechazó', e); } catch (e2) { /* nada */ } });
+          out.result = '[promesa] el valor llega en "resolved"';
+          res.then(function (v) {
+            try { console.log('[SacProbe] ' + name + ' resolvió', v); } catch (e) { /* nada */ }
+            if (holder.entry) { holder.entry.resolved = v === undefined ? '[undefined]' : safe(v, 6000); }
+            try { self.render(); } catch (e4) { /* nada */ }
+          }, function (e) {
+            try { console.log('[SacProbe] ' + name + ' rechazó', e); } catch (e2) { /* nada */ }
+            if (holder.entry) { holder.entry.rejected = String(e && e.message || e); }
+            try { self.render(); } catch (e5) { /* nada */ }
+          });
         } else {
           out.result = res === undefined ? null : res;
         }
@@ -180,7 +190,7 @@
         out.ok = false; out.error = String(e && e.message || e);
       }
       var txt; try { txt = JSON.stringify(out); } catch (e3) { txt = JSON.stringify({ method: methodName, ok: true, result: String(out.result) }); }
-      this._pushLog(String(methodName), argsJson, txt);
+      holder.entry = this._pushLog(String(methodName), argsJson, txt);
       return txt;
     }
 

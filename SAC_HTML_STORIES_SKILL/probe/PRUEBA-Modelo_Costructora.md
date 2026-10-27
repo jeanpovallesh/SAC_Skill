@@ -59,8 +59,9 @@ Tabla de referencia: antes de empezar, crea en la misma story una **tabla normal
 
 1. Reimporta el manifiesto 1.0.4. Si el panel no muestra botones, recarga la story (F5) o borra el widget y vuelve a insertarlo.
 2. Pulsa **Las 4 lecturas** (`getHierarchies`, `getHierarchyLevel`, `getDimensions`, `getMembers`, todas sobre `Entidad`). Pulsa **Copiar reporte** y pégame el resultado: el `invokeLog` trae la respuesta de cada llamada.
-3. Si las lecturas salieron con `"ok":true`, pulsa **Nivel 3**, espera un par de segundos, pulsa **Actualizar** y copia el reporte. Repite con **Expandir CIA_A_TOT** (después de volver a **Nivel 2**).
-4. Para otros métodos o dimensiones, escribe el método (por ejemplo `ds.getHierarchies`) y los argumentos en JSON (por ejemplo `["Interco"]`) en las dos cajas y pulsa **Ejecutar**.
+3. Los métodos devuelven promesas: cada entrada del `invokeLog` trae el valor en `resolved` (o el error en `rejected`) cuando SAC responde. Pulsa **Actualizar** si no lo ves.
+4. Para ver la expansión, **una acción a la vez** y copiando el reporte después de cada una: **Nivel 2** → Actualizar → copiar; **Expandir CIA_A_TOT** → esperar 2 segundos → Actualizar → copiar; **Colapsar CIA_A_TOT** → Actualizar → copiar.
+5. Para otros métodos o dimensiones, escribe el método (por ejemplo `ds.getHierarchies`) y los argumentos en JSON (por ejemplo `["Interco"]`) en las dos cajas y pulsa **Ejecutar**.
 
 Si una llamada da `"ok":false`, copia el `error` tal cual.
 
