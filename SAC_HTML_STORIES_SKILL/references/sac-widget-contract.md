@@ -257,6 +257,16 @@ Verificado con la sonda (2026-10-27, modelo con cuentas, story con jerarquías):
 - Antes de usar el binding: validar `b`, `b.data` y cada celda (`d && d.id`). Puede llegar vacío o en carga. (✅ el `render` observado lo hace.)
 - Recorrer las filas una vez y construir los mapas por dimensión (`{ id: label }`), no recorrer por cada selector.
 
+### 3.4.2 API del origen de datos dentro del widget (✅ existe, ⚠ comportamiento por probar)
+
+Obtención (verificado con la sonda 27e): `this.dataBindings.getDataBinding("<nombreBinding>")` → objeto binding → `.getDataSource()` → origen de datos.
+
+- **Objeto binding:** `getDataSource`, `getDimensions`, `getMembers`, `addDimensionToFeed`, `addMemberToFeed`, `removeDimension`, `removeMember`, `getLinkedAnalysis`, `setModel`, `openSelectModelDialog`.
+- **Origen de datos, subconjunto que el skill puede usar** (es el de la API pública de scripting de SAC): `getDimensions`, `getMeasures`, `getMembers`, `getDimensionProperties`, `getHierarchies`, `setHierarchy`, `getHierarchyLevel`, `setHierarchyLevel`, `expandNode`, `collapseNode`, `getDimensionFilters`, `setDimensionFilter`, `removeDimensionFilter`, `getMemberDisplayMode`, `setMemberDisplayMode`, `getVariables`, `setVariableValue`, `refreshData`, `setRefreshPaused`, `getResultSet`.
+- El objeto devuelto es la implementación interna de SAC y trae decenas de miembros privados (`_scriptContext`, `dispatchFetchData`, `resolveMemberId`…). **El skill solo usa el subconjunto anterior**: lo demás puede cambiar entre versiones sin aviso.
+- Consecuencias previstas, por confirmar: el widget puede cambiar jerarquía y nivel por su cuenta (mecanismo B de las jerarquías), expandir nodos y construir árboles; `getMembers` podría listar los miembros del modelo y no solo los que aparecen en las filas (⚠ cambiaría la limitación de 3.4); `addDimensionToFeed` / `removeDimension` permitirían cambiar los feeds en ejecución.
+- Siempre con comprobación defensiva (`typeof ds.setHierarchy === 'function'`) y con un estado de reserva si el método no existe.
+
 ### 3.5 Disparar eventos y actualizar propiedades (📘)
 
 Evento declarado en el manifiesto:
@@ -416,6 +426,6 @@ Cada regla se convierte en una verificación de `validate_bundle.py`.
 7. ✅ (2026-10-27) Caché: al reimportar el manifiesto 1.0.1 con la URL fijada a otro commit, SAC cargó el build `27c`. Con la URL fijada a un hash no hay problema de caché.
 8. **Jerarquías:** ✅ (2026-10-27) la celda trae `isNode`, `isCollapsed` y `parentId` (cuando hay padre en el nivel mostrado); no trae número de nivel. Con un nivel configurado en el Builder llegan solo los nodos de ese nivel, sin mezclar niveles ni doble conteo. ⚠ Falta: varios niveles a la vez y el nivel que causó el error.
 9. **Cómo se aplica una jerarquía elegida:** si la define solo el Builder, o si desde la story se puede cambiar con el origen de datos del widget (por ejemplo `getDataSource()` y el cambio de jerarquía) en el tipo de story del tenant.
-   ✅ (parcial, 2026-10-27) En la story (optimized) el autocompletado del script del botón solo ofrece `getCssClass`, `getLayout` y los métodos propios del widget: **el script de la story no accede al origen de datos del widget** (no hay `getDataSource` ni `getMyDataBinding`). La jerarquía y el nivel se fijan en el panel Builder. ⚠ Falta ver si el propio JS del widget alcanza `this.dataBindings.getDataBinding(...).getDataSource()` y qué métodos ofrece (sonda 27e).
+   ✅ (2026-10-27) Desde el **script de la story no se llega** al origen de datos (el autocompletado solo ofrece `getCssClass`, `getLayout` y los métodos propios del widget). Desde **dentro del JS del widget sí**: `this.dataBindings.getDataBinding("myDataBinding").getDataSource()` devuelve un origen de datos con `getHierarchies`, `setHierarchy`, `getHierarchyLevel`, `setHierarchyLevel`, `expandNode`, `collapseNode`, etc. (ver 3.4.2). ⚠ Falta comprobar su comportamiento real (sonda 27e, `probeInvoke`).
 10. **Expansión de nodos:** si SAC entrega todos los nodos o solo los expandidos, y cómo se pide la expansión de un nodo.
 11. **Selección múltiple:** nada que verificar en SAC (se resuelve dentro del widget), pero comprobar el rendimiento con listas largas.
