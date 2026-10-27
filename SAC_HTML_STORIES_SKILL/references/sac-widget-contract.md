@@ -247,6 +247,8 @@ Verificado con la sonda (2026-10-27, modelo con cuentas, story con jerarquías):
 - Formato: `[Dimension].[Jerarquia].&[IdMiembro]`. Para extraer el ID real: `/^\[([^\]]+)\]\.\[([^\]]+)\]\.&\[(.*)\]$/` → grupos *dimensión*, *jerarquía*, *miembro*. El nodo raíz del tiempo (`...[All].[(all)]`) no sigue ese patrón y se reconoce por `[All]`.
 - Una dimensión es jerárquica si su celda trae `isNode`. La jerarquía activa se lee del `id` de la propia celda; **los nombres de jerarquía del JSON del modelo coinciden con los de SAC, incluso con erratas** (`Jerraquia_Entidad`).
 - Con los nodos raíz **colapsados**, SAC entrega solo las filas de los nodos raíz (2 filas en la prueba: una por versión). Lo que llega depende de la expansión definida en el Builder o en la story. ⚠ Falta confirmar cómo llegan los hijos al expandir (prueba B).
+- ✅ Una dimensión que **no está en ningún feed** no se filtra: SAC la agrega sobre todos sus miembros. En la prueba, sin `Version` en los feeds la medida fue 26.037.548 = Actual (13.018.774) + Ppto (13.018.774), y sin `Periodo` sumó todos los periodos. El widget debe pedir `Version` (y el resto de dimensiones que cambian el significado del número) en los feeds o declarar que el usuario las filtre en la story.
+- ✅ En una **cuenta con hijos** puesta en el feed de medidas (`EEFF`, `isCollapsed: false`) llega **una sola columna** para el nodo; sus hijos no se convierten en columnas. Para ver cada cuenta hay que agregarla como medida.
 - Una versión plana junto a dimensiones en jerarquía no repite nodos; una dimensión sin filtrar (aquí `Version`, 2 miembros) **multiplica la suma** si el widget suma todas las filas: el motor debe filtrar o agrupar por ella.
 
 - **Las opciones disponibles salen de las filas devueltas, no del maestro del modelo.** Un selector solo ve miembros que aparecen en el resultado (los que pasan los filtros de la story y tienen datos). Es una limitación de diseño que hay que respetar y, cuando importe, comunicar al usuario.
@@ -403,13 +405,13 @@ Cada regla se convierte en una verificación de `validate_bundle.py`.
 
 ## 8. Pendientes de verificación (se cierran con el widget sonda)
 
-1. ✅ (2026-10-27) Celda de **propiedad**: `{ id, label }`, vacía como `{ id: "", label: "" }`; en `metadata.dimensions` su id es `<Dimension>.<propiedad>`. Falta ver una propiedad con valores (`Version.CATEGORY`, `Periodo.year`).
+1. ✅ (2026-10-27) Celda de **propiedad**: `{ id, label }` (con valor: `{ id: "2024", label: "2024" }`; vacía: `{ id: "", label: "" }`). En `metadata.dimensions` su id es `<Dimension>.<propiedad>` con **el nombre que usa SAC** (`Periodo.YEAR`, descripción `Year`), que puede diferir en mayúsculas del JSON del modelo (`year`): el widget compara sin distinguir mayúsculas. La propiedad **agrupa**: aunque su dimensión no esté en los feeds, SAC devuelve una fila por valor de propiedad.
 2. ✅ (2026-10-27) `metadata`: `feeds`, `dimensions`, `mainStructureMembers` (ver 3.4).
 3. ✅ (2026-10-27) Celda de **medida**: `{ raw, formatted, unit }`; la unidad variable llega resuelta en `unit` (`"USD"`).
 4. Si los métodos sin `body` en el manifiesto se resuelven siempre contra la clase.
 5. Nombres de los accesos de lectura y escritura que SAC genera para cada propiedad.
 6. Comportamiento de SAC ante un método que devuelve un objeto.
-7. Caché de los archivos JS al republicar. ✅ (parcial) el build `27b` cargó desde jsDelivr con la URL fijada al commit. Falta probar una republicación con cambio de versión.
+7. ✅ (2026-10-27) Caché: al reimportar el manifiesto 1.0.1 con la URL fijada a otro commit, SAC cargó el build `27c`. Con la URL fijada a un hash no hay problema de caché.
 8. **Jerarquías:** ✅ (parcial, 2026-10-27) la celda trae `isNode` e `isCollapsed`, **sin campo de padre ni de nivel**. ⚠ Falta ver filas con nodos expandidos para saber si se mezclan nodos y hojas (riesgo de doble conteo) y cómo reconstruir el árbol (orden de filas, o los miembros del JSON del modelo).
 9. **Cómo se aplica una jerarquía elegida:** si la define solo el Builder, o si desde la story se puede cambiar con el origen de datos del widget (por ejemplo `getDataSource()` y el cambio de jerarquía) en el tipo de story del tenant.
 10. **Expansión de nodos:** si SAC entrega todos los nodos o solo los expandidos, y cómo se pide la expansión de un nodo.
