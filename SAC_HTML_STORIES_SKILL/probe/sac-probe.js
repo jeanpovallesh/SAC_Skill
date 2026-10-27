@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27d'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27e'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
 
   var tpl = document.createElement('template');
@@ -32,6 +32,19 @@
     try { s = JSON.stringify(v, null, 1); } catch (e) { s = '[no serializable: ' + e.message + ']'; }
     if (s && limit && s.length > limit) s = s.slice(0, limit) + '...[truncado ' + (s.length - limit) + ']';
     return s;
+  }
+
+  // Lista nombre -> tipo de las propiedades de un objeto y su cadena de prototipos
+  function methodsOf(o) {
+    var out = {}, p = o, n = 0;
+    while (p && p !== Object.prototype && n < 4) {
+      Object.getOwnPropertyNames(p).forEach(function (k) {
+        if (k === 'constructor') return;
+        try { out[k] = typeof o[k]; } catch (e) { out[k] = 'error'; }
+      });
+      p = Object.getPrototypeOf(p); n++;
+    }
+    return out;
   }
 
   class SacProbe extends HTMLElement {
@@ -91,6 +104,45 @@
     getProbeBuild() { return BUILD; }
     setProbeNote(note) { this._note = String(note || ''); this.render(); }
 
+    // Origen de datos desde dentro del widget (this.dataBindings)
+    _getBindingObjects() {
+      var dbs = this.dataBindings, db = null, ds = null, err = null;
+      try {
+        if (dbs && typeof dbs.getDataBinding === 'function') db = dbs.getDataBinding('myDataBinding');
+        if (db && typeof db.getDataSource === 'function') ds = db.getDataSource();
+      } catch (e) { err = String(e && e.message || e); }
+      return { dbs: dbs, db: db, ds: ds, err: err };
+    }
+
+    // Llamada genérica desde el script de la story: probeInvoke("ds.setHierarchyLevel", '["Entidad",2]')
+    probeInvoke(methodName, argsJson) {
+      var out = { method: methodName };
+      try {
+        var o = this._getBindingObjects();
+        var name = String(methodName || '');
+        var target = o.ds, fn = name;
+        if (name.indexOf('db.') === 0) { target = o.db; fn = name.slice(3); }
+        else if (name.indexOf('dbs.') === 0) { target = o.dbs; fn = name.slice(4); }
+        else if (name.indexOf('ds.') === 0) { fn = name.slice(3); }
+        if (!target) { out.error = 'objeto no disponible (' + (o.err || 'dataBindings/getDataBinding/getDataSource ausente') + ')'; return JSON.stringify(out); }
+        if (typeof target[fn] !== 'function') { out.error = fn + ' no es una función'; return JSON.stringify(out); }
+        var args = argsJson ? JSON.parse(argsJson) : [];
+        var res = target[fn].apply(target, Array.isArray(args) ? args : [args]);
+        if (res && typeof res.then === 'function') {
+          out.result = '[promesa] ver consola';
+          res.then(function (v) { try { console.log('[SacProbe] ' + name + ' resolvió', v); } catch (e) { /* nada */ } },
+                   function (e) { try { console.log('[SacProbe] ' + name + ' rechazó', e); } catch (e2) { /* nada */ } });
+        } else {
+          out.result = res === undefined ? null : res;
+        }
+        out.ok = true;
+      } catch (e) {
+        out.ok = false; out.error = String(e && e.message || e);
+      }
+      var txt; try { txt = JSON.stringify(out); } catch (e3) { txt = JSON.stringify({ method: methodName, ok: true, result: String(out.result) }); }
+      return txt;
+    }
+
     _reportText() {
       return safe(this._report || { error: 'sin reporte aun' });
     }
@@ -106,6 +158,16 @@
         thisKeys_dataBinding: Object.keys(this).filter(function (k) { return /binding/i.test(k); }),
         binding: null
       };
+      try {
+        var bo = this._getBindingObjects();
+        rep.dataBindingsApi = {
+          dataBindingsType: typeof bo.dbs,
+          dataBindingsMembers: bo.dbs ? methodsOf(bo.dbs) : null,
+          bindingObjectMembers: bo.db ? methodsOf(bo.db) : null,
+          dataSourceMembers: bo.ds ? methodsOf(bo.ds) : null,
+          error: bo.err
+        };
+      } catch (e) { rep.dataBindingsApi = { error: String(e && e.message || e) }; }
       if (!b) {
         rep.binding = 'this.myDataBinding NO existe (¿feeds sin asignar en el Builder?)';
         return rep;

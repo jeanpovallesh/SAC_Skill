@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.sacprobe",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "SAC Probe (sonda)",
   "description": "Widget de diagnostico: muestra como llegan dimensiones, propiedades, medidas, metadata y jerarquias al widget.",
   "newInstancePrefix": "SacProbe",
@@ -52,7 +52,27 @@
     "setProbeNote": {
       "description": "Escribe una nota visible en el panel (prueba de metodos con parametros)",
       "parameters": [
-        { "name": "note", "type": "string", "description": "Texto" }
+        {
+          "name": "note",
+          "type": "string",
+          "description": "Texto"
+        }
+      ]
+    },
+    "probeInvoke": {
+      "description": "Llama a un metodo del origen de datos del widget desde dentro (prueba de jerarquias). Ej.: ds.getHierarchies con args ['Entidad']",
+      "returnType": "string",
+      "parameters": [
+        {
+          "name": "methodName",
+          "type": "string",
+          "description": "ds.<metodo>, db.<metodo> o dbs.<metodo>"
+        },
+        {
+          "name": "argsJson",
+          "type": "string",
+          "description": "Arreglo JSON con los argumentos"
+        }
       ]
     }
   },

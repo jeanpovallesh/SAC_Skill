@@ -53,28 +53,22 @@ Tabla de referencia: antes de empezar, crea en la misma story una **tabla normal
 
 ---
 
-## Prueba C: cambio de jerarquía desde script
+## Prueba C: origen de datos desde dentro del widget (sonda 27e)
 
-**Objetivo:** punto 9. Este modelo expone **una sola jerarquía por dimensión**, así que probamos qué ofrece la API, no el cambio en sí.
+**Objetivo:** puntos 9 y 10. El script de la story no ve el origen de datos (`getDataSource` no existe), así que lo exploramos desde el JS del widget.
 
-Ejecuta en un botón (sustituye `Widget_1`):
+1. Reimporta el manifiesto 1.0.3 y copia el reporte: la sección `dataBindingsApi` lista `dataBindingsMembers`, `bindingObjectMembers` y `dataSourceMembers` (los métodos que ofrece SAC dentro del widget). **Pégamela completa.**
+2. Si `dataSourceMembers` no es `null`, prueba desde un botón (sin riesgo de error de compilación; sustituye `SacProbe_1`):
 
 ```javascript
-var ds = Widget_1.getDataBindings().getDataBinding("myDataBinding").getDataSource();
-console.log("dims:", JSON.stringify(ds.getDimensions().map(function (d) { return d.id || d; })));
-console.log("hier Entidad:", JSON.stringify(ds.getHierarchies("Entidad")));
-console.log("hier Periodo:", JSON.stringify(ds.getHierarchies("Periodo")));
-console.log("hier Metrica:", JSON.stringify(ds.getHierarchies("Metrica")));
-// Cambio de jerarquía: probar con el ID real de Entidad
-try { ds.setHierarchy("Entidad", "Jerraquia_Entidad"); console.log("setHierarchy OK"); }
-catch (e) { console.log("setHierarchy ERROR:", e.message); }
+console.log(SacProbe_1.probeInvoke("ds.getHierarchies", '["Entidad"]'));
+console.log(SacProbe_1.probeInvoke("ds.getDimensions", '[]'));
+console.log(SacProbe_1.probeInvoke("ds.setHierarchyLevel", '["Entidad", 3]'));
+console.log(SacProbe_1.probeInvoke("ds.expandNode", '["Entidad", {"Entidad": "CIA_A_TOT"}]'));
+console.log(SacProbe_1.probeInvoke("ds.setHierarchy", '["Entidad", "Jerraquia_Entidad"]'));
 ```
 
-**Qué copiarme:** las líneas de consola, incluso los errores.
-
-**Si no puedes crear una segunda jerarquía:** si en `Entidad` o `Concepto` puedes añadir una jerarquía alternativa en el modelo (por ejemplo, "Por Vicepresidencia"), repite C. Con eso cierro el punto 9.
-
----
+`probeInvoke` devuelve un texto JSON con `ok`, `result` o `error`. Copia las salidas de la consola, incluso los errores. Después de cada cambio que diga `"ok":true`, copia también el reporte para ver cómo cambiaron las filas.
 
 ## Prueba D: la dimensión de cuentas como dimensión
 
