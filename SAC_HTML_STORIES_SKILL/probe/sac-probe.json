@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.sacprobe",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "SAC Probe (sonda)",
   "description": "Widget de diagnostico: muestra como llegan dimensiones, propiedades, medidas, metadata y jerarquias al widget.",
   "newInstancePrefix": "SacProbe",
@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sacprobe",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@b7d599629a2435303807240ad183868f3a8c47dd/SAC_HTML_STORIES_SKILL/probe/sac-probe.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@69c975bce11acd6aacec42d2919501dc439219b8/SAC_HTML_STORIES_SKILL/probe/sac-probe.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sacprobe-styling",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@b7d599629a2435303807240ad183868f3a8c47dd/SAC_HTML_STORIES_SKILL/probe/sac-probe_styling.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@69c975bce11acd6aacec42d2919501dc439219b8/SAC_HTML_STORIES_SKILL/probe/sac-probe_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
