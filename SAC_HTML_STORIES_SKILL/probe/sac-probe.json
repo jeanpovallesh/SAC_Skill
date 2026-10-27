@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sacprobe",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@69c975bce11acd6aacec42d2919501dc439219b8/SAC_HTML_STORIES_SKILL/probe/sac-probe.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@1e9184516894742a2a8ba7d30959c648cab88ad6/SAC_HTML_STORIES_SKILL/probe/sac-probe.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sacprobe-styling",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@69c975bce11acd6aacec42d2919501dc439219b8/SAC_HTML_STORIES_SKILL/probe/sac-probe_styling.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@1e9184516894742a2a8ba7d30959c648cab88ad6/SAC_HTML_STORIES_SKILL/probe/sac-probe_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
