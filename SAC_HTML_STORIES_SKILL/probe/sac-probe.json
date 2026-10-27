@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sacprobe",
-      "url": "{{BASE_URL}}/sac-probe.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@666090f750cbbcf898e100458e6ee70b61fc9e47/SAC_HTML_STORIES_SKILL/probe/sac-probe.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sacprobe-styling",
-      "url": "{{BASE_URL}}/sac-probe_styling.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@666090f750cbbcf898e100458e6ee70b61fc9e47/SAC_HTML_STORIES_SKILL/probe/sac-probe_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
