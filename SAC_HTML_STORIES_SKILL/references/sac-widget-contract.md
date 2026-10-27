@@ -224,20 +224,31 @@ _applyProps() {
 SAC deja el binding en `this.<nombreBinding>` (en los archivos observados, `this.myDataBinding`).
 
 ```js
-const b = this.myDataBinding;
-if (b && b.data && b.data.length > 0) {
+const b = this.myDataBinding;           // { data, metadata, state } ✅ sonda
+if (b && b.state === 'success' && b.data && b.data.length > 0) {
+  const md = b.metadata;                // mapa columna → dimensión (ver abajo)
   b.data.forEach(row => {
-    const d0 = row.dimensions_0;   // { id, label, ... }
-    const d1 = row.dimensions_1;
-    const m0 = row.measures_0;     // { raw, formatted }
+    const d0 = row.dims_0;              // { id, label }  (+ { isNode, isCollapsed } si la dimensión usa jerarquía)
+    const m0 = row.measures_0;          // { raw, formatted, unit }
   });
 }
 ```
 
-- ✅ Cada celda de dimensión se usa como `{ id, label }`. El widget observado construye con ellas los pares id/descripción.
-- 📘 Cada celda de medida es `{ raw, formatted }`. ⚠ Confirmar con la sonda.
-- 📘 Los nombres de columna son `<id del feed>_<índice>`, así que un feed con `id: "dimensions"` produce `dimensions_0…`, y uno con `id: "measures"` produce `measures_0…`.
-- 📘 `b.metadata` describe las columnas (nombres y etiquetas de dimensiones y medidas). ⚠ Estructura exacta por confirmar con la sonda.
+Verificado con la sonda (2026-10-27, modelo con cuentas, story con jerarquías):
+
+- ✅ `this.myDataBinding` existe y trae **tres claves**: `data`, `metadata`, `state` (`"success"` cuando hay datos). Los mismos datos llegan también dentro del argumento de `onCustomWidgetBeforeUpdate/AfterUpdate` (`changed.myDataBinding`), junto con `widgetName`, `designMode`, `mobileMode` y `themeInfo`. Los eventos del manifiesto aparecen en ese argumento como propiedades en `false`. El widget no debe copiar `changed` entero a su estado.
+- ✅ Los nombres de columna son `<id del feed>_<índice>` (`dims_0`, `props_0`, `measures_0`): el prefijo es el **id del feed**, no una palabra fija. El JS debe construirlos a partir de los feeds del manifiesto.
+- ✅ Celda de dimensión: `{ id, label }`. En una dimensión **plana** (`Version`) el `id` es el ID del miembro (`public.Actual`). En una dimensión **con jerarquía activa** el `id` es un nombre único `[Dimension].[Jerarquia].&[Miembro]` (el tiempo, `[Periodo].[YQM].[All].[(all)]`) y la celda añade `isNode` e `isCollapsed`. Ver 3.4.1.
+- ✅ Celda de **propiedad** agregada como feed de dimensión: `{ id, label }`, igual que una dimensión plana; vacía = `{ id: "", label: "" }` (no `null`).
+- ✅ Celda de **medida**: `{ raw, formatted, unit }`. `raw` es numérico, `formatted` trae separador de miles y decimales sin símbolo (`"13,018,774.00"`) y `unit` trae la unidad resuelta (`"USD"`), también cuando la medida es de unidad variable.
+- ✅ `b.metadata` tiene tres claves: `feeds` (por id de feed: `values[]` con las columnas y `type`), `dimensions` (por columna: `{ id, description }`; una propiedad aparece como `"<Dimension>.<propiedad>"`) y `mainStructureMembers` (por columna de medida: `{ id, label, isNode, isCollapsed }`; en un modelo con cuentas, la cuenta, p. ej. `[Concepto].[parentId].&[EEFF]`). **El mapa columna → dimensión sale de `metadata`, no del orden en que el usuario agregó los feeds.**
+#### 3.4.1 Nombres únicos de miembro y jerarquías (✅ sonda)
+
+- Formato: `[Dimension].[Jerarquia].&[IdMiembro]`. Para extraer el ID real: `/^\[([^\]]+)\]\.\[([^\]]+)\]\.&\[(.*)\]$/` → grupos *dimensión*, *jerarquía*, *miembro*. El nodo raíz del tiempo (`...[All].[(all)]`) no sigue ese patrón y se reconoce por `[All]`.
+- Una dimensión es jerárquica si su celda trae `isNode`. La jerarquía activa se lee del `id` de la propia celda; **los nombres de jerarquía del JSON del modelo coinciden con los de SAC, incluso con erratas** (`Jerraquia_Entidad`).
+- Con los nodos raíz **colapsados**, SAC entrega solo las filas de los nodos raíz (2 filas en la prueba: una por versión). Lo que llega depende de la expansión definida en el Builder o en la story. ⚠ Falta confirmar cómo llegan los hijos al expandir (prueba B).
+- Una versión plana junto a dimensiones en jerarquía no repite nodos; una dimensión sin filtrar (aquí `Version`, 2 miembros) **multiplica la suma** si el widget suma todas las filas: el motor debe filtrar o agrupar por ella.
+
 - **Las opciones disponibles salen de las filas devueltas, no del maestro del modelo.** Un selector solo ve miembros que aparecen en el resultado (los que pasan los filtros de la story y tienen datos). Es una limitación de diseño que hay que respetar y, cuando importe, comunicar al usuario.
 - Antes de usar el binding: validar `b`, `b.data` y cada celda (`d && d.id`). Puede llegar vacío o en carga. (✅ el `render` observado lo hace.)
 - Recorrer las filas una vez y construir los mapas por dimensión (`{ id: label }`), no recorrer por cada selector.
@@ -392,14 +403,14 @@ Cada regla se convierte en una verificación de `validate_bundle.py`.
 
 ## 8. Pendientes de verificación (se cierran con el widget sonda)
 
-1. Forma exacta de una celda de **propiedad** dentro de `myDataBinding.data` cuando se agrega como dimensión adicional.
-2. Estructura real de `myDataBinding.metadata` (nombres y etiquetas de columnas).
-3. Forma de las celdas de **medida** (`raw`, `formatted`) y el manejo de medidas con unidad variable.
+1. ✅ (2026-10-27) Celda de **propiedad**: `{ id, label }`, vacía como `{ id: "", label: "" }`; en `metadata.dimensions` su id es `<Dimension>.<propiedad>`. Falta ver una propiedad con valores (`Version.CATEGORY`, `Periodo.year`).
+2. ✅ (2026-10-27) `metadata`: `feeds`, `dimensions`, `mainStructureMembers` (ver 3.4).
+3. ✅ (2026-10-27) Celda de **medida**: `{ raw, formatted, unit }`; la unidad variable llega resuelta en `unit` (`"USD"`).
 4. Si los métodos sin `body` en el manifiesto se resuelven siempre contra la clase.
 5. Nombres de los accesos de lectura y escritura que SAC genera para cada propiedad.
 6. Comportamiento de SAC ante un método que devuelve un objeto.
-7. Caché de los archivos JS al republicar.
-8. **Jerarquías:** qué campos trae cada celda de una dimensión con jerarquía activa (padre, nivel, si es nodo u hoja) y si las filas incluyen nodos y hojas a la vez (riesgo de doble conteo).
+7. Caché de los archivos JS al republicar. ✅ (parcial) el build `27b` cargó desde jsDelivr con la URL fijada al commit. Falta probar una republicación con cambio de versión.
+8. **Jerarquías:** ✅ (parcial, 2026-10-27) la celda trae `isNode` e `isCollapsed`, **sin campo de padre ni de nivel**. ⚠ Falta ver filas con nodos expandidos para saber si se mezclan nodos y hojas (riesgo de doble conteo) y cómo reconstruir el árbol (orden de filas, o los miembros del JSON del modelo).
 9. **Cómo se aplica una jerarquía elegida:** si la define solo el Builder, o si desde la story se puede cambiar con el origen de datos del widget (por ejemplo `getDataSource()` y el cambio de jerarquía) en el tipo de story del tenant.
 10. **Expansión de nodos:** si SAC entrega todos los nodos o solo los expandidos, y cómo se pide la expansión de un nodo.
 11. **Selección múltiple:** nada que verificar en SAC (se resuelve dentro del widget), pero comprobar el rendimiento con listas largas.

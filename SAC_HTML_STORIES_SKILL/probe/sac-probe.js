@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27b'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27c'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
 
   var tpl = document.createElement('template');
@@ -63,7 +63,13 @@
 
     // ---- hooks SAC ----
     onCustomWidgetBeforeUpdate(changed) {
-      this._props = Object.assign(this._props, changed);
+      // SAC incluye myDataBinding, dataBindings y eventos en `changed`: no se copian al estado.
+      this._lastChangedKeys = Object.keys(changed || {});
+      var self = this;
+      Object.keys(changed || {}).forEach(function (k) {
+        if (k === 'myDataBinding' || k === 'dataBindings') return;
+        self._props[k] = changed[k];
+      });
     }
     onCustomWidgetAfterUpdate(changed) {
       if (changed && 'probeLabel' in changed) this._props.probeLabel = changed.probeLabel;
@@ -94,6 +100,7 @@
       var rep = {
         build: BUILD,
         renders: this._renders,
+        changedKeys: this._lastChangedKeys,
         note: this._note,
         props: this._props,
         thisKeys_dataBinding: Object.keys(this).filter(function (k) { return /binding/i.test(k); }),
@@ -164,7 +171,16 @@
       rep.hierarchyOrExtraCellFields = Object.keys(extra).length ? extra : 'ninguno (solo id/label/raw/formatted)';
 
       // Prueba 8: filas duplicadas por combinacion de dimensiones (señal de nodos+hojas)
-      var dimKeys = Object.keys(cols).filter(function (k) { return /^dimensions/.test(k); });
+      var dimKeys = Object.keys(cols).filter(function (k) { return !/^measures/.test(k) && !/^props/.test(k); });
+      if (b.metadata && b.metadata.feeds) {
+        var fk = [];
+        Object.keys(b.metadata.feeds).forEach(function (fid) {
+          var f = b.metadata.feeds[fid];
+          if (f && f.type === 'dimension' && !/^props/.test(fid)) fk = fk.concat(f.values || []);
+        });
+        if (fk.length) dimKeys = fk;
+      }
+      rep.dimKeysUsed = dimKeys;
       var seen = {}, dup = 0;
       for (var m = 0; m < maxScan; m++) {
         var key = dimKeys.map(function (k) { var v = data[m][k]; return v && v.id; }).join('|');
@@ -195,6 +211,20 @@
         data.forEach(function (r) { var v = r[k]; if (v && v.id !== undefined) set[v.id] = true; });
         var ks = Object.keys(set);
         rep.distinctIdsPerDimension[k] = { count: ks.length, first: ks.slice(0, 12) };
+      });
+
+      // Nombres unicos [Dim].[Jerarquia].&[Miembro]
+      var re = /^\[([^\]]+)\]\.\[([^\]]+)\]\.&\[(.*)\]$/;
+      rep.parsedIds = {};
+      dimKeys.forEach(function (k) {
+        var out = {};
+        data.forEach(function (r) {
+          var v = r[k]; if (!v || typeof v.id !== 'string') return;
+          var mm = re.exec(v.id);
+          out[v.id] = mm ? { dimension: mm[1], hierarchy: mm[2], member: mm[3], isNode: v.isNode, isCollapsed: v.isCollapsed } : 'plano';
+        });
+        var ks = Object.keys(out);
+        rep.parsedIds[k] = ks.slice(0, 15).reduce(function (a, id) { a[id] = out[id]; return a; }, {});
       });
 
       // Muestra

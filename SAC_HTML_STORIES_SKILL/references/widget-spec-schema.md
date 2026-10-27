@@ -105,7 +105,7 @@ Leyenda: ✅ decidido con el usuario · 📘 regla de diseño del skill · ⚠ p
 
 ## 5. `feeds`: el orden es el contrato
 
-Cada elemento es una columna `dimensions_N` del binding. El usuario las agrega **en este orden** en el Builder. ✅
+Cada elemento es una columna `<id del feed>_N` del binding (`dims_0`, …). El usuario las agrega **en este orden** en el Builder, y el JS verifica el mapa columna → dimensión con `binding.metadata.dimensions` (✅ sonda), sin depender solo del orden.
 
 ```json
 "feeds": [
