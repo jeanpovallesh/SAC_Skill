@@ -53,22 +53,16 @@ Tabla de referencia: antes de empezar, crea en la misma story una **tabla normal
 
 ---
 
-## Prueba C: origen de datos desde dentro del widget (sonda 27e)
+## Prueba C: origen de datos desde dentro del widget (sonda 27f)
 
-**Objetivo:** puntos 9 y 10. El script de la story no ve el origen de datos (`getDataSource` no existe), así que lo exploramos desde el JS del widget.
+**Objetivo:** puntos 9 y 10. El script de la story no ve el origen de datos, y la lista de métodos del widget puede quedar guardada con una versión anterior del manifiesto (`probeInvoke` no aparecía). Por eso la prueba se hace **con botones dentro del panel de la sonda**, sin script.
 
-1. Reimporta el manifiesto 1.0.3 y copia el reporte: la sección `dataBindingsApi` lista `dataBindingsMembers`, `bindingObjectMembers` y `dataSourceMembers` (los métodos que ofrece SAC dentro del widget). **Pégamela completa.**
-2. Si `dataSourceMembers` no es `null`, prueba desde un botón (sin riesgo de error de compilación; sustituye `SacProbe_1`):
+1. Reimporta el manifiesto 1.0.4. Si el panel no muestra botones, recarga la story (F5) o borra el widget y vuelve a insertarlo.
+2. Pulsa **Las 4 lecturas** (`getHierarchies`, `getHierarchyLevel`, `getDimensions`, `getMembers`, todas sobre `Entidad`). Pulsa **Copiar reporte** y pégame el resultado: el `invokeLog` trae la respuesta de cada llamada.
+3. Si las lecturas salieron con `"ok":true`, pulsa **Nivel 3**, espera un par de segundos, pulsa **Actualizar** y copia el reporte. Repite con **Expandir CIA_A_TOT** (después de volver a **Nivel 2**).
+4. Para otros métodos o dimensiones, escribe el método (por ejemplo `ds.getHierarchies`) y los argumentos en JSON (por ejemplo `["Interco"]`) en las dos cajas y pulsa **Ejecutar**.
 
-```javascript
-console.log(SacProbe_1.probeInvoke("ds.getHierarchies", '["Entidad"]'));
-console.log(SacProbe_1.probeInvoke("ds.getDimensions", '[]'));
-console.log(SacProbe_1.probeInvoke("ds.setHierarchyLevel", '["Entidad", 3]'));
-console.log(SacProbe_1.probeInvoke("ds.expandNode", '["Entidad", {"Entidad": "CIA_A_TOT"}]'));
-console.log(SacProbe_1.probeInvoke("ds.setHierarchy", '["Entidad", "Jerraquia_Entidad"]'));
-```
-
-`probeInvoke` devuelve un texto JSON con `ok`, `result` o `error`. Copia las salidas de la consola, incluso los errores. Después de cada cambio que diga `"ok":true`, copia también el reporte para ver cómo cambiaron las filas.
+Si una llamada da `"ok":false`, copia el `error` tal cual.
 
 ## Prueba D: la dimensión de cuentas como dimensión
 

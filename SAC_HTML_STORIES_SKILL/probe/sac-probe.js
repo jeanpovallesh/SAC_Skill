@@ -1,8 +1,20 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27e'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27f'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
+
+  var PRESETS = [
+    ['Leer: jerarquías Entidad', 'ds.getHierarchies', '["Entidad"]'],
+    ['Leer: nivel Entidad', 'ds.getHierarchyLevel', '["Entidad"]'],
+    ['Leer: dimensiones', 'ds.getDimensions', '[]'],
+    ['Leer: miembros Entidad', 'ds.getMembers', '["Entidad"]'],
+    ['Nivel 2', 'ds.setHierarchyLevel', '["Entidad",2]'],
+    ['Nivel 3', 'ds.setHierarchyLevel', '["Entidad",3]'],
+    ['Expandir CIA_A_TOT', 'ds.expandNode', '["Entidad",{"Entidad":"CIA_A_TOT"}]'],
+    ['Colapsar CIA_A_TOT', 'ds.collapseNode', '["Entidad",{"Entidad":"CIA_A_TOT"}]']
+  ];
+  var presetHtml = PRESETS.map(function (p, i) { return '<button data-i="' + i + '">' + p[0] + '</button>'; }).join('');
 
   var tpl = document.createElement('template');
   tpl.innerHTML =
@@ -11,9 +23,12 @@
     '.wrap{height:100%;display:flex;flex-direction:column;border:1px solid #d9d9d9;background:#fff}' +
     '.bar{display:flex;gap:8px;align-items:center;padding:6px 8px;background:#f5f6f7;border-bottom:1px solid #d9d9d9}' +
     '.bar b{flex:1}button{font:inherit;padding:3px 10px;cursor:pointer}' +
+    '.ctl{display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:#fafafa;border-bottom:1px solid #d9d9d9}.ctl button{padding:2px 6px}.ctl input{font:inherit;padding:2px 4px}' +
     'pre{margin:0;padding:8px;overflow:auto;flex:1;white-space:pre-wrap;word-break:break-all}' +
     '</style><div class="wrap"><div class="bar"><b id="t"></b>' +
-    '<button id="copy">Copiar reporte</button></div><pre id="out">esperando datos...</pre></div>';
+    '<button id="copy">Copiar reporte</button><button id="upd">Actualizar</button></div>' +
+    '<div class="ctl" id="ctl">' + presetHtml + '<br><input id="m" size="22" placeholder="ds.metodo"><input id="a" size="34" placeholder="[args JSON]"><button id="run">Ejecutar</button><button id="all">Las 4 lecturas</button></div>' +
+    '<pre id="out">esperando datos...</pre></div>';
 
   function typeOf(v) {
     if (v === null) return 'null';
@@ -56,7 +71,10 @@
       this._note = '';
       this._report = null;
       this._renders = 0;
+      this._invokeLog = [];
       var self = this;
+      this._root.getElementById('ctl').addEventListener('click', function (e) { self._onCtl(e); });
+      this._root.getElementById('upd').addEventListener('click', function () { self.render(); });
       this._root.getElementById('copy').addEventListener('click', function () {
         var txt = self._reportText();
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -114,6 +132,28 @@
       return { dbs: dbs, db: db, ds: ds, err: err };
     }
 
+    _pushLog(method, args, txt) {
+      var t = String(txt);
+      if (t.length > 6000) t = t.slice(0, 6000) + '...[truncado ' + (t.length - 6000) + ']';
+      this._invokeLog.push({ at: new Date().toISOString(), method: method, args: args, out: t });
+      if (this._invokeLog.length > 30) this._invokeLog.shift();
+    }
+
+    _onCtl(e) {
+      var t = e && e.target, id = t && t.id, i = t && t.getAttribute && t.getAttribute('data-i');
+      var root = this._root;
+      if (i !== null && i !== undefined && i !== '') {
+        var pr = PRESETS[parseInt(i, 10)];
+        if (pr) { this.probeInvoke(pr[1], pr[2]); this.render(); }
+      } else if (id === 'run') {
+        this.probeInvoke(root.getElementById('m').value, root.getElementById('a').value);
+        this.render();
+      } else if (id === 'all') {
+        for (var k = 0; k < 4; k++) this.probeInvoke(PRESETS[k][1], PRESETS[k][2]);
+        this.render();
+      }
+    }
+
     // Llamada genérica desde el script de la story: probeInvoke("ds.setHierarchyLevel", '["Entidad",2]')
     probeInvoke(methodName, argsJson) {
       var out = { method: methodName };
@@ -140,6 +180,7 @@
         out.ok = false; out.error = String(e && e.message || e);
       }
       var txt; try { txt = JSON.stringify(out); } catch (e3) { txt = JSON.stringify({ method: methodName, ok: true, result: String(out.result) }); }
+      this._pushLog(String(methodName), argsJson, txt);
       return txt;
     }
 
@@ -153,6 +194,7 @@
         build: BUILD,
         renders: this._renders,
         changedKeys: this._lastChangedKeys,
+        invokeLog: this._invokeLog.slice(-20),
         note: this._note,
         props: this._props,
         thisKeys_dataBinding: Object.keys(this).filter(function (k) { return /binding/i.test(k); }),
