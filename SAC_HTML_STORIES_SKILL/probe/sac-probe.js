@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'probe-1.0.0-2026-10-27c'; // cambiar la letra final en cada republicacion para probar cache
+  var BUILD = 'probe-1.0.0-2026-10-27d'; // cambiar la letra final en cada republicacion para probar cache
   var TAG = 'com-isitec-sacprobe';
 
   var tpl = document.createElement('template');
@@ -117,6 +117,12 @@
         hasData: Array.isArray(b.data),
         rowCount: Array.isArray(b.data) ? b.data.length : null
       };
+
+      // Estado distinto de success: mostrar mensajes y el binding completo
+      if (b.state !== 'success' || b.messages) {
+        rep.binding.messages = b.messages;
+        rep.bindingRaw = safe(b, 4000);
+      }
 
       // Prueba 2: metadata
       if (b.metadata) {
