@@ -25,11 +25,15 @@ Entrega a Claude el JSON validado y describe en lenguaje natural lo que quieres 
 - **Pivot tables:** filas, columnas y medidas de cada tabla (se configuran estrictamente como tú indiques).
 
 Claude produce una *especificación* (widget-spec) y la valida (`validate_spec.py`, S0–S14 y C1–C20).
+```bash
+python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_spec.py spec.json model-metadata-<ID>.json
+```
 
 ### Paso 4. Generar el widget
 ```bash
 python3 -I SAC_HTML_STORIES_SKILL/scripts/generate_widget.py spec.json model-metadata-<ID>.json --out salida/ [--base-url URL_JSDELIVR]
-python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_bundle.py salida/    # R1–R14, C17
+cd salida
+python3 -I ../SAC_HTML_STORIES_SKILL/scripts/validate_bundle.py <tag>.json <tag>.js <tag>_styling.js --spec ../spec.json    # R1–R14, C17
 ```
 Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
 
