@@ -1,4 +1,4 @@
-/* Ingresos y Gastos por Zona y Canal v1.0.2 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
+/* Ingresos y Gastos por Zona y Canal v1.0.3 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
 (function () {
 'use strict';
 var TAG = "com-isitec-sollazonascanales";
@@ -259,7 +259,7 @@ var SPEC = {
  },
  "_widget": {
   "tag": "com-isitec-sollazonascanales",
-  "version": "1.0.2"
+  "version": "1.0.3"
  }
 };
 var PROP_DEFS = [
@@ -582,7 +582,7 @@ function fmt(v, kind, opts) {
     return new Intl.NumberFormat(LOCALE, { style: 'percent', minimumFractionDigits: dec, maximumFractionDigits: dec }).format(v);
   }
   if (opts.compact && Math.abs(v) >= 1000) {
-    var abs = Math.abs(v), s = abs >= 1e9 ? [1e9, ' MM'] : abs >= 1e6 ? [1e6, ' M'] : [1e3, ' K'];
+    var abs = Math.abs(v), s = abs >= 1e12 ? [1e12, ' B'] : abs >= 1e9 ? [1e9, ' mil M'] : abs >= 1e6 ? [1e6, ' M'] : [1e3, ' K'];   // K = mil, M = millones, mil M = 10^9, B = billón (10^12)
     return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(v / s[0]) + s[1];
   }
   var d2 = k === 'decimal1' ? 1 : k === 'decimal2' || k === 'currency' ? 2 : 0;
@@ -597,6 +597,13 @@ function fmtMeasure(v, mid, rows, opts) {
 }
 
 function mlabel(id) { var d = measureDef(id) || {}; return d.label || id; }
+
+/* Formato compacto automático para tablas: si algún valor llega a millones, todas las celdas de esa medida se abrevian (el valor completo queda en el title) */
+function isBig(vals) { return vals.some(function (v) { return v != null && isFinite(v) && Math.abs(v) >= 1e6; }); }
+function cellTd(v, mid, rows, compact, extra) {
+  var full = fmtMeasure(v, mid, rows);
+  return '<td class="num"' + (extra || '') + (compact ? ' title="' + esc(full) + '"' : '') + '>' + esc(compact ? fmtMeasure(v, mid, rows, { compact: true }) : full) + '</td>';
+}
 
 /* ===== UI común: tokens, estilos, colores ===== */
 var TH = SPEC.theme || {};
@@ -769,6 +776,7 @@ COMPONENTS['cross-matrix'] = {
     var val = function (r, ck) { return ck === '_tot' ? r.tot : map[r.key + '\u0001' + ck]; };
     if (st.sort) rows.sort(function (a, b) { var x = val(a, st.sort), y = val(b, st.sort); return ((x == null ? -Infinity : x) - (y == null ? -Infinity : y)) * st.dir; });
     else rows.sort(function (a, b) { return (b.tot || 0) - (a.tot || 0); });
+    var big = o.compact != null ? !!o.compact : isBig(cell.map(function (g) { return g.v[mid]; }).concat(rowT.list.map(function (g) { return g.v[mid]; })).concat([colT.total[mid]]));
     var ps = o.pageSize || 0, pages = ps ? Math.max(1, Math.ceil(rows.length / ps)) : 1;
     st.page = clamp(st.page, 0, pages - 1);
     var view = ps ? rows.slice(st.page * ps, st.page * ps + ps) : rows;
@@ -783,12 +791,12 @@ COMPONENTS['cross-matrix'] = {
     var head = '<tr><th>' + esc((feedDef(u.rows) || {}).label || u.rows) + '</th>' + cols.map(function (k) { return th(k.key, k.label, 'num'); }).join('') + (o.rowTotal ? th('_tot', 'Total', 'num') : '') + '</tr>';
     var body = view.map(function (r) {
       return '<tr><td><i class="dot" style="background:' + esc(colorFor(u.rows, r.key)) + '"></i>' + esc(r.label) + '</td>' +
-        cols.map(function (k) { var v = map[r.key + '\u0001' + k.key]; return '<td class="num"' + heat(v) + '>' + esc(fmtMeasure(v, mid, ctx.rows)) + '</td>'; }).join('') +
-        (o.rowTotal ? '<td class="num"><b>' + esc(fmtMeasure(r.tot, mid, ctx.rows)) + '</b></td>' : '') + '</tr>';
+        cols.map(function (k) { var v = map[r.key + '\u0001' + k.key]; return cellTd(v, mid, ctx.rows, big, heat(v)); }).join('') +
+        (o.rowTotal ? '<td class="num"' + (big ? ' title="' + esc(fmtMeasure(r.tot, mid, ctx.rows)) + '"' : '') + '><b>' + esc(fmtMeasure(r.tot, mid, ctx.rows, { compact: big })) + '</b></td>' : '') + '</tr>';
     }).join('');
     var foot = o.columnTotal ? '<tfoot><tr><td>Total</td>' + cols.map(function (k) {
       var t = colT.list.filter(function (g) { return g.cells[0].key === k.key; })[0];
-      return '<td class="num">' + esc(fmtMeasure(t && t.v[mid], mid, ctx.rows)) + '</td>'; }).join('') + (o.rowTotal ? '<td class="num">' + esc(fmtMeasure(colT.total[mid], mid, ctx.rows)) + '</td>' : '') + '</tr></tfoot>' : '';
+      return cellTd(t && t.v[mid], mid, ctx.rows, big); }).join('') + (o.rowTotal ? cellTd(colT.total[mid], mid, ctx.rows, big) : '') + '</tr></tfoot>' : '';
     var tools = o.search === 'rows' ? '<div class="tools"><input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + esc(c.id) + '"></div>' : '';
     var pager = ps && pages > 1 ? '<div class="pager"><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="-1">‹</button><span>' + (st.page + 1) + ' / ' + pages + '</span><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="1">›</button></div>' : '';
     if (!rows.length) return card(ctx.t(c), tools + '<div class="empty">Sin datos para la selección</div>');
@@ -822,6 +830,8 @@ COMPONENTS['detail-table'] = {
         return ((x == null ? -Infinity : x) - (y == null ? -Infinity : y)) * st.dir;
       });
     } else list = list.slice().sort(function (a, b) { return cmpNatural(a.cells[0].label, b.cells[0].label); });
+    var bigM = {};
+    mids.forEach(function (m) { bigM[m] = o.compact != null ? !!o.compact : isBig(list.map(function (g) { return g.v[m]; }).concat([agg.total[m]])); });
     var ps = o.pageSize || 0, pages = ps ? Math.max(1, Math.ceil(list.length / ps)) : 1;
     st.page = clamp(st.page, 0, pages - 1);
     var view = ps ? list.slice(st.page * ps, st.page * ps + ps) : list;
@@ -831,9 +841,9 @@ COMPONENTS['detail-table'] = {
     };
     var head = '<tr>' + th('_label', (feedDef(ref) || {}).label || ref, '') + mids.map(function (m) { return th(m, mlabel(m), 'num'); }).join('') + '</tr>';
     var body = view.map(function (g) {
-      return '<tr><td>' + esc(g.cells[0].label) + '</td>' + mids.map(function (m) { return '<td class="num">' + esc(fmtMeasure(g.v[m], m, ctx.rows)) + '</td>'; }).join('') + '</tr>';
+      return '<tr><td>' + esc(g.cells[0].label) + '</td>' + mids.map(function (m) { return cellTd(g.v[m], m, ctx.rows, bigM[m]); }).join('') + '</tr>';
     }).join('');
-    var foot = o.totalsRow ? '<tfoot><tr><td>Total</td>' + mids.map(function (m) { return '<td class="num">' + esc(fmtMeasure(agg.total[m], m, ctx.rows)) + '</td>'; }).join('') + '</tr></tfoot>' : '';
+    var foot = o.totalsRow ? '<tfoot><tr><td>Total</td>' + mids.map(function (m) { return cellTd(agg.total[m], m, ctx.rows, bigM[m]); }).join('') + '</tr></tfoot>' : '';
     var tools = o.search === 'rows' ? '<div class="tools"><input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + esc(c.id) + '"></div>' : '';
     var pager = ps && pages > 1 ? '<div class="pager"><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="-1">‹</button><span>' + (st.page + 1) + ' / ' + pages + '</span><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="1">›</button></div>' : '';
     if (!list.length) return card(ctx.t(c), tools + '<div class="empty">Sin datos para la selección</div>');
@@ -1011,12 +1021,18 @@ COMPONENTS['pivot-table'] = {
       while (lo < hi) { var mid = (lo + hi) >> 1; if (arr[mid] < v) lo = mid + 1; else hi = mid; }
       return ' style="background:color-mix(in srgb,var(--c-acento) ' + Math.round(lo / (arr.length - 1) * 38) + '%,var(--c-superficie))"';
     };
+    var bigM = {};
+    M.forEach(function (m) {
+      var vs = [grand[m]];
+      vis.forEach(function (n) { colLeaves.forEach(function (lf) { vs.push(val(n, lf, m)); }); });
+      bigM[m] = o.compact != null ? !!o.compact : isBig(vs);
+    });
     var body = vis.map(function (n) {
       var id = 'n' + (nid++); idmap[id] = n.key;
       var tg = n.kids.length ? '<span class="tg" role="button" tabindex="0" aria-expanded="' + isOpen(n) + '" data-act="ptoggle" data-comp="' + cid + '" data-k="' + id + '">' + (isOpen(n) ? '▾' : '▸') + '</span>' : '<span class="tg"></span>';
       var parent = n.kids.length;
-      var cells = colLeaves.map(function (lf) { return M.map(function (m) { var v = val(n, lf, m); return '<td class="num"' + (parent ? '' : heat(m, v)) + '>' + esc(fmtMeasure(v, m, ctx.rows)) + '</td>'; }).join(''); }).join('');
-      var tot = o.rowTotal ? M.map(function (m) { var g = idx(n.level + 1, 0).get(n.key); return '<td class="num"><b>' + esc(fmtMeasure(g && g.v[m], m, ctx.rows)) + '</b></td>'; }).join('') : '';
+      var cells = colLeaves.map(function (lf) { return M.map(function (m) { var v = val(n, lf, m); return cellTd(v, m, ctx.rows, bigM[m], parent ? '' : heat(m, v)); }).join(''); }).join('');
+      var tot = o.rowTotal ? M.map(function (m) { var g = idx(n.level + 1, 0).get(n.key); return cellTd(g && g.v[m], m, ctx.rows, bigM[m], ' style="font-weight:700"'); }).join('') : '';
       return '<tr class="' + (parent ? 'pn' : '') + '"><td class="lbl" style="padding-left:' + (10 + n.level * 16) + 'px">' + tg + esc(n.cell.label) + '</td>' + cells + tot + '</tr>';
     }).join('');
     st.idmap = idmap;
@@ -1025,9 +1041,9 @@ COMPONENTS['pivot-table'] = {
       var ft = '<tr><td class="lbl">Total</td>';
       colLeaves.forEach(function (lf) {
         var g = idx(0, C.length).get(lf.keys.join(SEP));
-        M.forEach(function (m) { ft += '<td class="num">' + esc(fmtMeasure(g && g.v[m], m, ctx.rows)) + '</td>'; });
+        M.forEach(function (m) { ft += cellTd(g && g.v[m], m, ctx.rows, bigM[m]); });
       });
-      if (o.rowTotal) M.forEach(function (m) { ft += '<td class="num">' + esc(fmtMeasure(grand[m], m, ctx.rows)) + '</td>'; });
+      if (o.rowTotal) M.forEach(function (m) { ft += cellTd(grand[m], m, ctx.rows, bigM[m]); });
       foot = '<tfoot>' + ft + '</tr></tfoot>';
     }
     var tools = '<div class="tools">' + (o.search === 'rows' ? '<input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + cid + '">' : '') +

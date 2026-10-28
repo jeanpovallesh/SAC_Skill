@@ -116,12 +116,18 @@ COMPONENTS['pivot-table'] = {
       while (lo < hi) { var mid = (lo + hi) >> 1; if (arr[mid] < v) lo = mid + 1; else hi = mid; }
       return ' style="background:color-mix(in srgb,var(--c-acento) ' + Math.round(lo / (arr.length - 1) * 38) + '%,var(--c-superficie))"';
     };
+    var bigM = {};
+    M.forEach(function (m) {
+      var vs = [grand[m]];
+      vis.forEach(function (n) { colLeaves.forEach(function (lf) { vs.push(val(n, lf, m)); }); });
+      bigM[m] = o.compact != null ? !!o.compact : isBig(vs);
+    });
     var body = vis.map(function (n) {
       var id = 'n' + (nid++); idmap[id] = n.key;
       var tg = n.kids.length ? '<span class="tg" role="button" tabindex="0" aria-expanded="' + isOpen(n) + '" data-act="ptoggle" data-comp="' + cid + '" data-k="' + id + '">' + (isOpen(n) ? '▾' : '▸') + '</span>' : '<span class="tg"></span>';
       var parent = n.kids.length;
-      var cells = colLeaves.map(function (lf) { return M.map(function (m) { var v = val(n, lf, m); return '<td class="num"' + (parent ? '' : heat(m, v)) + '>' + esc(fmtMeasure(v, m, ctx.rows)) + '</td>'; }).join(''); }).join('');
-      var tot = o.rowTotal ? M.map(function (m) { var g = idx(n.level + 1, 0).get(n.key); return '<td class="num"><b>' + esc(fmtMeasure(g && g.v[m], m, ctx.rows)) + '</b></td>'; }).join('') : '';
+      var cells = colLeaves.map(function (lf) { return M.map(function (m) { var v = val(n, lf, m); return cellTd(v, m, ctx.rows, bigM[m], parent ? '' : heat(m, v)); }).join(''); }).join('');
+      var tot = o.rowTotal ? M.map(function (m) { var g = idx(n.level + 1, 0).get(n.key); return cellTd(g && g.v[m], m, ctx.rows, bigM[m], ' style="font-weight:700"'); }).join('') : '';
       return '<tr class="' + (parent ? 'pn' : '') + '"><td class="lbl" style="padding-left:' + (10 + n.level * 16) + 'px">' + tg + esc(n.cell.label) + '</td>' + cells + tot + '</tr>';
     }).join('');
     st.idmap = idmap;
@@ -130,9 +136,9 @@ COMPONENTS['pivot-table'] = {
       var ft = '<tr><td class="lbl">Total</td>';
       colLeaves.forEach(function (lf) {
         var g = idx(0, C.length).get(lf.keys.join(SEP));
-        M.forEach(function (m) { ft += '<td class="num">' + esc(fmtMeasure(g && g.v[m], m, ctx.rows)) + '</td>'; });
+        M.forEach(function (m) { ft += cellTd(g && g.v[m], m, ctx.rows, bigM[m]); });
       });
-      if (o.rowTotal) M.forEach(function (m) { ft += '<td class="num">' + esc(fmtMeasure(grand[m], m, ctx.rows)) + '</td>'; });
+      if (o.rowTotal) M.forEach(function (m) { ft += cellTd(grand[m], m, ctx.rows, bigM[m]); });
       foot = '<tfoot>' + ft + '</tr></tfoot>';
     }
     var tools = '<div class="tools">' + (o.search === 'rows' ? '<input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + cid + '">' : '') +

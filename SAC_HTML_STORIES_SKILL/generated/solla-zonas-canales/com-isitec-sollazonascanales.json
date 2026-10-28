@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.sollazonascanales",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "Ingresos y Gastos por Zona y Canal",
   "description": "Ingresos y gastos por zona y canal del modelo SOLLA-EBITDA",
   "newInstancePrefix": "SollaZonasCanales",
@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sollazonascanales",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@0eea649bde4e7a60e6b3ec8762a7038991784df5/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales.js",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sollazonascanales-styling",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@0eea649bde4e7a60e6b3ec8762a7038991784df5/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales_styling.js",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }

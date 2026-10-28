@@ -134,7 +134,7 @@ function fmt(v, kind, opts) {
     return new Intl.NumberFormat(LOCALE, { style: 'percent', minimumFractionDigits: dec, maximumFractionDigits: dec }).format(v);
   }
   if (opts.compact && Math.abs(v) >= 1000) {
-    var abs = Math.abs(v), s = abs >= 1e9 ? [1e9, ' MM'] : abs >= 1e6 ? [1e6, ' M'] : [1e3, ' K'];
+    var abs = Math.abs(v), s = abs >= 1e12 ? [1e12, ' B'] : abs >= 1e9 ? [1e9, ' mil M'] : abs >= 1e6 ? [1e6, ' M'] : [1e3, ' K'];   // K = mil, M = millones, mil M = 10^9, B = billón (10^12)
     return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(v / s[0]) + s[1];
   }
   var d2 = k === 'decimal1' ? 1 : k === 'decimal2' || k === 'currency' ? 2 : 0;
@@ -149,3 +149,10 @@ function fmtMeasure(v, mid, rows, opts) {
 }
 
 function mlabel(id) { var d = measureDef(id) || {}; return d.label || id; }
+
+/* Formato compacto automático para tablas: si algún valor llega a millones, todas las celdas de esa medida se abrevian (el valor completo queda en el title) */
+function isBig(vals) { return vals.some(function (v) { return v != null && isFinite(v) && Math.abs(v) >= 1e6; }); }
+function cellTd(v, mid, rows, compact, extra) {
+  var full = fmtMeasure(v, mid, rows);
+  return '<td class="num"' + (extra || '') + (compact ? ' title="' + esc(full) + '"' : '') + '>' + esc(compact ? fmtMeasure(v, mid, rows, { compact: true }) : full) + '</td>';
+}

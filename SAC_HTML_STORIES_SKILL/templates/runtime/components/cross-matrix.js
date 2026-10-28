@@ -15,6 +15,7 @@ COMPONENTS['cross-matrix'] = {
     var val = function (r, ck) { return ck === '_tot' ? r.tot : map[r.key + '\u0001' + ck]; };
     if (st.sort) rows.sort(function (a, b) { var x = val(a, st.sort), y = val(b, st.sort); return ((x == null ? -Infinity : x) - (y == null ? -Infinity : y)) * st.dir; });
     else rows.sort(function (a, b) { return (b.tot || 0) - (a.tot || 0); });
+    var big = o.compact != null ? !!o.compact : isBig(cell.map(function (g) { return g.v[mid]; }).concat(rowT.list.map(function (g) { return g.v[mid]; })).concat([colT.total[mid]]));
     var ps = o.pageSize || 0, pages = ps ? Math.max(1, Math.ceil(rows.length / ps)) : 1;
     st.page = clamp(st.page, 0, pages - 1);
     var view = ps ? rows.slice(st.page * ps, st.page * ps + ps) : rows;
@@ -29,12 +30,12 @@ COMPONENTS['cross-matrix'] = {
     var head = '<tr><th>' + esc((feedDef(u.rows) || {}).label || u.rows) + '</th>' + cols.map(function (k) { return th(k.key, k.label, 'num'); }).join('') + (o.rowTotal ? th('_tot', 'Total', 'num') : '') + '</tr>';
     var body = view.map(function (r) {
       return '<tr><td><i class="dot" style="background:' + esc(colorFor(u.rows, r.key)) + '"></i>' + esc(r.label) + '</td>' +
-        cols.map(function (k) { var v = map[r.key + '\u0001' + k.key]; return '<td class="num"' + heat(v) + '>' + esc(fmtMeasure(v, mid, ctx.rows)) + '</td>'; }).join('') +
-        (o.rowTotal ? '<td class="num"><b>' + esc(fmtMeasure(r.tot, mid, ctx.rows)) + '</b></td>' : '') + '</tr>';
+        cols.map(function (k) { var v = map[r.key + '\u0001' + k.key]; return cellTd(v, mid, ctx.rows, big, heat(v)); }).join('') +
+        (o.rowTotal ? '<td class="num"' + (big ? ' title="' + esc(fmtMeasure(r.tot, mid, ctx.rows)) + '"' : '') + '><b>' + esc(fmtMeasure(r.tot, mid, ctx.rows, { compact: big })) + '</b></td>' : '') + '</tr>';
     }).join('');
     var foot = o.columnTotal ? '<tfoot><tr><td>Total</td>' + cols.map(function (k) {
       var t = colT.list.filter(function (g) { return g.cells[0].key === k.key; })[0];
-      return '<td class="num">' + esc(fmtMeasure(t && t.v[mid], mid, ctx.rows)) + '</td>'; }).join('') + (o.rowTotal ? '<td class="num">' + esc(fmtMeasure(colT.total[mid], mid, ctx.rows)) + '</td>' : '') + '</tr></tfoot>' : '';
+      return cellTd(t && t.v[mid], mid, ctx.rows, big); }).join('') + (o.rowTotal ? cellTd(colT.total[mid], mid, ctx.rows, big) : '') + '</tr></tfoot>' : '';
     var tools = o.search === 'rows' ? '<div class="tools"><input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + esc(c.id) + '"></div>' : '';
     var pager = ps && pages > 1 ? '<div class="pager"><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="-1">‹</button><span>' + (st.page + 1) + ' / ' + pages + '</span><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="1">›</button></div>' : '';
     if (!rows.length) return card(ctx.t(c), tools + '<div class="empty">Sin datos para la selección</div>');

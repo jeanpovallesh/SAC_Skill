@@ -48,7 +48,7 @@ Todo valor visual sale de una variable CSS definida en `:host`. El generador esc
 - Tamaños (escala fija): 12 (apoyo, ejes), 14 (cuerpo, tablas), 16 (subtítulos), 20 (títulos de componente), 28–36 (cifra KPI). 📘
 - Peso 400 cuerpo, 600 títulos y cabeceras, 700 cifra KPI. Interlineado 1.4 en texto, 1.1 en cifras. 📘
 - Cifras en columnas y tablas con `font-variant-numeric: tabular-nums` y alineadas a la derecha. 📘
-- **Formato de números:** se usa `formatted` de SAC cuando la unidad es variable (moneda); si no, se formatea en el widget con `Intl.NumberFormat` en la configuración regional de la story (`es` por defecto). Abreviar miles y millones (`1,2 M`) solo en tarjetas KPI y ejes, con el valor completo en el detalle. ✅
+- **Formato de números:** se usa `formatted` de SAC cuando la unidad es variable (moneda); si no, se formatea en el widget con `Intl.NumberFormat` en la configuración regional de la story (`es` por defecto). Abreviar solo en tarjetas KPI, ejes y tablas con valores grandes (tablas: automático cuando algún valor llega a millones, con el valor completo en el `title` de la celda; `options.compact` lo fuerza o lo apaga). Convención en español: `K` = mil, `M` = millones, `mil M` = 10⁹, `B` = billón (10¹²); nunca `MM`, que se lee distinto según el país. ✅
 - Porcentajes con 1 decimal salvo que el modelo defina otra precisión (`decimals`). 📘
 - Valor ausente o no calculable: `—`. Nunca `0`, `NaN` ni `undefined`. 📘
 - Textos de negocio (títulos, etiquetas, metas) son **propiedades editables**, no texto fijo (S12). ✅

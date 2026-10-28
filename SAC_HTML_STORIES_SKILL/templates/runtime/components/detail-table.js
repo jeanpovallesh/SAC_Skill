@@ -17,6 +17,8 @@ COMPONENTS['detail-table'] = {
         return ((x == null ? -Infinity : x) - (y == null ? -Infinity : y)) * st.dir;
       });
     } else list = list.slice().sort(function (a, b) { return cmpNatural(a.cells[0].label, b.cells[0].label); });
+    var bigM = {};
+    mids.forEach(function (m) { bigM[m] = o.compact != null ? !!o.compact : isBig(list.map(function (g) { return g.v[m]; }).concat([agg.total[m]])); });
     var ps = o.pageSize || 0, pages = ps ? Math.max(1, Math.ceil(list.length / ps)) : 1;
     st.page = clamp(st.page, 0, pages - 1);
     var view = ps ? list.slice(st.page * ps, st.page * ps + ps) : list;
@@ -26,9 +28,9 @@ COMPONENTS['detail-table'] = {
     };
     var head = '<tr>' + th('_label', (feedDef(ref) || {}).label || ref, '') + mids.map(function (m) { return th(m, mlabel(m), 'num'); }).join('') + '</tr>';
     var body = view.map(function (g) {
-      return '<tr><td>' + esc(g.cells[0].label) + '</td>' + mids.map(function (m) { return '<td class="num">' + esc(fmtMeasure(g.v[m], m, ctx.rows)) + '</td>'; }).join('') + '</tr>';
+      return '<tr><td>' + esc(g.cells[0].label) + '</td>' + mids.map(function (m) { return cellTd(g.v[m], m, ctx.rows, bigM[m]); }).join('') + '</tr>';
     }).join('');
-    var foot = o.totalsRow ? '<tfoot><tr><td>Total</td>' + mids.map(function (m) { return '<td class="num">' + esc(fmtMeasure(agg.total[m], m, ctx.rows)) + '</td>'; }).join('') + '</tr></tfoot>' : '';
+    var foot = o.totalsRow ? '<tfoot><tr><td>Total</td>' + mids.map(function (m) { return cellTd(agg.total[m], m, ctx.rows, bigM[m]); }).join('') + '</tr></tfoot>' : '';
     var tools = o.search === 'rows' ? '<div class="tools"><input type="search" placeholder="Buscar…" aria-label="Buscar" value="' + esc(st.q) + '" data-act="q" data-comp="' + esc(c.id) + '"></div>' : '';
     var pager = ps && pages > 1 ? '<div class="pager"><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="-1">‹</button><span>' + (st.page + 1) + ' / ' + pages + '</span><button data-act="pg" data-comp="' + esc(c.id) + '" data-d="1">›</button></div>' : '';
     if (!list.length) return card(ctx.t(c), tools + '<div class="empty">Sin datos para la selección</div>');
