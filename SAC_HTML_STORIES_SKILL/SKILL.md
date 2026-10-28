@@ -100,6 +100,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 - **Cada cambio de JS exige un commit nuevo, actualizar el hash en el manifiesto y subir su `version`**, y reimportar el manifiesto en SAC.
 - Si el usuario tiene su propio host (por ejemplo `resources.kiplan.io`), se usa su URL base (`hosting.baseUrl`).
 - Los datos del cliente (modelos, widgets originales) **no se suben a un repositorio público** sin que el usuario lo autorice.
+- A futuro, cada cliente puede tener su **propio repositorio** de widgets, separado del repositorio del skill; el skill solo necesita `hosting.baseUrl` o el par usuario/repo, así que el cambio no afecta al flujo.
 
 ---
 
@@ -107,7 +108,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 
 | Componente | Estado |
 |---|---|
-| `references/` (contrato, esquema de spec, interpretación, catálogo, esquema de metadata) | Completo; `widget-types.md` §2.13 y §5.3 por actualizar con lo verificado en la sonda |
+| `references/` (contrato, esquema de spec, interpretación, catálogo, esquema de metadata) | Completo; `widget-types.md` (§2.1, §2.13, §5.3) y el esquema de la especificación ya incorporan lo verificado en la sonda |
 | `scripts/validate_model_json.py` (M1–M18) | Hecho |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
 | `design-guidelines.md` | Pendiente |

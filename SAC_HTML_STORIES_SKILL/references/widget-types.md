@@ -34,20 +34,24 @@ Todos los componentes usan las mismas palabras. Cada tipo indica cuáles acepta.
 
 Todos los componentes leen del **mismo conjunto de filas** ya filtrado y reducido. El motor se genera una sola vez en el JS principal; los componentes no vuelven a leer el binding.
 
-### 2.1 Normalización de filas ⚠
+### 2.1 Normalización de filas ✅
 
 Cada fila de `myDataBinding.data` se convierte en un registro:
 
 ```js
 {
-  dims:     { Zona_Regional: {id, label}, Canal: {id, label}, ... },   // desde dimensions_N
+  dims:     { Zona_Regional: {id, label, isNode, isCollapsed, parentId}, Canal: {id, label}, ... },
   props:    { Tipo_Canal: {id, label} },                               // feeds de rol "property"
-  measures: { Volumen: 1234, Facturacion: 5678.9, ... }                // desde measures_N → raw
+  measures: { Volumen: {raw: 1234, formatted: "1,234.00", unit: "USD"}, ... }
 }
 ```
 
-- El mapa `dimensions_N → ref` sale de `feeds` (orden del Builder).
-- El valor de cada medida usa `raw`; el texto con formato de SAC (`formatted`) se conserva aparte para mostrarlo cuando hay unidad variable. ⚠
+- **Columnas.** Se llaman `<feedId>_<índice>` (`dims_0`, `props_0`, `measures_0`). El mapa columna → dimensión se lee en cada render de `metadata.dimensions` (`{id, description}`; las propiedades como `"<Dim>.<PROP>"`); el orden **puede cambiar** entre ejecuciones, así que nunca se asume por posición. Las cuentas se leen de `metadata.mainStructureMembers.<col>`.
+- **Ids.** El adaptador compara sin distinguir mayúsculas y normaliza: `year` ≡ `Periodo.YEAR`, `Concepto` ≡ `@MeasureDimension`, y `[Dim].[Jer].&[Miembro]` ≡ `Miembro` (se quita el prefijo del nombre único para comparar con la metadata). Se conserva el `id` original de la celda para llamar a `expandNode`/`collapseNode`.
+- **Medidas.** El valor numérico es `raw`; `formatted` (separadores de miles, sin símbolo) se usa para mostrar cuando la unidad es variable; `unit` trae la moneda ya resuelta. Una medida sin unidad no la trae vacía: se trata como ausente.
+- **Propiedades.** Una propiedad sin valor llega como `{id:"", label:""}`. Una propiedad en un feed **actúa como agrupación**: agrega filas.
+- **Dimensiones fuera del feed.** SAC las **suma**; no se desglosan ni se pueden recuperar en el widget.
+- **Estado del binding.** `success`, `loading` (sin `data` ni `metadata`) o `error` (`messages`). Con `loading` se conserva el último render y se muestra un indicador discreto; no se vacía el widget.
 - Una fila con celdas vacías en un feed requerido se descarta y se cuenta en el diagnóstico.
 - Los miembros se indexan por `id`; el texto visible es `label`.
 
@@ -173,42 +177,57 @@ El aviso `missingFeeds` es **uno por widget**, no uno por componente.
 | Tabla y matriz | `pageSize` (10 por defecto) | Paginación |
 | Series apiladas | 8 | Las menores se agrupan en "Otros" |
 
-### 2.13 Jerarquías ✅ ⚠
+### 2.13 Jerarquías ✅
 
-El usuario necesita elegir una jerarquía en las tablas y ver los datos **de forma jerárquica**. Las reglas de esta sección valen para todos los componentes.
+El usuario puede elegir una jerarquía en las tablas y ver los datos **de forma jerárquica**. Todo lo de esta sección está verificado con la sonda (contrato §3.4.1, §3.4.2 y §8), salvo lo marcado ⚠.
 
-**Origen de la estructura**
+**Cómo entrega SAC una jerarquía**
 
-- Los ids de jerarquía disponibles salen de `hierarchies` de la dimensión en el modelo; la especificación los lista en `feeds[].hierarchy.available`. Pueden ser `level` (niveles fijos, por ejemplo Año › Trimestre › Mes) o `parent-child` (profundidad variable).
-- El **adaptador de jerarquía** convierte las filas de una dimensión en nodos `{ id, label, parentId, level, isLeaf }`. Si SAC entrega el padre y el nivel en cada celda, se usan. ⚠ Si no los entrega, el widget **no puede construir el árbol**: degrada a una lista plana ordenada y muestra "La jerarquía no está disponible: se muestra en lista". Cómo llegan nodos, padres y niveles se confirma con la sonda.
+- **Un nivel por lectura:** llega solo el nivel configurado (nunca el raíz y el nivel 2 juntos), sin doble conteo: el total del nivel coincide con el del raíz.
+- Con jerarquía activa, el `id` de la celda es el nombre único `[Dim].[Jer].&[Miembro]` y trae `isNode`, `isCollapsed` y `parentId` (si hay padre en el nivel mostrado). Las hojas **no** traen `isNode` ni `isCollapsed`.
+- Con la jerarquía plana (`@FlatHierarchy`) el `id` es el simple (`CO_A`) y no hay `isNode`, `isCollapsed` ni `parentId`.
+- El adaptador de jerarquía convierte las filas de una dimensión en nodos `{ id, label, parentId, isNode, isCollapsed, isLeaf }`. Si no hay `parentId` (jerarquía plana, o el nivel raíz) los nodos son todos de primer nivel y se muestran en lista.
+
+**El widget controla la jerarquía** (desde su propio JS; el script de la story no llega al origen de datos)
+
+```js
+const ds = this.dataBindings.getDataBinding('myDataBinding').getDataSource();
+await ds.getHierarchies('Entidad');                 // [{id:'Jerraquia_Entidad'},{id:'@FlatHierarchy',description:'Presentación plana'}]
+await ds.setHierarchy('Entidad', id);               // luego volver a fijar el nivel
+await ds.setHierarchyLevel('Entidad', n);           // nivel 1 = raíz
+await ds.expandNode('Entidad', { Entidad: idUnico });
+await ds.collapseNode('Entidad', { Entidad: idUnico });
+```
+
+- Todos devuelven **promesas** (resuelven `undefined`) y, tras `setHierarchy`, `setHierarchyLevel`, `expandNode` y `collapseNode`, el binding pasa por `loading` y vuelve a `success`: se protege con `typeof … === 'function'`, `try/catch` y se espera el siguiente render.
+- **`setHierarchy` reinicia la vista al nodo raíz colapsado:** tras cambiar de jerarquía se vuelve a llamar `setHierarchyLevel` (o `expandNode`).
+- `expandNode` y `collapseNode` usan siempre el **nombre único** (`id` de la celda).
+- El selector de jerarquía (`feeds[].hierarchy.selectable`) lista `getHierarchies(dim)`. Los ids de la especificación (`hierarchy.available`) se usan solo para filtrar o para etiquetar; se muestra `description` si existe.
+- El método `getSelectedHierarchy(dimension)` y el evento `onHierarchyChange` **no son necesarios** para que funcione; solo se agregan si la story quiere enterarse. Reglas de métodos en el contrato (§2.4).
+- Niveles: se muestran como "Nivel 1 … n". No se usa `fetchHierarchyLevels`. La profundidad máxima se deduce con `getMembers` (orden en árbol) o con las cadenas de `parentId`.
 
 **Sin doble conteo (regla crítica)**
 
-Con una jerarquía activa, las filas pueden incluir **nodos y hojas** a la vez. Sumarlos duplicaría los valores.
-
-1. Los componentes que **no** son tablas jerárquicas (tarjetas, dona, barras, burbujas, matrices sin `tree`) usan solo las **hojas** de esa dimensión, o el nivel indicado en `options.level` (entero desde 1 = raíz, o `leaf`).
-2. Los totales generales se calculan desde las hojas, nunca sumando nodos y hojas juntos.
-3. En una tabla jerárquica, el valor de un **nodo** es el que entrega SAC para ese nodo si existe (respeta agregaciones de jerarquía y ratios); si no existe, se calcula de abajo hacia arriba: suma de los hijos para medidas aditivas y, en ratios, numerador y denominador agregados en el nodo y luego divididos (2.5).
+1. Con un nivel fijo (`setHierarchyLevel`), todas las filas son del mismo nivel: se suman sin más.
+2. Con **nodos expandidos** (`expandNode`), SAC añade los hijos y **conserva la fila del padre**: sumar todo duplica. Una fila con `isNode && !isCollapsed` en cualquier dimensión es un **subtotal** y se **excluye** de totales, KPIs y gráficos; se usa solo para mostrar el valor del padre en una tabla en árbol.
+3. Los componentes que no son tablas jerárquicas (tarjetas, dona, barras, burbujas, matrices sin `tree`) trabajan con un **nivel fijo**: `options.level` (entero desde 1 = raíz) o, si no se indica, el nivel configurado en el Builder.
 4. Las medidas semiaditivas se reducen en el tiempo **antes** de agregar hacia arriba (2.3).
-
-**Elección de jerarquía**
-
-- Cuando `feeds[].hierarchy.selectable` es `true` y la dimensión tiene más de una jerarquía disponible, el componente muestra un **selector de jerarquía** (5.3).
-- Aplicar la jerarquía elegida a los datos puede hacerse de tres formas ⚠, que la sonda debe confirmar:
-  - **A. Definida en el Builder:** la jerarquía la fija el usuario al agregar la dimensión; el widget solo la lee y el selector no se dibuja.
-  - **B. Dirigida por el widget:** el widget guarda la jerarquía elegida, la expone con el método `getSelectedHierarchy(dimension)` y dispara el evento `onHierarchyChange`; la story aplica el cambio sobre el origen de datos y llegan filas nuevas.
-  - **C. Interna:** el binding trae varias jerarquías a la vez y el widget alterna. Es la menos probable.
-- El skill genera el método y el evento de la opción B siempre que haya un selector. Si la sonda demuestra que la opción B no es viable en el tenant, el selector se oculta y rige la opción A.
 
 **Expansión**
 
-- El estado de expansión (conjunto de ids expandidos) vive en el widget y se conserva entre re-renderizados y cambios de filtro.
-- Nivel inicial: propiedad `nivelExpansionInicial` (por defecto 1: solo raíces visibles).
-- ⚠ Si SAC devuelve solo los nodos expandidos, expandir un nodo requiere pedir más datos al origen. Se confirma con la sonda; si es así, la expansión usa el mismo mecanismo que la elección de jerarquía (evento + story).
+- La expansión la hace SAC (`expandNode`/`collapseNode`); el widget no conserva un conjunto propio de ids expandidos: el estado es el que indican `isCollapsed` y la presencia de los hijos.
+- Nivel inicial: propiedad `nivelExpansionInicial` (por defecto 1); el widget llama a `setHierarchyLevel` con ese valor al cargar.
+- ⚠ Sin verificar: "Expandir todo" (llamadas sucesivas a `expandNode`, y si los nodos expandidos conservan su estado tras otro `expandNode` o un cambio de filtro). Hasta confirmarlo, el control se llama "Nivel n" (`setHierarchyLevel`) y la expansión es nodo a nodo.
+
+**Cuentas (modelos basados en cuentas)**
+
+- La dimensión de cuentas **no puede ir en un feed de dimensiones**: entra como columnas del feed de medidas (`mainStructureMember`), y su estructura sale de `metadata.mainStructureMembers` (`id` único, `label`, `isNode`, `isCollapsed`). Una tabla con cuentas en filas se construye en el cliente, transponiendo esas columnas.
+- ⚠ Sin verificar: expandir cuentas con `expandNode` sobre `@MeasureDimension`.
 
 **Filtros jerárquicos**
 
-- En un filtro con `cascade`, la lista se muestra con sangría por nivel; elegir un nodo marca todos sus descendientes; un nodo con hijos parcialmente elegidos aparece en estado indeterminado; la búsqueda muestra la coincidencia con su ruta ("Zona Sur › Andalucía").
+- Los miembros de la lista salen de `getMembers(dim)` (maestro completo, en orden de árbol, **sin padre ni nivel**) o de las filas entregadas (con `parentId` pero solo con datos). ⚠ Para sangrar por nivel hace falta el padre: se toma de las filas entregadas; los miembros sin fila se muestran sin sangría.
+- Con `cascade`, elegir un nodo marca sus descendientes conocidos; un nodo con hijos parcialmente elegidos aparece indeterminado; la búsqueda muestra la ruta ("Zona Sur › Andalucía") cuando hay `parentId`.
 
 ---
 
@@ -401,14 +420,14 @@ Aplica a `detail-table` y a `cross-matrix` (sobre sus filas). Reglas de jerarqu�
 | **Requiere** | Que el eje de filas sea un feed con `hierarchy` en la especificación |
 | **Opciones** | `expandLevel` (nivel inicial; enlazado con la propiedad `nivelExpansionInicial`) · `hierarchyControl` (muestra el selector de jerarquía) · `indentPx` (sangría por nivel) · `showLevelColumn` (columna con el nivel del nodo) |
 | **Dibujo** | Una fila por nodo visible, con **sangría por nivel**, un indicador ▸ / ▾ en los nodos que tienen hijos y un espacio equivalente en las hojas · los nodos con hijos se destacan (peso de letra mayor) y muestran **valores agregados** · las hojas se dibujan normales · al final, la fila de total general (desde hojas, 2.13) |
-| **Controles** | "Expandir todo", "Contraer todo" y botones "Nivel 1 … n" (según los niveles existentes) · **selector de jerarquía** en la cabecera si hay más de una disponible y `hierarchyControl` está activo |
+| **Controles** | Botones "Nivel 1 … n" (`setHierarchyLevel`; muestran un solo nivel) · expandir/contraer por nodo (▸ / ▾ → `expandNode`/`collapseNode`) · "Expandir todo" ⚠ sin verificar (2.13) · **selector de jerarquía** (`getHierarchies`) si hay más de una y `hierarchyControl` está activo |
 | **Búsqueda** | Filtra por texto sobre id y etiqueta **conservando visibles los ancestros** de cada coincidencia (se expanden automáticamente); sin texto, vuelve al estado de expansión previo |
 | **Orden** | Ordenar por una columna ordena a los **hermanos dentro de su padre**; el árbol no se rompe |
 | **Paginación** | Se desactiva en modo árbol; el contenedor tiene altura máxima con cabecera fija y desplazamiento interno. Si hay más de unas 500 filas visibles, se dibujan solo las que caben en pantalla (virtualización) |
 | **Heat** (`cross-matrix`) | La escala de intensidad se calcula **por nivel**, para que los nodos con totales altos no aplasten a las hojas |
 | **Selección enlazada** | Elegir una fila selecciona el id del nodo; si el grupo usa una dimensión sin jerarquía, solo las hojas participan |
 | **Teclado y accesibilidad** | Contenedor con `role="treegrid"`; cada fila con `aria-level`, `aria-expanded` (si tiene hijos) y `aria-selected`; `→` expande, `←` contrae (o sube al padre), `↑` `↓` mueven el foco, `Enter` selecciona |
-| **Estados** | Sin información de padres/niveles → lista plana con aviso (2.13); nodo sin datos → "—" |
+| **Estados** | Sin `parentId` (jerarquía plana o un solo nivel) → lista plana sin sangría; `loading` → se conserva el último render con indicador; nodo sin datos → "—"; los subtotales (`isNode && !isCollapsed`) no entran en el total general (2.13) |
 | **Usado en** | Aún sin ejemplo; patrón típico: zonas regionales, centros de costos, cuentas, organización |
 
 ---
@@ -568,7 +587,7 @@ Un selector por dimensión del feed (mismo comportamiento que 7.2), usado para *
 | C14 | `hierarchy.default` pertenece a `hierarchy.available`, y todos esos ids existen en `hierarchies` de la dimensión en el modelo |
 | C15 | `options.level` solo en componentes sin `tree`, y su eje es un feed con `hierarchy` |
 | C16 | `cascade` solo en filtros cuya dimensión tiene `hierarchy` |
-| C17 | Si algún feed tiene `hierarchy.selectable: true`, existen el método `getSelectedHierarchy` y el evento `onHierarchyChange` |
+| C17 | Si algún feed tiene `hierarchy.selectable: true`, el JS llama a `setHierarchy` y luego a `setHierarchyLevel` protegidas con `typeof`, y existe la propiedad `nivelExpansionInicial`; `getSelectedHierarchy` y `onHierarchyChange`, si se declaran, devuelven `string` y se disparan |
 | C18 | Con jerarquía activa, ningún componente no jerárquico suma nodos y hojas a la vez |
 
 ---

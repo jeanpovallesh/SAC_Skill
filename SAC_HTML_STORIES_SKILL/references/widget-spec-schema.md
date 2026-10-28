@@ -326,7 +326,7 @@ Los textos libres por fila (por ejemplo un "plan de pipeline" distinto en cada d
 - Toda propiedad lleva `appliesTo` (qué elemento o cálculo modifica). Si no se aplica a nada, el validador la rechaza (regla R7 del contrato). 📘
 - Cada propiedad genera: la entrada del manifiesto, su uso en el JS principal, y el control y el `set` en el styling.
 - Para widgets `solo-lectura`, `methods` y `events` pueden ser mínimos o vacíos. Para `captura`, se declara el método de salida (`getJsonString`) y, si la story necesita enterarse, un evento.
-- Si algún feed tiene `hierarchy.selectable: true`, el skill agrega el método `getSelectedHierarchy(dimension)` y el evento `onHierarchyChange`, y la propiedad `nivelExpansionInicial` (entero, por defecto 1). Ver `widget-types.md`, 2.13.
+- Si algún feed tiene `hierarchy.selectable: true`, el widget cambia la jerarquía por sí mismo (`setHierarchy` + `setHierarchyLevel` sobre el origen de datos, ver `widget-types.md` 2.13) y el skill agrega la propiedad `nivelExpansionInicial` (entero, por defecto 1). El método `getSelectedHierarchy(dimension)` (devuelve `string`) y el evento `onHierarchyChange` son **opcionales**: solo si el pedido indica que la story debe enterarse.
 
 ---
 
@@ -403,4 +403,4 @@ Restricciones al generar el JS 📘:
 | S11 | Cantidad de feeds ≤ 8; si no, se avisa |
 | S12 | Ninguna etiqueta o texto de negocio está fijo en `components`: va como propiedad o sale de datos |
 | S13 | Todo id de `hierarchy.available` y `hierarchy.default` existe en `hierarchies` de esa dimensión en el modelo |
-| S14 | Un componente con `options.tree` usa como filas un feed con `hierarchy`; `selectable: true` implica el método y el evento de jerarquía (los agrega el skill) |
+| S14 | Un componente con `options.tree` usa como filas un feed con `hierarchy`; `selectable: true` implica la propiedad `nivelExpansionInicial` y la llamada al origen de datos para cambiar la jerarquía; el método y el evento son opcionales |
