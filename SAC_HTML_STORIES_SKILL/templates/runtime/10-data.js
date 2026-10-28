@@ -1,6 +1,7 @@
 /* ===== lectura del data binding ===== */
 /* Columnas: <feedId>_<n>. El mapa columna -> dimensión sale de metadata.dimensions en cada lectura
    (el orden puede cambiar entre ejecuciones). Verificado con la sonda. */
+function msmKeys(r) { var o = {}; Object.keys(r).forEach(function (k) { if (/^measures_/.test(k)) o[k] = 1; }); return o; }
 function readBinding(binding) {
   if (!binding) return { state: 'none' };
   if (binding.state === 'loading') return { state: 'loading' };
@@ -44,7 +45,7 @@ function readBinding(binding) {
     });
     Object.keys(measCols).forEach(function (col) {
       var c = r[col];
-      if (c && typeof c.raw === 'number') rec.m[measCols[col]] = { raw: c.raw, formatted: c.formatted, unit: c.unit };
+      if (c && typeof c.raw === 'number' && isFinite(c.raw)) rec.m[measCols[col]] = { raw: c.raw, formatted: c.formatted, unit: c.unit };
     });
     return rec;
   });
@@ -53,5 +54,6 @@ function readBinding(binding) {
     if ((m.required || (!m.optional && m.role === 'value')) && !present[m.id]) missing.push(m.id);
   });
   var received = Object.keys(metaDims).map(function (k) { return metaDims[k].id; }).concat(Object.keys(msm).map(function (k) { return memberKey(msm[k].id); }));
-  return { state: 'success', rows: rows, present: present, missing: missing, received: received };
+  var sample = data.slice(0, 3).map(function (r) { return r; });
+  return { state: 'success', rows: rows, present: present, missing: missing, received: received, sample: sample, metaKeys: Object.keys(meta), nRaw: data.length, nBad: data.reduce(function (a, r) { return a + Object.keys(msmKeys(r)).filter(function (k) { var c = r[k]; return c && typeof c.raw !== 'number' || (c && typeof c.raw === 'number' && !isFinite(c.raw)); }).length; }, 0) };
 }

@@ -66,7 +66,7 @@ El HTML aporta zonas y canales, pero **no tiene ninguna vista por línea o marca
     "name": "Distribución por Zonas y Canales",
     "id": "com.isitec.distribucionzonascanales",
     "tag": "com-isitec-distribucionzonascanales",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "prefix": "DistribucionZonas",
     "description": "Tablero de distribución por zona regional, canal y línea/marca",
     "mode": "solo-lectura",

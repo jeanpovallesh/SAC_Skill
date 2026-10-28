@@ -158,6 +158,15 @@ class Widget extends HTMLElement {
         '<br><span class="muted">Se esperan (ids del modelo): ' + esc(expected.join(', ')) + '</span><br><span class="muted">Se recibieron: ' + esc(read.received.join(', ') || 'nada') + '</span></div></div>';
     }
     var missing = '';
+    var diag = '';
+    if (this._props.diagnostico) {
+      var cut = function (o) { var t = JSON.stringify(o); return t.length > 1500 ? t.slice(0, 1500) + '…' : t; };
+      diag = '<details open class="notice"><summary><b>Diagnóstico</b></summary><pre style="white-space:pre-wrap;font-size:11px">' + esc(
+        'versión: ' + SPEC._widget.version + '\nfilas recibidas: ' + read.nRaw + ' · celdas de medida no numéricas: ' + read.nBad +
+        '\nrecibido: ' + read.received.join(', ') + '\npresente: ' + Object.keys(read.present).join(', ') +
+        '\nmetadata: ' + cut(this.myDataBinding && this.myDataBinding.metadata && { dimensions: this.myDataBinding.metadata.dimensions, mainStructureMembers: this.myDataBinding.metadata.mainStructureMembers }) +
+        '\nmuestra: ' + cut(read.sample)) + '</pre></details>';
+    }
     var ctx = this._ctx(read);
     var parts = SPEC.components.map(function (c) {
       var ok = asArray(c.requires).every(function (r) { return ctx.have(r); });
@@ -167,7 +176,7 @@ class Widget extends HTMLElement {
       return html ? '<div class="cell s' + (c.span || defaultSpan(c.type)) + '">' + html + '</div>' : '';
     }).join('');
     if (!ctx.rows.length) parts = '<div class="cell s12"><div class="empty">Sin datos para la selección</div></div>';
-    return '<div class="root"><div class="bar"></div>' + head + missing + renderFilters(ctx) + '<div class="grid">' + parts + '</div></div>';
+    return '<div class="root"><div class="bar"></div>' + head + missing + diag + renderFilters(ctx) + '<div class="grid">' + parts + '</div></div>';
   }
 }
 function defaultSpan(type) {

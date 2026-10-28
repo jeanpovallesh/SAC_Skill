@@ -17,7 +17,7 @@ COMPONENTS['donut-share'] = {
     var opt = { aria: { enabled: true }, textStyle: baseTextStyle(), animation: false,
       tooltip: { trigger: 'item', confine: true, formatter: function (p) { return esc(p.name) + ': ' + esc(fmtMeasure(p.value, mid, ctx.rows)) + ' (' + fmt(p.value / total, 'percent1') + ')'; } },
       series: series };
-    if (o.centerTotal) opt.graphic = [{ type: 'text', left: 'center', top: 'middle', style: { text: fmtMeasure(total, mid, ctx.rows, { compact: true }), fontSize: 17, fontWeight: 700, fontFamily: FONT, fill: THC.texto || '#0b1c30', textAlign: 'center' } }];
+    if (o.centerTotal) opt.graphic = [{ type: 'text', left: 'center', top: 'middle', style: { text: fmtMeasure(total, mid, ctx.rows, { compact: true }), fontSize: 14, fontWeight: 700, fontFamily: FONT, fill: THC.texto || '#0b1c30', textAlign: 'center' } }];
     var show = asArray(o.legend || ['share', 'value']);
     var lg = '<div class="lgl">' + list.map(function (e) {
       var on = !sel || sel === e.key;

@@ -17,10 +17,10 @@ COMPONENTS['bubble-matrix'] = {
     var pts = agg.filter(function (g) { return g.v[u.x] != null && g.v[u.y] != null && g.v[u.size] != null; });
     if (pts.length < 2) return card(ctx.t(c), '<div class="empty">Sin datos suficientes para la selección</div>');
     var sel = ctx.group(o.selectionGroup);
-    var maxS = Math.max.apply(null, pts.map(function (g) { return g.v[u.size]; })) || 1;
+    var maxS = Math.max.apply(null, pts.map(function (g) { return Math.abs(g.v[u.size]); })) || 1;
     var yPct = /^percent/.test((measureDef(u.y) || {}).format || '');
     var data = pts.map(function (g) {
-      var r = 14 + 30 * Math.sqrt(Math.max(g.v[u.size], 0) / maxS);
+      var r = 14 + 30 * Math.sqrt(Math.max(Math.abs(g.v[u.size]), 0) / maxS);
       return { name: g.cells[0].label, key: g.cells[0].key, value: [g.v[u.x], g.v[u.y], g.v[u.size]], symbolSize: r * 2,
         itemStyle: { color: colorFor(u.axis, g.cells[0].key), opacity: sel ? dim(sel, g.cells[0].key) : 0.8 } };
     }).sort(function (a, b) { return b.symbolSize - a.symbolSize; });
@@ -33,8 +33,9 @@ COMPONENTS['bubble-matrix'] = {
       var a = vals.concat(ref != null ? [ref] : []), lo = Math.min.apply(null, a), hi = Math.max.apply(null, a), pad = (hi - lo) * 0.1 || Math.abs(hi) * 0.1 || 1;
       return { min: lo - pad, max: hi + pad };
     };
+    var rx0 = pts.map(function (g) { return g.v[u.x]; });
     var rx = rng(pts.map(function (g) { return g.v[u.x]; }), xr), ry = rng(pts.map(function (g) { return g.v[u.y]; }), yr);
-    if (rx.min > 0 && rx.min < (rx.max - rx.min)) rx.min = 0;
+    if (Math.min.apply(null, rx0) >= 0) rx.min = 0;
     var lab = mlabel;
     var opt = { aria: { enabled: true }, textStyle: baseTextStyle(), animation: false,
       grid: { left: 84, right: 24, top: 24, bottom: 48 },

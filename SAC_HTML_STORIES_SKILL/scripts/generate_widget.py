@@ -38,9 +38,16 @@ def split_feeds(spec):
     return dims, props
 
 
+DIAG = {'id': 'diagnostico', 'type': 'boolean', 'default': False, 'label': 'Mostrar diagnóstico de datos', 'appliesTo': 'panel de diagnóstico', 'derived': True}
+
+
+def widget_props(spec):
+    return spec_lib.all_properties(spec) + [DIAG]
+
+
 def manifest(spec, base_url, names):
     w = spec['widget']
-    props = spec_lib.all_properties(spec)
+    props = widget_props(spec)
     pj = {}
     for p in props:
         pj[p['id']] = {'type': TYPE_MAP.get(p.get('type'), 'string'),
@@ -83,6 +90,8 @@ def group_of(p):
     pid = p['id']
     if pid == 'title':
         return 'Widget'
+    if pid == 'diagnostico':
+        return 'Diagnóstico'
     if pid.startswith('etiqueta_'):
         return 'Filtros'
     m = re.match(r'(?:titulo|texto)_([A-Za-z0-9]+?)(?:_|$)', pid)
@@ -93,7 +102,7 @@ def group_of(p):
 
 def main_js(spec, meta_hint):
     w = spec['widget']
-    props = spec_lib.all_properties(spec)
+    props = widget_props(spec)
     model = {'timeDim': time_dim(spec)}
     s = {k: v for k, v in spec.items() if k not in ('request', 'assumptions', 'model', 'hosting', 'widget')}
     s['_model'] = model
@@ -129,7 +138,7 @@ def main_js(spec, meta_hint):
 
 def styling_js(spec):
     w = spec['widget']
-    props = spec_lib.all_properties(spec)
+    props = widget_props(spec)
     cls = re.sub(r'[^A-Za-z0-9]', '', w['prefix']) + 'Styling'
     groups = {}
     for p in props:
