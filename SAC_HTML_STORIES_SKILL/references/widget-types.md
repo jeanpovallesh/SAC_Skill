@@ -338,7 +338,7 @@ Una tarjeta tiene título (en mayúsculas pequeñas), valor principal, unidad op
 | **Usa** | `axis` · `measures` (aditiva o semiaditiva) |
 | **Opciones** | `centerTotal` (muestra el total en el centro con su unidad) · `legend`: lista con `share`, `value` o ambos · `topN` (6 por defecto; el resto en "Otros") · `selectionGroup` |
 | **Cálculo** | Total = suma sobre los miembros; porcentaje de cada miembro; los miembros con valor ≤ 0 se omiten; los de menos de ~1 % se agrupan en "Otros" |
-| **Dibujo** | Anillo SVG con segmentos calculados desde los porcentajes (arcos con ángulos acumulados); centro con total; leyenda debajo o al lado con color, nombre, porcentaje y valor |
+| **Dibujo** | Gráfico `pie` de ECharts (SVG) en anillo, con colores estables por miembro (2.8); centro con total; leyenda HTML debajo con color, nombre, porcentaje y valor |
 | **Interacción** | Clic en segmento o leyenda selecciona el miembro; hover resalta el segmento |
 | **Estados** | Total 0 → `empty` |
 | **Usado en** | Ejemplo 02 |
@@ -367,7 +367,7 @@ Se declaran en `options.status`:
 | **Requiere** | Las tres medidas |
 | **Opciones** | `yReference` (propiedad o número: línea horizontal de meta) · `xReference` (`median`, `mean`, propiedad o número: línea vertical) · `quadrantLabels` (4 etiquetas en las esquinas) · `selectionGroup` |
 | **Cálculo** | Para cada miembro: `x`, `y`, `size` (ratios con 2.5). Escala X: lineal de 0 a máximo + 10 %. Escala Y: lineal entre el mínimo y el máximo con margen del 10 %, incluyendo `yReference` si existe. Radio: raíz cuadrada del tamaño, entre 14 y 44 px |
-| **Dibujo** | SVG con ejes y cuadrícula suave · burbujas coloreadas por miembro (2.8) · línea de referencia con su valor · etiquetas de cuadrante si `quadrantLabels` · dentro de la burbuja, nombre y valor solo si el radio lo permite (si no, solo en tooltip) |
+| **Dibujo** | Gráfico `scatter` de ECharts (SVG) con ejes que incluyen las referencias · burbujas coloreadas por miembro (2.8) · líneas de referencia con su valor · leyenda HTML · nombre y valores en tooltip · ⚠ `quadrantLabels` aún no implementado (deben ser propiedades de texto editables) |
 | **Etiquetas de cuadrante** | Se generan como **propiedades de texto editables** con valores genéricos (por ejemplo "Alto volumen / Alto margen"); no se fijan textos de negocio en el código |
 | **Interacción** | Hover/foco: tooltip con nombre y los tres valores; clic selecciona el miembro; la selección se refleja en una barra de detalle inferior con los valores calculados (sin texto analítico) |
 | **Colisiones** | Burbujas solapadas: se dibujan de mayor a menor tamaño, con transparencia parcial; el orden de enfoque con teclado es por tamaño descendente |

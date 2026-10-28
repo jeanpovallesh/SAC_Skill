@@ -24,7 +24,7 @@ COMPONENTS['detail-table'] = {
       var ar = st.sort === key ? (st.dir > 0 ? ' ▲' : ' ▼') : '';
       return '<th tabindex="0" class="' + cls + '" data-act="sort" data-comp="' + esc(c.id) + '" data-key="' + esc(key) + '" aria-sort="' + (st.sort === key ? (st.dir > 0 ? 'ascending' : 'descending') : 'none') + '">' + esc(label) + ar + '</th>';
     };
-    var head = '<tr>' + th('_label', (feedDef(ref) || {}).label || ref, '') + mids.map(function (m) { return th(m, (measureDef(m) || {}).label || m, 'num'); }).join('') + '</tr>';
+    var head = '<tr>' + th('_label', (feedDef(ref) || {}).label || ref, '') + mids.map(function (m) { return th(m, mlabel(m), 'num'); }).join('') + '</tr>';
     var body = view.map(function (g) {
       return '<tr><td>' + esc(g.cells[0].label) + '</td>' + mids.map(function (m) { return '<td class="num">' + esc(fmtMeasure(g.v[m], m, ctx.rows)) + '</td>'; }).join('') + '</tr>';
     }).join('');

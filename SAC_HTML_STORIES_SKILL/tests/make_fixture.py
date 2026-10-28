@@ -25,7 +25,7 @@ meta_dims = {}
 for i, f in enumerate(dims):
     meta_dims['dims_%d' % i] = {'id': f['ref'], 'description': f.get('label') or f['ref']}
 for i, f in enumerate(props):
-    meta_dims['props_%d' % i] = {'id': f['of'] + '.' + f['ref'] if False else f['ref'], 'description': f.get('label') or f['ref']}
+    meta_dims['props_%d' % i] = {'id': f['of'] + '.' + f['ref'], 'description': f.get('label') or f['ref']}
 msm = {}
 for i, m in enumerate(values):
     msm['measures_%d' % i] = {'id': '[Account].[parentId].&[%s]' % m['ref'], 'label': m['ref']}

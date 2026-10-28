@@ -11,7 +11,7 @@ Leyenda: ✅ observado en los HTML de referencia y la sonda · 📘 regla de dis
 1. **El dato manda.** Cada elemento visual existe porque muestra un valor del modelo; la decoración se mínima. 📘
 2. **Una sola identidad por widget.** Mismos tokens, mismas formas y mismo color por serie en todos los componentes. 📘
 3. **Legible sin color.** Etiquetas, símbolos y orden llevan el significado; el color lo refuerza (accesibilidad §2.11). 📘
-4. **Autocontenido.** CSS incrustado en el shadow DOM; sin Tailwind por CDN, sin Google Fonts, sin iconos de fuente, sin imágenes remotas. Iconos en SVG en línea y pila de fuentes con alternativas del sistema. ✅ ⚠ (confirmar si el tenant bloquea recursos externos)
+4. **Autocontenido.** CSS incrustado en el shadow DOM; sin Tailwind por CDN, sin Google Fonts, sin iconos de fuente, sin imágenes remotas. Iconos en SVG en línea y pila de fuentes con alternativas del sistema. ✅ Los gráficos complejos (dona, burbujas, líneas, pirámide) usan **Apache ECharts 5.5.1 recortado e incluido en el JS principal** (renderizador SVG, `templates/vendor/`); verificado en el tenant el 2026-10-28, donde también carga por CDN (jsDelivr). Se incluye en el archivo para no depender de la red. ⚠ Fuentes web externas siguen sin verificar
 5. **El widget es solo el contenido (D1).** Sin barra lateral, encabezado, perfil ni logo; la story los resuelve. ✅
 6. **Se adapta a su contenedor, no a la ventana.** El tamaño lo da la story: los puntos de quiebre se miden sobre el ancho del propio widget (`ResizeObserver` o `@container`), no con `@media` de la ventana. 📘
 
@@ -132,6 +132,6 @@ Todo valor visual sale de una variable CSS definida en `:host`. El generador esc
 
 ## 9. Pendientes
 
-1. ⚠ Confirmar en el tenant si se bloquean fuentes y recursos externos (si no, se podrían permitir fuentes web con alternativa).
+1. ⚠ Confirmar si el tenant permite fuentes web externas. (Scripts externos: sí, probado con ECharts por jsDelivr el 2026-10-28.)
 2. Definir el modo oscuro (tokens alternos) si algún cliente lo pide.
 3. Ajustar la paleta con la identidad visual de cada cliente (se pasa por `theme`).

@@ -16,6 +16,9 @@ class Widget extends HTMLElement {
     this._inited = {};
     this._uiState = {};
     this._compState = {};
+    this._groups = {};
+    this._charts = [];
+    this._pending = [];
     this._last = null;
     this._width = 0;
     this._box.addEventListener('click', function (e) { self._onAct(e); });
@@ -24,7 +27,7 @@ class Widget extends HTMLElement {
     this._box.addEventListener('keydown', function (e) {
       var t = e.target;
       if ((e.key === 'Enter' || e.key === ' ') && t && t.getAttribute && t.getAttribute('data-act') === 'sort') { e.preventDefault(); self._onAct(e); }
-      if (e.key === 'Escape') { Object.keys(self._uiState).forEach(function (k) { self._uiState[k].open = false; }); self._render(); }
+      if (e.key === 'Escape') { self._groups = {}; Object.keys(self._uiState).forEach(function (k) { self._uiState[k].open = false; }); self._render(); }
     });
     if (typeof ResizeObserver === 'function') {
       this._ro = new ResizeObserver(function () { self._measure(); });
@@ -35,7 +38,7 @@ class Widget extends HTMLElement {
   onCustomWidgetBeforeUpdate(changed) { this._merge(changed); }
   onCustomWidgetAfterUpdate(changed) { this._merge(changed); this._render(); }
   onCustomWidgetResize() { this._measure(); }
-  onCustomWidgetDestroy() { if (this._ro) this._ro.disconnect(); }
+  onCustomWidgetDestroy() { if (this._ro) this._ro.disconnect(); this._charts.forEach(function (ch) { try { ch.dispose(); } catch (e) { /* nada */ } }); }
   _merge(changed) {
     var self = this;
     Object.keys(changed || {}).forEach(function (k) {
@@ -46,6 +49,7 @@ class Widget extends HTMLElement {
     var w = this.clientWidth || this.getBoundingClientRect().width || 0;
     if (Math.abs(w - this._width) < 2) return;
     this._width = w;
+    this._charts.forEach(function (ch) { try { ch.resize(); } catch (e) { /* nada */ } });
     this._box.className = w >= 900 ? 'w-lg' : w >= 600 ? 'w-md' : 'w-sm';
   }
   /* ---- estado auxiliar ---- */
@@ -59,7 +63,9 @@ class Widget extends HTMLElement {
       label: function (f) { var v = self._props['etiqueta_' + f.id]; return v != null && v !== '' ? v : (feedDef(f.target) || {}).label || f.target; },
       prop: function (id) { return self._props[id]; },
       ui: function (k, d) { return self._uiState[k] || (self._uiState[k] = d); },
-      state: function (k, d) { return self._compState[k] || (self._compState[k] = d); }
+      state: function (k, d) { return self._compState[k] || (self._compState[k] = d); },
+      group: function (g) { return g ? self._groups[g] || null : null; },
+      charts: self._pending
     };
   }
   _onAct(e) {
@@ -70,7 +76,8 @@ class Widget extends HTMLElement {
     if (e.type === 'click' && el.getAttribute('data-act') === 'fopt') return;
     var ctx = this._ctx(this._last), changed = false;
     var act = el.getAttribute('data-act');
-    if (/^f/.test(act)) changed = handleFilterAct(ctx, el);
+    if (act === 'gsel') { changed = this._pick(el.getAttribute('data-g'), el.getAttribute('data-k')); }
+    else if (/^f/.test(act)) changed = handleFilterAct(ctx, el);
     else {
       var cid = el.getAttribute('data-comp');
       var c = SPEC.components.filter(function (x) { return x.id === cid; })[0];
@@ -78,6 +85,26 @@ class Widget extends HTMLElement {
       if (impl && impl.act) changed = impl.act(ctx, el, c);
     }
     if (changed) this._render();
+  }
+  _pick(g, k) {
+    if (!g) return false;
+    this._groups[g] = this._groups[g] === k ? null : k;
+    return true;
+  }
+  _mountCharts() {
+    var self = this;
+    this._charts.forEach(function (ch) { try { ch.dispose(); } catch (e) { /* nada */ } });
+    this._charts = [];
+    if (!ECH) return;
+    var pend = this._pending.splice(0, this._pending.length);
+    pend.forEach(function (p) {
+      var host = self._box.querySelector('[data-chart="' + p.id + '"]');
+      if (!host) return;
+      var ch = ECH.init(host, null, { renderer: 'svg' });
+      ch.setOption(p.option);
+      if (p.onPick) ch.on('click', function (ev) { var r = p.onPick(ev); if (r && self._pick(r.g, r.k)) self._render(); });
+      self._charts.push(ch);
+    });
   }
   /* ---- render ---- */
   _render() {
@@ -87,7 +114,9 @@ class Widget extends HTMLElement {
       this._box.classList.remove('loading');
       if (read.state === 'success') { this._last = read; initFilterDefaults(read.rows, this._sel, this._inited); }
       this._measure();
+      this._pending.length = 0;
       this._box.innerHTML = this._html(read);
+      this._mountCharts();
       var fo = this._box.querySelector('[data-act="fq"]');
       if (fo && this._uiState && Object.keys(this._uiState).some(function (k) { return this._uiState[k].keepFocus; }, this)) {
         fo.focus(); var l = fo.value.length; try { fo.setSelectionRange(l, l); } catch (e) { /* nada */ }

@@ -12,7 +12,7 @@ import spec_lib                      # noqa: E402
 import validate_spec                 # noqa: E402
 
 RT = os.path.join(HERE, '..', 'templates', 'runtime')
-ORDER = ['00-util.js', '10-data.js', '20-engine.js', '30-ui.js']
+ORDER = ['00-util.js', '10-data.js', '20-engine.js', '30-ui.js', '35-charts.js']
 TYPE_MAP = {'string': 'string', 'integer': 'integer', 'number': 'number', 'boolean': 'boolean'}
 
 
@@ -115,12 +115,16 @@ def main_js(spec, meta_hint):
                 found = True
         if not found:
             missing.append(t)
+    if any('needs:echarts' in t for t in comps):
+        vend = read(os.path.join(RT, '..', 'vendor', 'echarts-5.5.1.min.js'))
+    else:
+        vend = ''
     parts += comps + [read(os.path.join(RT, '40-filters.js')), read(os.path.join(RT, '90-widget.js'))]
     head = ("/* %s v%s · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */\n"
             "(function () {\n'use strict';\nvar TAG = %s;\nvar SPEC = %s;\nvar PROP_DEFS = %s;\n") % (
         w['name'], w['version'], json.dumps(w['tag']), js(s), js(pdefs))
     tail = "\nif (!customElements.get(TAG)) customElements.define(TAG, Widget);\n})();\n"
-    return head + '\n'.join(parts) + tail, missing
+    return head + vend + '\n' + '\n'.join(parts) + tail, missing
 
 
 def styling_js(spec):

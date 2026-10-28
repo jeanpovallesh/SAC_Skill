@@ -147,3 +147,5 @@ function fmtMeasure(v, mid, rows, opts) {
   var u = /^percent/.test(d.format || '') ? '' : unitOf(rows || [], mid);
   return u && s !== '—' ? s + ' ' + u : s;
 }
+
+function mlabel(id) { var d = measureDef(id) || {}; return d.label || id; }

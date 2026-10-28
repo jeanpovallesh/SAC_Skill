@@ -7,7 +7,7 @@ description: Genera y valida los tres archivos de un widget custom de SAP Analyt
 
 Convierte **metadata de un modelo de SAC + un pedido en texto libre** en un widget custom listo para subir a SAC: manifiesto, JS principal y JS de styling, coherentes entre sí y validados.
 
-**Estado:** el conocimiento (`references/`), la sonda y los tres validadores están completos y probados. Las plantillas del generador están **pendientes** (ver sección 8): hasta que existan, los tres archivos se escriben siguiendo las referencias y se validan con los scripts.
+**Estado:** el conocimiento (`references/`), la sonda y los tres validadores están completos y probados. El generador (`scripts/generate_widget.py`) cubre ya los componentes del ejemplo 02 (ver sección 8); para los tipos sin plantilla, los tres archivos se completan siguiendo las referencias y se validan con los scripts.
 
 ---
 
@@ -115,7 +115,9 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | `tests/test_validators.py` | 56 pruebas: `python3 -I tests/test_validators.py` |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
 | `references/design-guidelines.md` | Primer borrador |
-| Plantillas del generador (manifiesto, JS principal, styling) | **Pendiente** |
+| Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; faltan componentes de jerarquía, líneas, pirámide, comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
+| `tests/make_fixture.py`, `tests/render_harness.py` (datos simulados y captura en Chromium) | Hecho |
+| Gráficos con ECharts (incluido en el JS) | Verificado en el tenant 2026-10-28 (`probe/echarts/`) |
 | `convert_sac_metadata.py` (export de SAC → JSON canónico) | Pendiente |
 
 El validador de paquete hace análisis estático (expresiones regulares y conteo de llaves): detecta los fallos típicos de coherencia entre los tres archivos, pero la prueba final es cargar el widget en una story.
