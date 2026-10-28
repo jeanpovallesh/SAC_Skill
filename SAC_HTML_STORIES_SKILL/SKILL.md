@@ -111,7 +111,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | `references/` (contrato, esquema de spec, interpretación, catálogo, esquema de metadata) | Completo; `widget-types.md` (§2.1, §2.13, §5.3) y el esquema de la especificación ya incorporan lo verificado en la sonda |
 | `scripts/validate_model_json.py` (M1–M18) | Hecho |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
-| `design-guidelines.md` | Pendiente |
+| `references/design-guidelines.md` | Primer borrador |
 | JSON Schema formal de la metadata | Pendiente |
 | Validador de especificación (S1–S14) y de paquete (R1–R14, C1–C18) | Pendiente |
 | Plantillas del generador (manifiesto, JS principal, styling) | Pendiente |
@@ -131,6 +131,7 @@ Mientras los validadores no existan, el paquete se revisa a mano con las tablas 
 | Componentes disponibles, opciones y C1–C18 | `references/widget-types.md` |
 | Formato del JSON del modelo y M1–M18 | `references/model-metadata-schema.md` |
 | Ver un caso completo pedido → especificación | `examples/01-rrhh-demografia-genero.md`, `examples/02-scm-distribucion-zonas-canales.md` |
+| Cómo se ve y se comporta un widget (tokens, tipografía, color) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |
 | Cómo se obtiene la metadata | `prompts/prompt-generar-metadata-modelo.md` |
 | Comprobar un comportamiento de SAC | `probe/` |
