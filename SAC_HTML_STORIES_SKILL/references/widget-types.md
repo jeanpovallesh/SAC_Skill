@@ -374,6 +374,19 @@ Se declaran en `options.status`:
 | **Estados** | Menos de 2 miembros → `empty`; valores `null` en `x`, `y` o `size` → esa burbuja se omite y se cuenta |
 | **Usado en** | Ejemplo 02 |
 
+### 4.7 `bubble-map` ✅
+
+| | |
+|---|---|
+| **Propósito** | Ubicar los miembros de una dimensión en un mapa y dimensionarlos por una medida |
+| **Usa** | `axis` · `lat` · `lng` (propiedades de la dimensión del eje, indicadas por el usuario) · `measures` (la primera da el tamaño) |
+| **Requiere** | Las propiedades de latitud y longitud (feeds de rol `property`); si faltan, el componente no se dibuja |
+| **Opciones** | `country` (**obligatorio**; nombre en inglés de Natural Earth, p. ej. `Colombia`) · `labels` (nombre junto al punto) · `roam` (zoom y desplazamiento, por defecto sí) · `height` · `selectionGroup` |
+| **Cálculo** | Se agrega la medida por miembro; las coordenadas salen del valor de las propiedades (decimales con coma o punto); los miembros sin coordenadas válidas se omiten y se cuentan |
+| **Dibujo** | ECharts `geo` (SVG) con el contorno del país incluido en el JS (`templates/vendor/geo/`, ~10 KB por país); burbujas por miembro con color estable (2.8); leyenda clicable debajo |
+| **Notas** | Sin mapa base de calles (verificado que el tenant también carga teselas externas; un componente con Leaflet queda como opción futura) |
+| **Usado en** | Ejemplo 03 |
+
 ---
 
 ## 5. Tablas y matrices
@@ -429,6 +442,20 @@ Aplica a `detail-table` y a `cross-matrix` (sobre sus filas). Reglas de jerarqu�
 | **Teclado y accesibilidad** | Contenedor con `role="treegrid"`; cada fila con `aria-level`, `aria-expanded` (si tiene hijos) y `aria-selected`; `→` expande, `←` contrae (o sube al padre), `↑` `↓` mueven el foco, `Enter` selecciona |
 | **Estados** | Sin `parentId` (jerarquía plana o un solo nivel) → lista plana sin sangría; `loading` → se conserva el último render con indicador; nodo sin datos → "—"; los subtotales (`isNode && !isCollapsed`) no entran en el total general (2.13) |
 | **Usado en** | Aún sin ejemplo; patrón típico: zonas regionales, centros de costos, cuentas, organización |
+
+### 5.4 `pivot-table` ✅
+
+| | |
+|---|---|
+| **Propósito** | Tabla dinámica: filas y columnas anidadas, varias medidas, subtotales y totales |
+| **Usa** | `rows` (lista de dimensiones, de la más general a la más detallada) · `columns` (lista, opcional) · `measures` (varias; van como columnas internas de cada columna) |
+| **Opciones** | `rowTotal` (columna de totales) · `columnTotal` (fila de totales) · `expandLevels` (niveles de filas abiertos al inicio; por defecto todos) · `heat` · `search: rows` · `maxRows` (1000) · `dropColumnsWithoutData` |
+| **Cálculo** | Cada celda, subtotal y total se **agrega con el motor** sobre las filas de datos (no se suman celdas ya sumadas): respeta saldos semiaditivos y calcula los ratios como suma/suma |
+| **Interacción** | ▸/▾ por nodo, "Expandir todo", "Contraer todo", ordenar por la columna de una medida, buscador sobre el primer nivel |
+| **Reglas** | Una dimensión no puede estar en filas y columnas (C20); más de 4 niveles de filas o 3 de columnas se avisa |
+| **Pendiente** | Jerarquías del modelo como niveles de filas (ver 2.13) y subtotales de columnas intermedias |
+| **Usado en** | Ejemplo 03 |
+
 
 ---
 
@@ -588,6 +615,8 @@ Un selector por dimensión del feed (mismo comportamiento que 7.2), usado para *
 | C15 | `options.level` solo en componentes sin `tree`, y su eje es un feed con `hierarchy` |
 | C16 | `cascade` solo en filtros cuya dimensión tiene `hierarchy` |
 | C17 | Si algún feed tiene `hierarchy.selectable: true`, el JS llama a `setHierarchy` y luego a `setHierarchyLevel` protegidas con `typeof`, y existe la propiedad `nivelExpansionInicial`; `getSelectedHierarchy` y `onHierarchyChange`, si se declaran, devuelven `string` y se disparan |
+| C19 | `bubble-map`: `lat` y `lng` son propiedades (feeds `property`) de la dimensión del eje, distintas entre sí, y existe `options.country` |
+| C20 | `pivot-table`: una dimensión no aparece en filas y columnas a la vez |
 | C18 | Con jerarquía activa, ningún componente no jerárquico suma nodos y hojas a la vez |
 
 ---

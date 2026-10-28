@@ -8,3 +8,13 @@ function chartHost(ctx, id, option, height, onPick) {
 }
 function baseTextStyle() { return { fontFamily: FONT, color: THC.texto2 || '#45464d', fontSize: 12 }; }
 function dim(sel, key) { return sel && sel !== key ? 0.3 : 1; }
+var GEO_READY = {};
+function ensureGeo(country) {
+  if (!ECH || !GEOMAPS[country]) return null;
+  var name = 'geo_' + country;
+  if (!GEO_READY[name]) {
+    ECH.registerMap(name, { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { name: country }, geometry: GEOMAPS[country] }] });
+    GEO_READY[name] = 1;
+  }
+  return name;
+}

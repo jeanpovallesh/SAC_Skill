@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.sollazonascanales",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "Ingresos y Gastos por Zona y Canal",
   "description": "Ingresos y gastos por zona y canal del modelo SOLLA-EBITDA",
   "newInstancePrefix": "SollaZonasCanales",
@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sollazonascanales",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@353d916cda7228e92c16fa537f0b32e05426e328/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales.js",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sollazonascanales-styling",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@353d916cda7228e92c16fa537f0b32e05426e328/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales_styling.js",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
@@ -69,6 +69,11 @@
       "type": "string",
       "description": "Título: Detalle por canal",
       "default": "Detalle por canal"
+    },
+    "titulo_pivotZonaCanal": {
+      "type": "string",
+      "description": "Título: Ingresos y gastos por zona y canal",
+      "default": "Ingresos y gastos por zona y canal"
     },
     "etiqueta_fPeriodo": {
       "type": "string",

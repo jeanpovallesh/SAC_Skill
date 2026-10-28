@@ -1,6 +1,6 @@
 import * as echarts from 'echarts/core';
-import { PieChart, BarChart, ScatterChart, LineChart } from 'echarts/charts';
-import { TooltipComponent, LegendComponent, GridComponent, MarkLineComponent, AriaComponent, GraphicComponent } from 'echarts/components';
+import { PieChart, BarChart, ScatterChart, LineChart, MapChart } from 'echarts/charts';
+import { TooltipComponent, LegendComponent, GridComponent, MarkLineComponent, AriaComponent, GraphicComponent, GeoComponent, VisualMapComponent } from 'echarts/components';
 import { SVGRenderer } from 'echarts/renderers';
-echarts.use([PieChart, BarChart, ScatterChart, LineChart, TooltipComponent, LegendComponent, GridComponent, MarkLineComponent, AriaComponent, GraphicComponent, SVGRenderer]);
+echarts.use([PieChart, BarChart, ScatterChart, LineChart, MapChart, TooltipComponent, LegendComponent, GridComponent, MarkLineComponent, AriaComponent, GraphicComponent, GeoComponent, VisualMapComponent, SVGRenderer]);
 export default echarts;

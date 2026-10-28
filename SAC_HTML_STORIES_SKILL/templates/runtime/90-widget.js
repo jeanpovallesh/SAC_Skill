@@ -73,7 +73,7 @@ class Widget extends HTMLElement {
     this._focusQ = el && el.getAttribute('data-act') === 'q' ? el.getAttribute('data-comp') : null;
     if (!el || !this._last || this._last.state !== 'success') return;
     if (e.type === 'change' && el.getAttribute('data-act') !== 'fopt') return;
-    if (e.type === 'click' && el.getAttribute('data-act') === 'fopt') return;
+    if (e.type === 'click' && /^(fopt|q|fq)$/.test(el.getAttribute('data-act'))) return;
     var ctx = this._ctx(this._last), changed = false;
     var act = el.getAttribute('data-act');
     if (act === 'gsel') { changed = this._pick(el.getAttribute('data-g'), el.getAttribute('data-k')); }
@@ -173,7 +173,7 @@ class Widget extends HTMLElement {
       if (!ok) return '';
       var impl = COMPONENTS[c.type];
       var html = impl ? impl.render(ctx, c) : '<div class="notice">Componente no disponible: ' + esc(c.type) + '</div>';
-      return html ? '<div class="cell s' + (c.span || defaultSpan(c.type)) + '">' + html + '</div>' : '';
+      return html ? '<div class="cell s' + ((c.layout && c.layout.span) || defaultSpan(c.type)) + '">' + html + '</div>' : '';
     }).join('');
     if (!ctx.rows.length) parts = '<div class="cell s12"><div class="empty">Sin datos para la selección</div></div>';
     return '<div class="root"><div class="bar"></div>' + head + missing + diag + renderFilters(ctx) + '<div class="grid">' + parts + '</div></div>';

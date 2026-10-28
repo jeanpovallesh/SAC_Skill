@@ -128,12 +128,18 @@ def main_js(spec, meta_hint):
         vend = read(os.path.join(RT, '..', 'vendor', 'echarts-5.5.1.min.js'))
     else:
         vend = ''
+    countries = sorted({(c.get('options') or {}).get('country') for c in spec['components'] if c['type'] == 'bubble-map' and (c.get('options') or {}).get('country')})
+    allgeo = json.loads(read(os.path.join(RT, '..', 'vendor', 'geo', 'countries.json'))) if countries else {}
+    unknown = [x for x in countries if x not in allgeo]
+    if unknown:
+        raise SystemExit('País(es) sin contorno: %s. Use el nombre en inglés de Natural Earth (por ejemplo Colombia, Mexico, Peru, Chile, Argentina, Spain).' % ', '.join(unknown))
+    geo_js = 'var GEOMAPS = %s;\n' % json.dumps({x: allgeo[x] for x in countries}, separators=(',', ':'))
     parts += comps + [read(os.path.join(RT, '40-filters.js')), read(os.path.join(RT, '90-widget.js'))]
     head = ("/* %s v%s · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */\n"
             "(function () {\n'use strict';\nvar TAG = %s;\nvar SPEC = %s;\nvar PROP_DEFS = %s;\n") % (
         w['name'], w['version'], json.dumps(w['tag']), js(s), js(pdefs))
     tail = "\nif (!customElements.get(TAG)) customElements.define(TAG, Widget);\n})();\n"
-    return head + vend + '\n' + '\n'.join(parts) + tail, missing
+    return head + vend + '\n' + geo_js + '\n'.join(parts) + tail, missing
 
 
 def styling_js(spec):

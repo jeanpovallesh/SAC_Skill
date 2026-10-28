@@ -99,6 +99,16 @@ neg_spec('tree sin hierarchy', s1, m1, lambda s: s['components'][6]['options']._
 neg_spec('comparativo sin comparison', s2, m2, lambda s: s['components'].append({'id': 'x', 'type': 'bar-compare', 'uses': {'axis': 'Canal', 'measures': ['Volumen']}}), 'C11')
 neg_spec('span > 12', s2, m2, lambda s: [s['components'][0].__setitem__('layout', {'span': 8, 'row': 1}), s['components'][1].__setitem__('layout', {'span': 8, 'row': 1})], 'C12')
 
+# ---------- ejemplo 03 (mapa y pivot)
+s3, m3 = spec_of('examples/03-mapa-y-pivot-zonas.md'), load('examples/models/model-metadata-distribucion-geo.json')
+e3, w3 = vs.validate(s3, m3)
+check('spec válida: 03-mapa-y-pivot-zonas.md', not e3)
+neg_spec('mapa sin country', s3, m3, lambda s: s['components'][1]['options'].pop('country'), 'C19')
+neg_spec('mapa con lat que no es propiedad del eje', s3, m3, lambda s: s['components'][1]['uses'].__setitem__('lat', 'Canal'), 'C19')
+neg_spec('mapa con lat = lng', s3, m3, lambda s: s['components'][1]['uses'].__setitem__('lng', 'Latitud'), 'C19')
+neg_spec('pivot con dimensión repetida', s3, m3, lambda s: s['components'][2]['uses'].__setitem__('columns', ['Canal']), 'C20')
+neg_spec('pivot sin rows', s3, m3, lambda s: s['components'][2]['uses'].pop('rows'), 'C4')
+
 # ---------- paquete (si existe el validador)
 try:
     import validate_bundle as vb  # noqa: E402

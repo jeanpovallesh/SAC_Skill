@@ -1,0 +1,307 @@
+{
+  "schema_version": "1.0",
+  "model": {
+    "id": "MODELO_DISTRIBUCION_GEO",
+    "name": "Distribución Comercial",
+    "type": "analytic",
+    "description": "Volumen, rentabilidad y operación logística por zona, canal y marca"
+  },
+  "dimensions": [
+    {
+      "id": "Periodo",
+      "description": "Periodo",
+      "type": "time",
+      "ordered": true,
+      "granularity": "month",
+      "synonyms": [
+        "fecha",
+        "mes"
+      ],
+      "hierarchies": [
+        {
+          "id": "Anio_Trimestre_Mes",
+          "description": "Año > Trimestre > Mes",
+          "kind": "level",
+          "default": true,
+          "levels": [
+            {
+              "id": "Anio",
+              "description": "Año"
+            },
+            {
+              "id": "Trimestre",
+              "description": "Trimestre"
+            },
+            {
+              "id": "Mes",
+              "description": "Mes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Zona_Regional",
+      "description": "Zona regional",
+      "type": "generic",
+      "synonyms": [
+        "región",
+        "territorio",
+        "zona",
+        "plaza"
+      ],
+      "hierarchies": [
+        {
+          "id": "Geografica",
+          "description": "País > Zona > Región",
+          "kind": "parent-child",
+          "default": true
+        },
+        {
+          "id": "Logistica",
+          "description": "Centro de distribución > Ruta",
+          "kind": "parent-child"
+        }
+      ],
+      "properties": [
+        {
+          "id": "Latitud",
+          "description": "Latitud (grados decimales)",
+          "type": "number"
+        },
+        {
+          "id": "Longitud",
+          "description": "Longitud (grados decimales)",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "id": "Canal",
+      "description": "Canal de distribución",
+      "type": "generic",
+      "synonyms": [
+        "canal",
+        "canal de venta",
+        "ruta al mercado"
+      ],
+      "properties": [
+        {
+          "id": "Tipo_Canal",
+          "description": "Tipo de canal (B2B / D2C)",
+          "type": "string"
+        }
+      ],
+      "hierarchies": [],
+      "members": [
+        {
+          "id": "MAY",
+          "description": "Mayorista",
+          "properties": {
+            "Tipo_Canal": "B2B"
+          }
+        },
+        {
+          "id": "RET",
+          "description": "Cadenas Retail",
+          "properties": {
+            "Tipo_Canal": "B2B"
+          }
+        },
+        {
+          "id": "TRA",
+          "description": "Canal Tradicional",
+          "properties": {
+            "Tipo_Canal": "B2B"
+          }
+        },
+        {
+          "id": "D2C",
+          "description": "E-commerce / D2C",
+          "properties": {
+            "Tipo_Canal": "D2C"
+          }
+        },
+        {
+          "id": "FAR",
+          "description": "Farmacéutico / Especializado",
+          "properties": {
+            "Tipo_Canal": "B2B"
+          }
+        }
+      ],
+      "members_complete": true
+    },
+    {
+      "id": "Marca_Linea",
+      "description": "Línea / Marca",
+      "type": "generic",
+      "synonyms": [
+        "marca",
+        "línea",
+        "producto",
+        "familia"
+      ],
+      "hierarchies": [
+        {
+          "id": "Portafolio",
+          "description": "Línea > Marca",
+          "kind": "parent-child",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "id": "Volumen_Cajas",
+      "description": "Volumen despachado",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "cajas",
+      "decimals": 0,
+      "aggregation": "additive",
+      "synonyms": [
+        "volumen",
+        "despachos",
+        "cantidad"
+      ]
+    },
+    {
+      "id": "Facturacion_Bruta",
+      "description": "Facturación bruta",
+      "unit": "currency",
+      "type": "fixed",
+      "unit_value": "USD",
+      "decimals": 2,
+      "aggregation": "additive",
+      "synonyms": [
+        "ventas",
+        "ingresos"
+      ]
+    },
+    {
+      "id": "Margen_Contribucion",
+      "description": "Margen de contribución",
+      "unit": "currency",
+      "type": "fixed",
+      "unit_value": "USD",
+      "decimals": 2,
+      "aggregation": "additive",
+      "good_direction": "up"
+    },
+    {
+      "id": "Coste_Distribucion",
+      "description": "Coste de distribución",
+      "unit": "currency",
+      "type": "fixed",
+      "unit_value": "USD",
+      "decimals": 2,
+      "aggregation": "additive",
+      "good_direction": "down",
+      "synonyms": [
+        "costo logístico"
+      ]
+    },
+    {
+      "id": "Margen_Pct",
+      "description": "Margen de contribución %",
+      "unit": "percent",
+      "type": "fixed",
+      "unit_value": "%",
+      "decimals": 1,
+      "aggregation": "non-additive",
+      "components": {
+        "numerator": "Margen_Contribucion",
+        "denominator": "Facturacion_Bruta"
+      },
+      "good_direction": "up"
+    },
+    {
+      "id": "Puntos_Venta_Auditados",
+      "description": "Puntos de venta auditados",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "PDV",
+      "decimals": 0,
+      "aggregation": "semi-additive",
+      "time_aggregation": "last"
+    },
+    {
+      "id": "Puntos_Venta_Activos",
+      "description": "Puntos de venta activos",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "PDV",
+      "decimals": 0,
+      "aggregation": "semi-additive",
+      "time_aggregation": "last"
+    },
+    {
+      "id": "Inventario_Cajas",
+      "description": "Inventario en canal",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "cajas",
+      "decimals": 0,
+      "aggregation": "semi-additive",
+      "time_aggregation": "last"
+    },
+    {
+      "id": "Despacho_Diario",
+      "description": "Despacho diario promedio",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "cajas",
+      "decimals": 0,
+      "aggregation": "additive"
+    },
+    {
+      "id": "Cajas_Merma_Devolucion",
+      "description": "Cajas en merma o devolución",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "cajas",
+      "decimals": 0,
+      "aggregation": "additive",
+      "good_direction": "down"
+    },
+    {
+      "id": "Envios_Totales",
+      "description": "Envíos totales",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "envíos",
+      "decimals": 0,
+      "aggregation": "additive"
+    },
+    {
+      "id": "Nodo_Semana",
+      "description": "Nodos por semana",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "nodo-semana",
+      "decimals": 0,
+      "aggregation": "additive"
+    },
+    {
+      "id": "Horas_Ciclo_Pedido",
+      "description": "Horas acumuladas de ciclo de pedido",
+      "unit": "number",
+      "type": "fixed",
+      "unit_value": "h",
+      "decimals": 1,
+      "aggregation": "additive",
+      "good_direction": "down"
+    },
+    {
+      "id": "Pedidos_Totales",
+      "description": "Pedidos totales",
+      "unit": "unit",
+      "type": "fixed",
+      "unit_value": "pedidos",
+      "decimals": 0,
+      "aggregation": "additive"
+    }
+  ]
+}

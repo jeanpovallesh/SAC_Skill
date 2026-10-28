@@ -29,13 +29,15 @@ CATALOG = {
     'bubble-matrix': ({'axis', 'x', 'y', 'size'}, {'axis', 'x', 'y', 'size'}),
     'cross-matrix': ({'rows', 'columns', 'measures', 'series'}, {'rows', 'columns', 'measures'}),
     'detail-table': ({'rows', 'measures', 'properties'}, {'rows', 'measures'}),
+    'pivot-table': ({'rows', 'columns', 'measures'}, {'rows', 'measures'}),
+    'bubble-map': ({'axis', 'lat', 'lng', 'measures'}, {'axis', 'lat', 'lng', 'measures'}),
     'bar-compare': ({'axis', 'measures'}, {'axis', 'measures'}),
     'variance-table': ({'rows', 'measures'}, {'rows', 'measures'}),
     'line-trend': ({'axis', 'measures', 'series'}, {'axis', 'measures'}),
     'filter-bar': (set(), set()),
     'combobox-selector': None, 'capture-list': None, 'csv-import': None, 'json-preview': None,
 }
-DIM_KEYS = {'axis', 'series', 'split', 'rows', 'columns', 'breakdown'}
+DIM_KEYS = {'axis', 'series', 'split', 'rows', 'columns', 'breakdown', 'lat', 'lng'}
 MEAS_KEYS = {'measures', 'x', 'y', 'size'}
 NEEDS_COMPARISON = {'bar-compare', 'variance-table'}
 REQUIRED_SECTIONS = ('request', 'widget', 'model', 'hosting', 'feeds', 'measures', 'components', 'assumptions')
@@ -264,6 +266,25 @@ def validate(spec, meta):
         lay = c.get('layout') or {}
         if 'span' in lay:
             rows_by_layout[lay.get('row')] = rows_by_layout.get(lay.get('row'), 0) + lay['span']
+        # C19 bubble-map: coordenadas desde propiedades de la dimensión del eje
+        if ctype == 'bubble-map':
+            ax = (as_list(uses.get('axis')) or [None])[0]
+            for k in ('lat', 'lng'):
+                r = (as_list(uses.get(k)) or [None])[0]
+                f = feed_refs.get(r, {})
+                if r and (f.get('role') != 'property' or f.get('of') != dim_of(ax)):
+                    err('C19', f'{cid}: uses.{k} = "{r}" debe ser una propiedad (feed role property) de la dimensión del eje "{ax}"')
+            if (as_list(uses.get('lat')) or [None])[0] == (as_list(uses.get('lng')) or [None])[0]:
+                err('C19', f'{cid}: lat y lng deben ser propiedades distintas')
+            if not isinstance(opts.get('country'), str) or not opts.get('country'):
+                err('C19', f'{cid}: falta options.country (nombre del país en inglés, para el contorno del mapa)')
+        # C20 pivot-table
+        if ctype == 'pivot-table':
+            rr, cc = as_list(uses.get('rows')), as_list(uses.get('columns'))
+            if set(rr) & set(cc):
+                err('C20', f'{cid}: una dimensión no puede estar en filas y columnas a la vez: {sorted(set(rr) & set(cc))}')
+            if len(rr) > 4 or len(cc) > 3:
+                warn('C20', f'{cid}: más de 4 niveles de filas o 3 de columnas hace la tabla difícil de leer')
         # C13 / C15 / S14
         tree = opts.get('tree')
         axis_ref = uses.get('rows') if tree else (uses.get('axis') or uses.get('rows'))

@@ -276,6 +276,8 @@ Preguntar solo en estos casos (máximo **3 preguntas**, cortas, cada una con una
 | Una coincidencia **requerida** es de confianza baja | "¿'Retiros' corresponde a la medida `Bajas` o a `Salidas_Voluntarias`?" |
 | Las pistas de modo son contradictorias | "¿El widget solo muestra datos o también genera una lista para enviar a la story?" |
 | La respuesta cambia los feeds o el contrato de salida | "¿Los ids de género son `F` y `M`?" |
+| El pedido incluye un **mapa** | "¿De qué dimensión y de qué propiedades salen la latitud y la longitud, y en qué país se dibuja?" (obligatorio: el contorno y las coordenadas no se inventan) |
+| El pedido incluye una **tabla dinámica** | "¿Qué dimensiones van en filas, cuáles en columnas y qué medidas?" (las indica el usuario; cada tabla puede variar) |
 | Hay dos interpretaciones válidas de "comparativo" | "¿Comparar contra el periodo anterior o contra una versión?" |
 
 **No** se pregunta por: estilo, orden de componentes, textos, colores, umbrales (van como propiedades editables), ni por elementos opcionales.
