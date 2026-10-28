@@ -118,6 +118,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; faltan componentes de jerarquía, líneas, pirámide, comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
 | `tests/make_fixture.py`, `tests/render_harness.py` (datos simulados y captura en Chromium) | Hecho |
 | Gráficos con ECharts (incluido en el JS) | Verificado en el tenant 2026-10-28 (`probe/echarts/`) |
+| Mapas: ECharts `geo` (contorno incluido) y Leaflet con teselas externas | Verificado en el tenant 2026-10-28 (`probe/maps/`); componente de mapa y `pivot-table` pendientes |
 | `convert_sac_metadata.py` (export de SAC → JSON canónico) | Pendiente |
 
 El validador de paquete hace análisis estático (expresiones regulares y conteo de llaves): detecta los fallos típicos de coherencia entre los tres archivos, pero la prueba final es cargar el widget en una story.
