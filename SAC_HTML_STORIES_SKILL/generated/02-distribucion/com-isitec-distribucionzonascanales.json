@@ -1,0 +1,152 @@
+{
+  "id": "com.isitec.distribucionzonascanales",
+  "version": "1.0.0",
+  "name": "Distribución por Zonas y Canales",
+  "description": "Tablero de distribución por zona regional, canal y línea/marca",
+  "newInstancePrefix": "DistribucionZonas",
+  "icon": "",
+  "vendor": "ISITEC",
+  "eula": "",
+  "license": "",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-isitec-distribucionzonascanales",
+      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-isitec-distribucionzonascanales-styling",
+      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales_styling.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Título",
+      "default": "Distribución por Zonas y Canales"
+    },
+    "metaMargen": {
+      "type": "number",
+      "description": "Meta de margen de contribución (%)",
+      "default": 20
+    },
+    "umbralDominancia": {
+      "type": "integer",
+      "description": "Participación mínima para canal dominante (%)",
+      "default": 35
+    },
+    "textoDominante": {
+      "type": "string",
+      "description": "Texto de canal dominante",
+      "default": "Dominante"
+    },
+    "textoMixto": {
+      "type": "string",
+      "description": "Texto de mezcla equilibrada",
+      "default": "Mix equilibrado"
+    },
+    "titulo_kpiMargen": {
+      "type": "string",
+      "description": "Título: Margen bruto ponderado",
+      "default": "Margen bruto ponderado"
+    },
+    "titulo_kpiCoste": {
+      "type": "string",
+      "description": "Título: Coste de distribución / venta",
+      "default": "Coste de distribución / venta"
+    },
+    "titulo_kpiMezcla": {
+      "type": "string",
+      "description": "Título: Volumen B2B vs D2C",
+      "default": "Volumen B2B vs D2C"
+    },
+    "titulo_kpiCobertura": {
+      "type": "string",
+      "description": "Título: Cobertura de puntos de venta",
+      "default": "Cobertura de puntos de venta"
+    },
+    "titulo_donaCanales": {
+      "type": "string",
+      "description": "Título: Reparto de cuota por canal",
+      "default": "Reparto de cuota por canal"
+    },
+    "titulo_burbujasCanales": {
+      "type": "string",
+      "description": "Título: Volumen vs. margen de contribución",
+      "default": "Volumen vs. margen de contribución"
+    },
+    "titulo_barras100Zona": {
+      "type": "string",
+      "description": "Título: Penetración de canales por zona regional",
+      "default": "Penetración de canales por zona regional"
+    },
+    "titulo_barrasMarca": {
+      "type": "string",
+      "description": "Título: Canales por línea / marca",
+      "default": "Canales por línea / marca"
+    },
+    "titulo_matrizZonaMarca": {
+      "type": "string",
+      "description": "Título: Zona regional × línea / marca",
+      "default": "Zona regional × línea / marca"
+    },
+    "titulo_kpiDoh": {
+      "type": "string",
+      "description": "Título: Días de inventario en canal",
+      "default": "Días de inventario en canal"
+    },
+    "titulo_kpiMerma": {
+      "type": "string",
+      "description": "Título: Tasa de mermas y devoluciones",
+      "default": "Tasa de mermas y devoluciones"
+    },
+    "titulo_kpiFrecuencia": {
+      "type": "string",
+      "description": "Título: Frecuencia de despacho",
+      "default": "Frecuencia de despacho"
+    },
+    "titulo_kpiCiclo": {
+      "type": "string",
+      "description": "Título: Tiempo de ciclo de pedido",
+      "default": "Tiempo de ciclo de pedido"
+    },
+    "titulo_tablaCanales": {
+      "type": "string",
+      "description": "Título: Detalle por canal",
+      "default": "Detalle por canal"
+    },
+    "etiqueta_fPeriodo": {
+      "type": "string",
+      "description": "Etiqueta del filtro Periodo",
+      "default": "Periodo"
+    }
+  },
+  "methods": {},
+  "events": {},
+  "dataBindings": {
+    "myDataBinding": {
+      "feeds": [
+        {
+          "id": "dims",
+          "description": "Dimensiones, en este orden: Zona regional (Zona_Regional), Canal de distribución (Canal), Línea / Marca (Marca_Linea), Periodo (Periodo)",
+          "type": "dimension"
+        },
+        {
+          "id": "props",
+          "description": "Propiedades de dimensión (agregar como dimensión): Tipo de canal (B2B / D2C) (Tipo_Canal)",
+          "type": "dimension"
+        },
+        {
+          "id": "measures",
+          "description": "Medidas: Volumen_Cajas, Facturacion_Bruta, Margen_Contribucion, Coste_Distribucion, Puntos_Venta_Auditados, Puntos_Venta_Activos, Inventario_Cajas, Despacho_Diario, Cajas_Merma_Devolucion, Envios_Totales, Nodo_Semana, Horas_Ciclo_Pedido, Pedidos_Totales",
+          "type": "mainStructureMember"
+        }
+      ]
+    }
+  }
+}
