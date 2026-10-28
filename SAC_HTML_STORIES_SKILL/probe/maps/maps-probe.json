@@ -1,0 +1,36 @@
+{
+  "id": "com.isitec.mapsprobe",
+  "version": "1.0.0",
+  "name": "Maps Probe (sonda)",
+  "description": "Prueba de mapas con ECharts geo y de teselas externas",
+  "newInstancePrefix": "MapsProbe",
+  "icon": "",
+  "vendor": "ISITEC",
+  "eula": "",
+  "license": "",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-isitec-mapsprobe",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@a333ce03a471216be77b9d024a71544b5091c0dc/SAC_HTML_STORIES_SKILL/probe/maps/maps-probe.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-isitec-mapsprobe-styling",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@a333ce03a471216be77b9d024a71544b5091c0dc/SAC_HTML_STORIES_SKILL/probe/maps/maps-probe_styling.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {},
+  "methods": {
+    "getMapsReport": {
+      "description": "Reporte de la prueba (JSON como texto)",
+      "returnType": "string"
+    }
+  },
+  "events": {},
+  "dataBindings": {}
+}
