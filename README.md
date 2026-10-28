@@ -2,28 +2,57 @@
 
 Skill **SAC_HTML_STORIES_SKILL**: a partir del JSON de metadata de un modelo de SAP Analytics Cloud y una petición en lenguaje natural, genera los tres archivos de un widget personalizado de SAC (manifiesto `.json`, componente principal `.js` y `_styling.js`).
 
-**Estado:** en construcción. Se está armando primero el conocimiento (`references/`), después el `SKILL.md`, los generadores y los validadores.
+## Flujo de trabajo (qué debe hacer el usuario)
+
+### Paso 1. Obtener la metadata del modelo
+Con el **ID del modelo de SAC** se genera el prompt para Claude Code (con el MCP de SAC activo):
+
+```bash
+python3 -I SAC_HTML_STORIES_SKILL/scripts/make_metadata_prompt.py <ID_DEL_MODELO> --out prompt.md
+```
+
+(o pídeselo a Claude dándole solo el ID). Pega el bloque del `prompt.md` en Claude Code; produce `model-metadata-<ID>.json` con el formato canónico. Plantilla: `SAC_HTML_STORIES_SKILL/prompts/prompt-metadata-modelo.template.md`.
+
+### Paso 2. Validar la metadata
+```bash
+python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_model_json.py model-metadata-<ID>.json
+```
+Reglas M1–M18. Corrige o pide regenerar si hay errores.
+
+### Paso 3. Pedir el tablero
+Entrega a Claude el JSON validado y describe en lenguaje natural lo que quieres (KPIs, gráficos, tablas, filtros, mapa, pivot). Claude hace las preguntas necesarias, por ejemplo:
+- **Mapas:** de qué dimensión y propiedades salen latitud/longitud, y el país (contorno).
+- **Pivot tables:** filas, columnas y medidas de cada tabla (se configuran estrictamente como tú indiques).
+
+Claude produce una *especificación* (widget-spec) y la valida (`validate_spec.py`, S0–S14 y C1–C20).
+
+### Paso 4. Generar el widget
+```bash
+python3 -I SAC_HTML_STORIES_SKILL/scripts/generate_widget.py spec.json model-metadata-<ID>.json --out salida/ [--base-url URL_JSDELIVR]
+python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_bundle.py salida/    # R1–R14, C17
+```
+Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
+
+### Paso 5. Publicar y cargar en SAC
+1. Sube los archivos al repositorio (commit) y fija el manifiesto a ese commit vía jsDelivr (`--base-url`).
+2. En SAC: *Aplicaciones → Widgets personalizados → Crear*, pega la URL del manifiesto `.json`.
+3. Inserta el widget en la historia/aplicación, enlaza los datos (feeds de dimensiones, propiedades y medidas) y, si algo no se ve, activa la propiedad `diagnostico`.
 
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
-| `SAC_HTML_STORIES_SKILL/references/` | Contrato del widget (R1–R14), esquema de la especificación (S1–S14), interpretación de la petición, catálogo de tipos de widget (C1–C18) y esquema de metadata del modelo (M1–M18) |
-| `SAC_HTML_STORIES_SKILL/examples/` | Casos completos petición → especificación, modelos de ejemplo y HTML de referencia (referencias de estilo, no plantillas) |
-| `SAC_HTML_STORIES_SKILL/schemas/` | JSON Schema de la metadata del modelo |
-| `SAC_HTML_STORIES_SKILL/scripts/` | Validadores: `validate_model_json.py` (M1–M18), `validate_spec.py` (S1–S14, C) y `validate_bundle.py` (R1–R14, C17) |
-| `SAC_HTML_STORIES_SKILL/tests/` | Pruebas de los validadores (`python3 -I tests/test_validators.py`) |
-| `SAC_HTML_STORIES_SKILL/probe/` | Widget sonda para verificar cómo entrega SAC los datos (pendientes ⚠ del contrato, sección 8) |
-| `SAC_HTML_STORIES_SKILL/prompts/` | Prompt para generar el JSON de metadata con el MCP de SAC |
-
-## Uso rápido
-
-```bash
-python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_model_json.py SAC_HTML_STORIES_SKILL/examples/models/model-metadata-rrhh.json
-```
+| `SAC_HTML_STORIES_SKILL/SKILL.md` | Instrucciones del skill y estado |
+| `SAC_HTML_STORIES_SKILL/references/` | Contrato del widget, esquema de especificación, interpretación de la petición, catálogo de tipos (kpi, barras, dona, burbujas, matriz, tabla, pivot, mapa), guías de diseño y esquema de metadata |
+| `SAC_HTML_STORIES_SKILL/templates/` | Runtime y componentes que usa el generador; ECharts 5.5.1 embebido y contornos de países |
+| `SAC_HTML_STORIES_SKILL/scripts/` | `make_metadata_prompt.py`, `generate_widget.py` y validadores (`validate_model_json.py`, `validate_spec.py`, `validate_bundle.py`) |
+| `SAC_HTML_STORIES_SKILL/examples/` | Casos petición → especificación y modelos de ejemplo |
+| `SAC_HTML_STORIES_SKILL/generated/` | Widgets generados de ejemplo |
+| `SAC_HTML_STORIES_SKILL/probe/` | Widgets sonda usados para verificar el comportamiento de SAC |
+| `SAC_HTML_STORIES_SKILL/prompts/` | Plantilla y versión genérica del prompt de metadata |
+| `SAC_HTML_STORIES_SKILL/tests/` | Pruebas (`python3 -I tests/test_validators.py`) y renderizado con Chromium |
 
 ## Pendientes
-
-- Plantillas del generador (manifiesto, JS principal, styling) y prueba de punta a punta con el modelo del cliente.
 - `convert_sac_metadata.py` (export físico de SAC → JSON canónico).
-- Revisión de `design-guidelines.md`.
+- Tablas en árbol con jerarquías del modelo, línea de tendencia, pirámide, comparación, componentes de captura y mapa con Leaflet.
+- Textos fijos de la interfaz (Total, Buscar…, Todos, Otros) como propiedades editables.
