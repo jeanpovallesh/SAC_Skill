@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-distribucionzonascanales",
-      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@80bafc4f4ef42d98e911857c4fbea2f542d5a83e/SAC_HTML_STORIES_SKILL/generated/02-distribucion/com-isitec-distribucionzonascanales.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-distribucionzonascanales-styling",
-      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales_styling.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@80bafc4f4ef42d98e911857c4fbea2f542d5a83e/SAC_HTML_STORIES_SKILL/generated/02-distribucion/com-isitec-distribucionzonascanales_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
