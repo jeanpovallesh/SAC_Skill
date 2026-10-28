@@ -1,0 +1,46 @@
+{
+  "id": "com.isitec.echartsprobe",
+  "version": "1.0.0",
+  "name": "ECharts Probe (sonda)",
+  "description": "Prueba de ECharts incluido en el JS y de carga por CDN",
+  "newInstancePrefix": "EChartsProbe",
+  "icon": "",
+  "vendor": "ISITEC",
+  "eula": "",
+  "license": "",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-isitec-echartsprobe",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@e36564658fc25743173b7fb6ef3f86d2031a5717/SAC_HTML_STORIES_SKILL/probe/echarts/echarts-probe.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-isitec-echartsprobe-styling",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@e36564658fc25743173b7fb6ef3f86d2031a5717/SAC_HTML_STORIES_SKILL/probe/echarts/echarts-probe_styling.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "titulo": {
+      "type": "string",
+      "description": "T\u00edtulo",
+      "default": "Prueba ECharts"
+    }
+  },
+  "methods": {
+    "getEchartsReport": {
+      "description": "Reporte de la prueba (JSON como texto)",
+      "returnType": "string"
+    },
+    "getEchartsBuild": {
+      "description": "Build cargado",
+      "returnType": "string"
+    }
+  },
+  "events": {},
+  "dataBindings": {}
+}
