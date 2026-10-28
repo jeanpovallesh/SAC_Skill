@@ -30,6 +30,7 @@ metadata┘
 
 1. **JSON canónico de metadata del modelo** (entrada oficial). Formato en `references/model-metadata-schema.md`. Si el usuario no lo tiene, `prompts/prompt-generar-metadata-modelo.md` indica cómo pedirlo al MCP de SAC desde VS Code. El export físico de SAC solo vale como respaldo (esquema §5.4).
    - Validar siempre antes de usarlo: `python3 -I scripts/validate_model_json.py <archivo.json>` (reglas M1–M18).
+   - Si el usuario solo da el **ID del modelo**, se le entrega el prompt para Claude Code con el MCP de SAC: `python3 -I scripts/make_metadata_prompt.py <ID>` (plantilla en `prompts/prompt-metadata-modelo.template.md`).
 2. **Pedido** del usuario en texto libre. Puede incluir un HTML de referencia (procedimiento en `references/intent-interpretation.md` §10).
 3. **URL base del host** donde se publicarán los JS (ver sección 7). Si no la da, se deja como parámetro y se avisa.
 
@@ -137,5 +138,5 @@ El validador de paquete hace análisis estático (expresiones regulares y conteo
 | Ver un caso completo pedido → especificación | `examples/01-rrhh-demografia-genero.md`, `examples/02-scm-distribucion-zonas-canales.md` |
 | Cómo se ve y se comporta un widget (tokens, tipografía, color) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |
-| Cómo se obtiene la metadata | `prompts/prompt-generar-metadata-modelo.md` |
+| Cómo se obtiene la metadata | `scripts/make_metadata_prompt.py <ID>` (prompt listo con el ID del modelo); `prompts/prompt-generar-metadata-modelo.md` queda como versión genérica |
 | Comprobar un comportamiento de SAC | `probe/` |
