@@ -22,7 +22,7 @@ python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_model_json.py SAC_HTML_STORIE
 
 ## Pendientes
 
-- `SKILL.md` y `design-guidelines.md`.
+- `design-guidelines.md`.
 - Cerrar con la sonda los puntos ⚠ del contrato (forma de celdas, `metadata`, jerarquías, caché).
 - JSON Schema formal de la metadata y validadores de especificación y de paquete.
 - Plantillas del generador.
