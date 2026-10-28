@@ -96,7 +96,7 @@ Regla de oro: **todo nombre declarado en el manifiesto debe existir con exactame
 - Tipos habituales: `string`, `integer`, `number`, `boolean`, y arreglos como `string[]`. 📘
 - Cada propiedad debe tener `description` y, idealmente, `default`.
 - Una propiedad solo sirve si **las tres piezas** la respetan: el manifiesto la declara, el JS principal la aplica en `onCustomWidgetBeforeUpdate`/`render`, y el styling ofrece un control para editarla. (✅ En el widget observado `title` está declarada y el styling la edita, pero el JS la guarda y nunca la usa: es el patrón que el skill debe evitar.)
-- SAC puede generar accesos de lectura y escritura en SAC Script para cada propiedad declarada. ⚠ Confirmar nombres exactos (`getX` / `setX`) en el tenant antes de documentarlos como regla.
+- ✅ (2026-10-28) SAC **no** genera accesos de lectura ni escritura en SAC Script para las propiedades (ver §8, ítem 5). Si la story necesita leer o cambiar una, el manifiesto declara métodos `getX` y `setX` y el JS los implementa.
 
 ### 2.4 `methods` (✅ 📘)
 
@@ -116,7 +116,7 @@ Regla de oro: **todo nombre declarado en el manifiesto debe existir con exactame
 ```
 
 - Cada método declarado es invocable desde SAC Script (`Widget_1.getJsonString()`).
-- Debe existir un método con **el mismo nombre** en la clase del JS principal. (✅ Patrón observado: los métodos del manifiesto no llevan `body` y se resuelven contra la clase.) ⚠ Confirmar en el tenant; la alternativa del framework es declarar `body` con el código en el propio manifiesto.
+- Debe existir un método con **el mismo nombre** en la clase del JS principal. (✅ Patrón observado: los métodos del manifiesto no llevan `body` y se resuelven contra la clase.) ✅ Confirmado en el tenant (2026-10-28, ver §8 ítem 4); la alternativa del framework es declarar `body` con el código en el propio manifiesto.
 - Tipos de retorno y de parámetro: tipos simples (`string`, `integer`, `number`, `boolean`) y sus arreglos. **No se debe devolver un objeto JS a SAC Script**: serializar con `JSON.stringify` y declarar `returnType: "string"`. (✅ `getJsonData` figura como `string` en el manifiesto pero el JS devuelve un objeto: es una inconsistencia a evitar.) ⚠ Verificar qué ocurre con objetos en el tenant.
 - Un método que no devuelve nada omite `returnType`.
 

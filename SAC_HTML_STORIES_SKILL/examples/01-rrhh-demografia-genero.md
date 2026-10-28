@@ -87,6 +87,9 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
 
   "measures": [
     { "id": "Headcount",    "ref": "Headcount", "role": "value", "aggregation": "additive", "required": true, "format": "integer" },
+    { "id": "Suma_Edad",         "ref": "Suma_Edad",         "role": "value", "aggregation": "additive", "optional": true, "format": "integer" },
+    { "id": "Retenidos",         "ref": "Retenidos",         "role": "value", "aggregation": "additive", "optional": true, "format": "integer" },
+    { "id": "Headcount_Inicial", "ref": "Headcount_Inicial", "role": "value", "aggregation": "additive", "optional": true, "format": "integer" },
     { "id": "EdadPromedio", "role": "ratio", "numerator": "Suma_Edad", "denominator": "Headcount", "optional": true, "format": "decimal1", "unit": "años" },
     { "id": "TasaRetencion","role": "ratio", "numerator": "Retenidos", "denominator": "Headcount_Inicial", "optional": true, "format": "percent1" }
   ],

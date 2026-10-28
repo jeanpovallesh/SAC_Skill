@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jeanpovallesh/SAC_Skill/schemas/model-metadata.schema.json",
+  "title": "Metadata de un modelo de SAC (forma canónica)",
+  "description": "Valida la ESTRUCTURA del JSON de metadata (references/model-metadata-schema.md). Las reglas que cruzan campos (ids únicos, padres existentes, ciclos, componentes de ratios, etc.) las comprueba scripts/validate_model_json.py. Los alias de 'dimensions[].type' se aceptan aquí y el script los normaliza.",
+  "type": "object",
+  "required": ["schema_version", "model", "dimensions", "measures"],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "model": { "$ref": "#/$defs/model" },
+    "dimensions": { "type": "array", "items": { "$ref": "#/$defs/dimension" } },
+    "measures": { "type": "array", "items": { "$ref": "#/$defs/measure" } }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "text": { "type": "string" },
+    "synonyms": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "model": {
+      "type": "object",
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["planning", "analytic"] },
+        "description": { "$ref": "#/$defs/text" }
+      },
+      "additionalProperties": true
+    },
+    "dimension": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "$ref": "#/$defs/text" },
+        "type": {
+          "enum": ["version", "time", "account", "category", "organization", "generic",
+                   "scenario", "date", "period", "calendar", "accounts", "entity", "company", "legal_entity", "other", "custom"]
+        },
+        "ordered": { "type": "boolean" },
+        "granularity": { "enum": ["year", "semester", "quarter", "month", "week", "day"] },
+        "synonyms": { "$ref": "#/$defs/synonyms" },
+        "properties": { "type": "array", "items": { "$ref": "#/$defs/property" } },
+        "hierarchies": { "type": "array", "items": { "$ref": "#/$defs/hierarchy" } },
+        "members": { "type": "array", "items": { "$ref": "#/$defs/member" } },
+        "members_complete": { "type": "boolean" },
+        "system_properties": { "type": "array", "items": { "type": "string" } },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "property": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "$ref": "#/$defs/text" },
+        "type": { "enum": ["string", "number", "date", "boolean"] },
+        "synonyms": { "$ref": "#/$defs/synonyms" }
+      },
+      "additionalProperties": true
+    },
+    "hierarchy": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "$ref": "#/$defs/text" },
+        "kind": { "enum": ["level", "parent-child"] },
+        "default": { "type": "boolean" },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "properties": { "id": { "$ref": "#/$defs/id" }, "description": { "$ref": "#/$defs/text" } },
+            "additionalProperties": true
+          }
+        }
+      },
+      "if": { "required": ["levels"] },
+      "then": { "properties": { "kind": { "const": "level" } }, "required": ["kind"] },
+      "additionalProperties": true
+    },
+    "member": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "$ref": "#/$defs/text" },
+        "parent_id": { "type": ["string", "null"] },
+        "properties": { "type": "object" },
+        "synonyms": { "$ref": "#/$defs/synonyms" }
+      },
+      "additionalProperties": true
+    },
+    "measure": {
+      "type": "object",
+      "required": ["id", "unit", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "$ref": "#/$defs/text" },
+        "unit": { "enum": ["currency", "unit", "number", "percent"] },
+        "type": { "enum": ["fixed", "variable"] },
+        "unit_value": { "type": ["string", "null"] },
+        "decimals": { "type": ["integer", "null"], "minimum": 0, "maximum": 6 },
+        "aggregation": { "enum": ["additive", "semi-additive", "non-additive"] },
+        "time_aggregation": { "enum": ["last", "avg"] },
+        "components": {
+          "type": "object",
+          "required": ["numerator", "denominator"],
+          "properties": { "numerator": { "$ref": "#/$defs/id" }, "denominator": { "$ref": "#/$defs/id" } },
+          "additionalProperties": true
+        },
+        "good_direction": { "enum": ["up", "down"] },
+        "synonyms": { "$ref": "#/$defs/synonyms" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "fixed" } }, "required": ["type"] },
+          "then": { "required": ["unit_value"], "properties": { "unit_value": { "type": "string", "minLength": 1 } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "variable" } }, "required": ["type"] },
+          "then": { "properties": { "unit_value": { "type": "null" } } }
+        }
+      ],
+      "additionalProperties": true
+    }
+  }
+}

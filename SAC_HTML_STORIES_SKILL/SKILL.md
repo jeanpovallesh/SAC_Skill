@@ -7,7 +7,7 @@ description: Genera y valida los tres archivos de un widget custom de SAP Analyt
 
 Convierte **metadata de un modelo de SAC + un pedido en texto libre** en un widget custom listo para subir a SAC: manifiesto, JS principal y JS de styling, coherentes entre sí y validados.
 
-**Estado:** el conocimiento (`references/`) y la sonda están completos y verificados contra un tenant real. Los validadores de especificación y de paquete, y las plantillas del generador, están **pendientes** (ver sección 8): hasta que existan, la generación se hace a mano siguiendo las referencias y la validación se hace con la tabla R1–R14 del contrato.
+**Estado:** el conocimiento (`references/`), la sonda y los tres validadores están completos y probados. Las plantillas del generador están **pendientes** (ver sección 8): hasta que existan, los tres archivos se escriben siguiendo las referencias y se validan con los scripts.
 
 ---
 
@@ -37,12 +37,12 @@ metadata┘
 
 ## 3. Flujo
 
-1. **Validar la metadata** (M1–M18). Si falla, detenerse y explicar qué corregir.
+1. **Validar la metadata**: `python3 -I scripts/validate_model_json.py <metadata.json>` (M1–M18 y esquema JSON). Si falla, detenerse y explicar qué corregir.
 2. **Interpretar el pedido** (`references/intent-interpretation.md`): familia de widget, términos enlazados a ids del modelo, roles, composición, comparación solo si la piden (D7).
-3. **Escribir la especificación** (`references/widget-spec-schema.md`) y pasar S1–S14.
+3. **Escribir la especificación** (`references/widget-spec-schema.md`) y validarla: `python3 -I scripts/validate_spec.py <spec.json> <metadata.json>` (S1–S14 y reglas C de componentes).
 4. **Mostrar el resumen al usuario** (formato en `intent-interpretation.md` §11): orden de feeds, medidas, componentes, filtros, propiedades, supuestos y preguntas abiertas. **No generar hasta que confirme.**
 5. **Generar los tres archivos** desde la especificación, con el catálogo `references/widget-types.md` y las reglas de `references/sac-widget-contract.md`.
-6. **Validar el paquete** (R1–R14 del contrato, y C1–C18 del catálogo). Corregir en la especificación y regenerar; no parchear los archivos.
+6. **Validar el paquete**: `python3 -I scripts/validate_bundle.py <manifiesto.json> <principal.js> <styling.js> --spec <spec.json>` (R1–R14 y C17). Corregir en la especificación y regenerar; no parchear los archivos.
 7. **Entregar** (sección 6): los tres archivos, la nota de instalación con el orden de feeds, y los supuestos.
 
 ---
@@ -109,15 +109,16 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | Componente | Estado |
 |---|---|
 | `references/` (contrato, esquema de spec, interpretación, catálogo, esquema de metadata) | Completo; `widget-types.md` (§2.1, §2.13, §5.3) y el esquema de la especificación ya incorporan lo verificado en la sonda |
-| `scripts/validate_model_json.py` (M1–M18) | Hecho |
+| `schemas/model-metadata.schema.json` + `scripts/validate_model_json.py` (M1–M18) | Hecho |
+| `scripts/validate_spec.py` (S1–S14, C1–C16) | Hecho; probado con las especificaciones de los ejemplos 01 y 02 |
+| `scripts/validate_bundle.py` (R1–R14, C17 y comprobaciones verificadas con la sonda) | Hecho; análisis estático, no sustituye probar en SAC |
+| `tests/test_validators.py` | 56 pruebas: `python3 -I tests/test_validators.py` |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
 | `references/design-guidelines.md` | Primer borrador |
-| JSON Schema formal de la metadata | Pendiente |
-| Validador de especificación (S1–S14) y de paquete (R1–R14, C1–C18) | Pendiente |
-| Plantillas del generador (manifiesto, JS principal, styling) | Pendiente |
+| Plantillas del generador (manifiesto, JS principal, styling) | **Pendiente** |
 | `convert_sac_metadata.py` (export de SAC → JSON canónico) | Pendiente |
 
-Mientras los validadores no existan, el paquete se revisa a mano con las tablas R1–R14 (contrato §6) y se declara en la entrega qué reglas se comprobaron y cómo.
+El validador de paquete hace análisis estático (expresiones regulares y conteo de llaves): detecta los fallos típicos de coherencia entre los tres archivos, pero la prueba final es cargar el widget en una story.
 
 ---
 
@@ -129,7 +130,7 @@ Mientras los validadores no existan, el paquete se revisa a mano con las tablas 
 | Cómo se interpreta el pedido, preguntas, patrones | `references/intent-interpretation.md` |
 | Estructura de la especificación y S1–S14 | `references/widget-spec-schema.md` |
 | Componentes disponibles, opciones y C1–C18 | `references/widget-types.md` |
-| Formato del JSON del modelo y M1–M18 | `references/model-metadata-schema.md` |
+| Formato del JSON del modelo y M1–M18 | `references/model-metadata-schema.md`, `schemas/model-metadata.schema.json` |
 | Ver un caso completo pedido → especificación | `examples/01-rrhh-demografia-genero.md`, `examples/02-scm-distribucion-zonas-canales.md` |
 | Cómo se ve y se comporta un widget (tokens, tipografía, color) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |

@@ -107,7 +107,9 @@ Se incluyen solo para dimensiones **pequeñas** (hasta unos 200 miembros) cuyos 
 | `good_direction` | No | `up` o `down`: sentido favorable. Por defecto `up` |
 | `synonyms` | No | Otros nombres |
 
-Si el modelo usa **cuentas** (dimensión `account`), los miembros de esa dimensión llegan al widget como una dimensión normal; las medidas del modelo, por el feed de medidas. ⚠ Se confirma con la sonda cuando el modelo tenga ambas.
+Si el modelo usa **cuentas** (dimensión `account`), los miembros de esa dimensión **no pueden agregarse como dimensión** del feed: entran como columnas del feed de medidas (`mainStructureMember`), una por cuenta ✅ (sonda, 2026-10-28). Las medidas del modelo, si las hay, comparten ese feed. En la especificación, una medida puede apuntar (`ref`) a una medida del modelo o a un miembro de la dimensión de cuentas.
+
+**Validación.** La estructura la comprueba `schemas/model-metadata.schema.json` (JSON Schema 2020-12) y el resto de reglas (M1–M18) `scripts/validate_model_json.py`.
 
 ---
 
