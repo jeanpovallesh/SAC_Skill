@@ -1,6 +1,6 @@
 {
   "id": "com.isitec.distribucionzonascanales",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "Distribución por Zonas y Canales",
   "description": "Tablero de distribución por zona regional, canal y línea/marca",
   "newInstancePrefix": "DistribucionZonas",
@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-distribucionzonascanales",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@75c500dbe13b69d0d5e3b64ddabce2cb20ae0bff/SAC_HTML_STORIES_SKILL/generated/02-distribucion/com-isitec-distribucionzonascanales.js",
+      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-distribucionzonascanales-styling",
-      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@75c500dbe13b69d0d5e3b64ddabce2cb20ae0bff/SAC_HTML_STORIES_SKILL/generated/02-distribucion/com-isitec-distribucionzonascanales_styling.js",
+      "url": "{{BASE_URL}}/com-isitec-distribucionzonascanales_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }

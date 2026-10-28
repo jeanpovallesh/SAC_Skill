@@ -289,9 +289,10 @@ def validate(man, main_js, sty_js, names, spec=None):
 
     # ---- C17 jerarquías
     if re.search(r'\bsetHierarchy\s*\(', main):
-        if not re.search(r"typeof\s+[\w.\[\]'\"]*setHierarchy\s*===?\s*['\"]function", main):
+        if not re.search(r"typeof\s+[\w.\[\]'\"]*setHierarchy\s*[!=]==?\s*['\"]function", main):
             err('C17', 'setHierarchy se llama sin protección con typeof … === "function"')
-        if not re.search(r'\bsetHierarchyLevel\s*\(', main):
+        non_flat = [a for a in re.findall(r'\bsetHierarchy\s*\(([^)]*)\)', main) if '@FlatHierarchy' not in a]   # la vista plana no tiene niveles
+        if non_flat and not re.search(r'\bsetHierarchyLevel\s*\(', main):
             err('C17', 'tras setHierarchy hay que volver a fijar el nivel con setHierarchyLevel (setHierarchy reinicia a la raíz)')
         if not re.search(r'catch\s*\(|\.catch\s*\(', main):
             warn('C17', 'las llamadas al origen de datos devuelven promesas: manejar el rechazo')

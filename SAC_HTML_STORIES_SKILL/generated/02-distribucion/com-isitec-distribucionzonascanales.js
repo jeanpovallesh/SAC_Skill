@@ -1,4 +1,4 @@
-/* Distribución por Zonas y Canales v1.0.1 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
+/* Distribución por Zonas y Canales v1.0.2 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
 (function () {
 'use strict';
 var TAG = "com-isitec-distribucionzonascanales";
@@ -549,7 +549,7 @@ var SPEC = {
  },
  "_widget": {
   "tag": "com-isitec-distribucionzonascanales",
-  "version": "1.0.1"
+  "version": "1.0.2"
  }
 };
 var PROP_DEFS = [
@@ -1473,6 +1473,25 @@ class Widget extends HTMLElement {
     }
     if (changed) this._render();
   }
+  /* Vista plana: si una dimensión sin jerarquía en la especificación llega con nodos (solo raíces), pedir @FlatHierarchy.
+     ⚠ no verificado en el tenant; si falla, el aviso del widget indica configurar la jerarquía plana en el Builder. */
+  _ensureFlat(read) {
+    try {
+      var dbs = this.dataBindings;
+      var db = dbs && typeof dbs.getDataBinding === 'function' ? dbs.getDataBinding('myDataBinding') : null;
+      var ds = db && typeof db.getDataSource === 'function' ? db.getDataSource() : null;
+      if (!ds || typeof ds.setHierarchy !== 'function') return;
+      this._flat = this._flat || {};
+      SPEC.feeds.filter(function (f) { return f.role === 'dimension' && !f.hierarchy; }).forEach(function (f) {
+        if (this._flat[f.ref]) return;
+        var hasNodes = read.rows.some(function (rec) { return rec.d[f.ref] && rec.d[f.ref].isNode; });
+        if (!hasNodes) return;
+        this._flat[f.ref] = true;
+        var p = ds.setHierarchy(f.ref, '@FlatHierarchy');
+        if (p && typeof p.catch === 'function') p.catch(function () { /* nada */ });
+      }, this);
+    } catch (e) { /* nada */ }
+  }
   _pick(g, k) {
     if (!g) return false;
     this._groups[g] = this._groups[g] === k ? null : k;
@@ -1499,7 +1518,7 @@ class Widget extends HTMLElement {
       var read = readBinding(this.myDataBinding);
       if (read.state === 'loading') { this._box.classList.add('loading'); return; }   // conserva el último render
       this._box.classList.remove('loading');
-      if (read.state === 'success') { this._last = read; initFilterDefaults(read.rows, this._sel, this._inited); }
+      if (read.state === 'success') { this._last = read; this._ensureFlat(read); initFilterDefaults(read.rows, this._sel, this._inited); }
       this._measure();
       this._pending.length = 0;
       this._box.innerHTML = this._html(read);
@@ -1539,7 +1558,7 @@ class Widget extends HTMLElement {
   }
 }
 function defaultSpan(type) {
-  return /^kpi/.test(type) ? 3 : /table|matrix/.test(type) ? 12 : 6;
+  return /^kpi/.test(type) ? 3 : /bubble/.test(type) ? 6 : /table|matrix/.test(type) ? 12 : 6;
 }
 
 if (!customElements.get(TAG)) customElements.define(TAG, Widget);

@@ -1,0 +1,97 @@
+{
+  "id": "com.isitec.sollazonascanales",
+  "version": "1.0.0",
+  "name": "Ingresos y Gastos por Zona y Canal",
+  "description": "Ingresos y gastos por zona y canal del modelo SOLLA-EBITDA",
+  "newInstancePrefix": "SollaZonasCanales",
+  "icon": "",
+  "vendor": "ISITEC",
+  "eula": "",
+  "license": "",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-isitec-sollazonascanales",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    },
+    {
+      "kind": "styling",
+      "tag": "com-isitec-sollazonascanales-styling",
+      "url": "{{BASE_URL}}/com-isitec-sollazonascanales_styling.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Título",
+      "default": "Ingresos y Gastos por Zona y Canal"
+    },
+    "titulo_kpiIngresos": {
+      "type": "string",
+      "description": "Título: Ingresos",
+      "default": "Ingresos"
+    },
+    "titulo_kpiGastos": {
+      "type": "string",
+      "description": "Título: Gastos",
+      "default": "Gastos"
+    },
+    "titulo_kpiGastoPct": {
+      "type": "string",
+      "description": "Título: Gastos sobre ingresos",
+      "default": "Gastos sobre ingresos"
+    },
+    "titulo_donaCanales": {
+      "type": "string",
+      "description": "Título: Ingresos por canal",
+      "default": "Ingresos por canal"
+    },
+    "titulo_burbujasCanales": {
+      "type": "string",
+      "description": "Título: Ingresos vs. gastos sobre ingresos por canal",
+      "default": "Ingresos vs. gastos sobre ingresos por canal"
+    },
+    "titulo_barras100Zona": {
+      "type": "string",
+      "description": "Título: Mezcla de canales por zona",
+      "default": "Mezcla de canales por zona"
+    },
+    "titulo_matrizZonaCanal": {
+      "type": "string",
+      "description": "Título: Zona × canal",
+      "default": "Zona × canal"
+    },
+    "titulo_tablaCanales": {
+      "type": "string",
+      "description": "Título: Detalle por canal",
+      "default": "Detalle por canal"
+    },
+    "etiqueta_fPeriodo": {
+      "type": "string",
+      "description": "Etiqueta del filtro Periodo",
+      "default": "Periodo"
+    }
+  },
+  "methods": {},
+  "events": {},
+  "dataBindings": {
+    "myDataBinding": {
+      "feeds": [
+        {
+          "id": "dims",
+          "description": "Dimensiones, en este orden: Zona (Zona), Canal (Canal), Periodo (Periodo)",
+          "type": "dimension"
+        },
+        {
+          "id": "measures",
+          "description": "Medidas: Ingresos, Gastos",
+          "type": "mainStructureMember"
+        }
+      ]
+    }
+  }
+}
