@@ -133,7 +133,12 @@ class Widget extends HTMLElement {
     if (read.state === 'none') return '<div class="root">' + head + '<div class="notice">Asigne el origen de datos y los feeds en el Builder.</div></div>';
     if (read.state === 'error') return head + '<div class="notice err" role="alert">Error en el origen de datos' + (read.messages && read.messages.length ? ': ' + esc(JSON.stringify(read.messages)) : '') + '</div>';
     if (read.state !== 'success') return head;
-    var missing = read.missing.length ? '<div class="notice" role="status">Faltan feeds por asignar: ' + esc(read.missing.join(', ')) + '</div>' : '';
+    if (read.missing.length) {
+      var expected = SPEC.feeds.filter(function (f) { return !f.optional; }).map(function (f) { return f.ref; }).concat(SPEC.measures.filter(function (m) { return m.role === 'value' && !m.optional; }).map(function (m) { return m.ref || m.id; }));
+      return '<div class="root">' + head + '<div class="notice" role="status"><b>Faltan feeds por asignar o no coinciden con el modelo:</b> ' + esc(read.missing.join(', ')) +
+        '<br><span class="muted">Se esperan (ids del modelo): ' + esc(expected.join(', ')) + '</span><br><span class="muted">Se recibieron: ' + esc(read.received.join(', ') || 'nada') + '</span></div></div>';
+    }
+    var missing = '';
     var ctx = this._ctx(read);
     var parts = SPEC.components.map(function (c) {
       var ok = asArray(c.requires).every(function (r) { return ctx.have(r); });

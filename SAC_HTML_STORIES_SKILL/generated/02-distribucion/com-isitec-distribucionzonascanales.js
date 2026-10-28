@@ -1,4 +1,4 @@
-/* Distribución por Zonas y Canales v1.0.0 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
+/* Distribución por Zonas y Canales v1.0.1 · generado por SAC_HTML_STORIES_SKILL · NO editar: regenerar desde la especificación */
 (function () {
 'use strict';
 var TAG = "com-isitec-distribucionzonascanales";
@@ -549,7 +549,7 @@ var SPEC = {
  },
  "_widget": {
   "tag": "com-isitec-distribucionzonascanales",
-  "version": "1.0.0"
+  "version": "1.0.1"
  }
 };
 var PROP_DEFS = [
@@ -759,7 +759,8 @@ function readBinding(binding) {
   SPEC.measures.forEach(function (m) {
     if ((m.required || (!m.optional && m.role === 'value')) && !present[m.id]) missing.push(m.id);
   });
-  return { state: 'success', rows: rows, present: present, missing: missing };
+  var received = Object.keys(metaDims).map(function (k) { return metaDims[k].id; }).concat(Object.keys(msm).map(function (k) { return memberKey(msm[k].id); }));
+  return { state: 'success', rows: rows, present: present, missing: missing, received: received };
 }
 
 /* ===== motor: filtros, agregación, ratios, formato ===== */
@@ -1519,7 +1520,12 @@ class Widget extends HTMLElement {
     if (read.state === 'none') return '<div class="root">' + head + '<div class="notice">Asigne el origen de datos y los feeds en el Builder.</div></div>';
     if (read.state === 'error') return head + '<div class="notice err" role="alert">Error en el origen de datos' + (read.messages && read.messages.length ? ': ' + esc(JSON.stringify(read.messages)) : '') + '</div>';
     if (read.state !== 'success') return head;
-    var missing = read.missing.length ? '<div class="notice" role="status">Faltan feeds por asignar: ' + esc(read.missing.join(', ')) + '</div>' : '';
+    if (read.missing.length) {
+      var expected = SPEC.feeds.filter(function (f) { return !f.optional; }).map(function (f) { return f.ref; }).concat(SPEC.measures.filter(function (m) { return m.role === 'value' && !m.optional; }).map(function (m) { return m.ref || m.id; }));
+      return '<div class="root">' + head + '<div class="notice" role="status"><b>Faltan feeds por asignar o no coinciden con el modelo:</b> ' + esc(read.missing.join(', ')) +
+        '<br><span class="muted">Se esperan (ids del modelo): ' + esc(expected.join(', ')) + '</span><br><span class="muted">Se recibieron: ' + esc(read.received.join(', ') || 'nada') + '</span></div></div>';
+    }
+    var missing = '';
     var ctx = this._ctx(read);
     var parts = SPEC.components.map(function (c) {
       var ok = asArray(c.requires).every(function (r) { return ctx.have(r); });

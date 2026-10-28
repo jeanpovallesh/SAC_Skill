@@ -52,5 +52,6 @@ function readBinding(binding) {
   SPEC.measures.forEach(function (m) {
     if ((m.required || (!m.optional && m.role === 'value')) && !present[m.id]) missing.push(m.id);
   });
-  return { state: 'success', rows: rows, present: present, missing: missing };
+  var received = Object.keys(metaDims).map(function (k) { return metaDims[k].id; }).concat(Object.keys(msm).map(function (k) { return memberKey(msm[k].id); }));
+  return { state: 'success', rows: rows, present: present, missing: missing, received: received };
 }
