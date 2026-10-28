@@ -9,8 +9,12 @@ Importable: validate(spec, meta) -> (errores, advertencias).
 Referencias: references/widget-spec-schema.md (S), references/widget-types.md (C).
 """
 import json
+import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from spec_lib import IDENT, derived_properties  # noqa: E402
 
 # tipo -> (claves permitidas en `uses`, claves obligatorias). None = no se comprueba (captura).
 CATALOG = {
@@ -33,7 +37,6 @@ CATALOG = {
 }
 DIM_KEYS = {'axis', 'series', 'split', 'rows', 'columns', 'breakdown'}
 MEAS_KEYS = {'measures', 'x', 'y', 'size'}
-TEXT_KEYS = {'label', 'labels', 'text', 'message', 'footer', 'note', 'caption'}
 NEEDS_COMPARISON = {'bar-compare', 'variance-table'}
 REQUIRED_SECTIONS = ('request', 'widget', 'model', 'hosting', 'feeds', 'measures', 'components', 'assumptions')
 
@@ -219,10 +222,9 @@ def validate(spec, meta):
                         err('S7', f'{cid}: usa la medida non-additive "{m}" con filtros activos sin hideWhenFiltered')
                     if not any(m in str(a) for a in spec.get('assumptions', [])):
                         warn('C9', f'{cid}: declarar en assumptions el aviso de la medida non-additive "{m}"')
-        # S12
-        for k, v in opts.items():
-            if k in TEXT_KEYS and isinstance(v, str) and v.strip():
-                warn('S12', f'{cid}: options.{k} lleva un texto fijo ("{v[:30]}"); debería ser una propiedad')
+        # S12: los textos fijos pasan a ser propiedades derivadas (spec_lib.derived_properties)
+        if not IDENT.match(str(cid)):
+            err('S12', f'id de componente "{cid}": solo letras, números y _ (se usa para nombrar propiedades)')
         # C5
         grp = opts.get('selectionGroup')
         if grp:
@@ -291,6 +293,19 @@ def validate(spec, meta):
             err('S8', f'propiedad "{p["id"]}": falta appliesTo')
         if 'default' not in p or p['default'] is None:
             err('S8', f'propiedad "{p["id"]}": falta default')
+
+    # ---------- S12: propiedades derivadas
+    declared = [p['id'] for p in spec.get('properties', []) or []]
+    for d in derived_properties(spec):
+        if d['id'] in declared:
+            if d['id'] != 'nivelExpansionInicial':
+                err('S12', f'la propiedad derivada "{d["id"]}" colisiona con una propiedad declarada')
+    for fl in filters:
+        if not IDENT.match(str(fl.get('id'))):
+            err('S12', f'id de filtro "{fl.get("id")}": solo letras, números y _')
+    for c in comps:
+        if c.get('type') not in ('filter-bar',) and 'title' not in c:
+            warn('S12', f'{c.get("id")}: sin title (el componente se dibuja sin encabezado)')
 
     # ---------- S9: identidad
     w = spec['widget']

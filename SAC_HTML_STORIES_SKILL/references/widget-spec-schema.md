@@ -328,6 +328,21 @@ Los textos libres por fila (por ejemplo un "plan de pipeline" distinto en cada d
 - Para widgets `solo-lectura`, `methods` y `events` pueden ser mínimos o vacíos. Para `captura`, se declara el método de salida (`getJsonString`) y, si la story necesita enterarse, un evento.
 - Si algún feed tiene `hierarchy.selectable: true`, el widget cambia la jerarquía por sí mismo (`setHierarchy` + `setHierarchyLevel` sobre el origen de datos, ver `widget-types.md` 2.13) y el skill agrega la propiedad `nivelExpansionInicial` (entero, por defecto 1). El método `getSelectedHierarchy(dimension)` (devuelve `string`) y el evento `onHierarchyChange` son **opcionales**: solo si el pedido indica que la story debe enterarse.
 
+### 11.1 Propiedades derivadas (S12) ✅
+
+Decisión (2026-10-28): **todo título y etiqueta debe poder editarse en línea** desde el panel de styling. En la especificación se escriben como literales (`title`, etiquetas de filtro, textos de `options`) y el generador los convierte en propiedades, sin que haya que declararlas a mano:
+
+| Texto en la especificación | Propiedad generada | Valor por defecto |
+|---|---|---|
+| `components[].title` | `titulo_<idComponente>` | el texto del título |
+| `filters[]` (etiqueta) | `etiqueta_<idFiltro>` | `filters[].label`, o la etiqueta del feed `target` |
+| `components[].options.<label\|labels\|text\|message\|footer\|note\|caption>` (cadena) | `texto_<idComponente>_<clave>` | el texto |
+| `feeds[].hierarchy.selectable` | `nivelExpansionInicial` (entero, por defecto 1) | 1 |
+
+- Las propiedades derivadas se suman a las declaradas (`widget-spec-schema` §11) en el manifiesto, el JS principal y el styling; la lista la calcula `scripts/spec_lib.py` (`derived_properties`), que usan el validador y el generador.
+- Los textos que salen de los datos (nombres de miembros, medidas, unidades) **no** son propiedades.
+- El panel de styling agrupa los controles: Widget · Filtros · Un grupo por componente · Umbrales y metas.
+
 ---
 
 ## 12. `theme`
@@ -401,6 +416,6 @@ Restricciones al generar el JS 📘:
 | S9 | `id`, `tag` y `prefix` son consistentes entre sí; el `tag` no lleva sufijo de versión |
 | S10 | `assumptions` no está vacío cuando hubo decisiones tomadas por el skill |
 | S11 | Cantidad de feeds ≤ 8; si no, se avisa |
-| S12 | Ninguna etiqueta o texto de negocio está fijo en `components`: va como propiedad o sale de datos |
+| S12 | Todo texto visible fijo (título de componente, etiqueta de filtro, textos de `options`) es el **valor por defecto de una propiedad editable** que el generador crea (§11.1); los ids de componentes y filtros son identificadores válidos (`A-Za-z0-9_`) y no colisionan con propiedades declaradas |
 | S13 | Todo id de `hierarchy.available` y `hierarchy.default` existe en `hierarchies` de esa dimensión en el modelo |
 | S14 | Un componente con `options.tree` usa como filas un feed con `hierarchy`; `selectable: true` implica la propiedad `nivelExpansionInicial` y la llamada al origen de datos para cambiar la jerarquía; el método y el evento son opcionales |

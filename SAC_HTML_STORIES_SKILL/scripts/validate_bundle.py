@@ -218,6 +218,8 @@ def validate(man, main_js, sty_js, names, spec=None):
     for p in props:
         if not re.search(r'\b' + re.escape(p) + r'\b', cleaned):
             err('R7', f'la propiedad "{p}" no se usa en el JS principal')
+        elif (re.match(r'(titulo|etiqueta|texto)_', p) and re.search(r'_?props\[\s*[\'"]' + p.split('_')[0] + r'_[\'"]\s*\+', main)):
+            pass   # lectura dinámica de propiedades derivadas (S12): _props['titulo_' + id]
         elif not re.search(r'(?<![\w.])(?:this\.)?_?props\.' + re.escape(p) + r'\b|_?props\[[\'"]' + re.escape(p) + r'[\'"]\]|\bget\s+' + re.escape(p) + r'\b|\bthis\.' + re.escape(p) + r'\b|\bchanged\.' + re.escape(p), main):
             warn('R7', f'la propiedad "{p}" aparece en el JS principal pero no se lee desde _props: comprobar que se aplique')
         if not (props[p] or {}).get('description'):
