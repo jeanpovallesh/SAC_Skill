@@ -12,14 +12,14 @@
     {
       "kind": "main",
       "tag": "com-isitec-sollazonascanales",
-      "url": "{{BASE_URL}}/com-isitec-sollazonascanales.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@353d916cda7228e92c16fa537f0b32e05426e328/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales.js",
       "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-isitec-sollazonascanales-styling",
-      "url": "{{BASE_URL}}/com-isitec-sollazonascanales_styling.js",
+      "url": "https://cdn.jsdelivr.net/gh/jeanpovallesh/SAC_Skill@353d916cda7228e92c16fa537f0b32e05426e328/SAC_HTML_STORIES_SKILL/generated/solla-zonas-canales/com-isitec-sollazonascanales_styling.js",
       "integrity": "",
       "ignoreIntegrity": true
     }
