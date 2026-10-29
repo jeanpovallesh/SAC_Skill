@@ -168,13 +168,29 @@ class Widget extends HTMLElement {
         '\nmuestra: ' + cut(read.sample)) + '</pre></details>';
     }
     var ctx = this._ctx(read);
-    var parts = SPEC.components.map(function (c) {
+    var cells = [];
+    SPEC.components.forEach(function (c) {
       var ok = asArray(c.requires).every(function (r) { return ctx.have(r); });
-      if (!ok) return '';
+      if (!ok) return;
       var impl = COMPONENTS[c.type];
       var html = impl ? impl.render(ctx, c) : '<div class="notice">Componente no disponible: ' + esc(c.type) + '</div>';
-      return html ? '<div class="cell s' + ((c.layout && c.layout.span) || defaultSpan(c.type)) + '">' + html + '</div>' : '';
-    }).join('');
+      if (html) cells.push({ c: c, html: html, kpi: /^kpi/.test(c.type) && !(c.layout && c.layout.span) });
+    });
+    /* Varios KPI seguidos forman una franja: un contenedor dividido por líneas de 1 px (design-guidelines §5.1) */
+    var parts = [], pi = 0;
+    var plain = function (x) { return '<div class="cell s' + ((x.c.layout && x.c.layout.span) || defaultSpan(x.c.type)) + '">' + x.html + '</div>'; };
+    while (pi < cells.length) {
+      if (!cells[pi].kpi) { parts.push(plain(cells[pi])); pi++; continue; }
+      var pj = pi; while (pj < cells.length && cells[pj].kpi) pj++;
+      var run = cells.slice(pi, pj), per = run.length <= 5 ? run.length : Math.ceil(run.length / 2);
+      if (run.length === 1) parts.push(plain(run[0]));
+      else for (var pk = 0; pk < run.length; pk += per) {
+        var row = run.slice(pk, pk + per);
+        parts.push('<div class="cell s12"><div class="strip" style="--n:' + row.length + '">' + row.map(function (x) { return '<div class="kc">' + x.html + '</div>'; }).join('') + '</div></div>');
+      }
+      pi = pj;
+    }
+    parts = parts.join('');
     if (!ctx.rows.length) parts = '<div class="cell s12"><div class="empty">Sin datos para la selección</div></div>';
     return '<div class="root"><div class="bar"></div>' + head + missing + diag + renderFilters(ctx) + '<div class="grid">' + parts + '</div></div>';
   }
