@@ -63,7 +63,7 @@ Notas:
 - Los comandos instalan para **Claude Code**; añade `-g -a claude-code -y` para instalarlas globalmente (`~/.claude/skills`) sin preguntas. Se comprueba con `ls ~/.claude/skills`. Requiere Node.js.
 - **Revisa cada skill antes de usarla:** son de terceros y corren con los permisos del agente.
 - **Nada de esto cambia las reglas del skill.** Prevalecen siempre el contrato de SAC, las decisiones D1–D11 y el HTML de referencia que aportes; de las skills externas se descarta lo que no cabe en un widget embebido (navegación, fuentes web, recursos externos) y sus propuestas se traducen a los tokens de `design-guidelines.md`.
-- Estado de la integración: hoy el skill las consulta en el paso de diseño; la auditoría con `web-design-guidelines` y el criterio de movimiento se aplican a petición. Integrarlos de forma automática en el flujo está pendiente.
+- Estado de la integración: hoy el skill las consulta en el paso de diseño; el criterio de movimiento (Emil Kowalski) ya está incorporado en la guía y en el runtime; la auditoría con `web-design-guidelines` se aplica a petición y su integración automática en el flujo está pendiente.
 
 ## Estructura
 

@@ -136,6 +136,10 @@ class Widget extends HTMLElement {
       this._pending.length = 0;
       this._box.innerHTML = this._html(read);
       this._mountCharts();
+      if (!this._shown && read.state === 'success') {   // entrada suave solo la primera vez; los re-dibujos por filtros no se animan
+        this._shown = true; var bx = this._box; bx.classList.add('enter');
+        setTimeout(function () { bx.classList.remove('enter'); }, 300);
+      }
       var fo = this._box.querySelector('[data-act="fq"]');
       if (fo && this._uiState && Object.keys(this._uiState).some(function (k) { return this._uiState[k].keepFocus; }, this)) {
         fo.focus(); var l = fo.value.length; try { fo.setSelectionRange(l, l); } catch (e) { /* nada */ }

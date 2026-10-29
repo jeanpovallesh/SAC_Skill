@@ -11,7 +11,7 @@ function buildCss() {
     '--c-texto:' + (THC.texto || '#0b1c30') + ';--c-texto-2:' + (THC.texto2 || '#45464d') + ';--c-texto-3:' + (THC.texto3 || '#636b7a') + ';--c-activo:' + (THC.activo || '#e8eefb') + ';' +
     '--c-acento:' + (THC.acento || '#0051d5') + ';--c-positivo:' + (THC.positivo || '#004942') + ';--c-negativo:' + (THC.negativo || '#ba1a1a') + ';' +
     '--fuente-cuerpo:' + (TH.fontBody || "Inter,'Segoe UI',system-ui,Arial,sans-serif") + ';--fuente-titulo:' + (TH.fontDisplay || TH.fontBody || "Inter,'Segoe UI',system-ui,Arial,sans-serif") + ';' +
-    '--radio:12px;--e:8px;--fs-apoyo:12px;--fs-cuerpo:14px;--fs-sub:16px;--fs-kpi:28px;--fila:36px}' +
+    '--radio:12px;--e:8px;--ease:cubic-bezier(.23,1,.32,1);--t:140ms;--fs-apoyo:12px;--fs-cuerpo:14px;--fs-sub:16px;--fs-kpi:28px;--fila:36px}' +
     '*{box-sizing:border-box}table,button,input{font:inherit}' +
     '.root{background:var(--c-fondo);color:var(--c-texto);font:14px/1.4 var(--fuente-cuerpo);padding:16px;min-height:60px}' +
     '.w-sm .root{padding:12px}' +
@@ -58,7 +58,13 @@ function buildCss() {
     '.pv th.ctr{text-align:center}.pv th,.pv td{border-right:1px solid var(--c-regla)}.pv td.lbl,.pv th.lbl{position:sticky;left:0;z-index:1;background:var(--c-superficie);text-align:left}.pv th.lbl{z-index:2}.pv tr.pn td{font-weight:600;background:var(--c-fondo)}.pv tr.pn td.lbl{background:var(--c-fondo)}.tg{display:inline-block;width:16px;cursor:pointer;color:var(--c-texto-2)}' +
     '.tools button{border:1px solid var(--c-control);background:var(--c-superficie);border-radius:6px;padding:4px 8px;cursor:pointer;color:inherit}' +
     '.pos{color:var(--c-positivo)}.neg{color:var(--c-negativo)}' +
-    '@media (prefers-reduced-motion:reduce){*{transition:none!important}}';
+    /* movimiento (design-guidelines §6.1): solo respuesta al gesto; lo frecuente (filas, cabeceras, filtros) cambia al instante */
+    'button{transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),color var(--t) var(--ease),transform var(--t) var(--ease)}' +
+    '.f button.sel:hover,.tools button:hover,.pager button:hover:not(:disabled),.seg button:hover{background:var(--c-superficie-2)}.seg button.on:hover{background:var(--c-acento)}' +
+    'button:active:not(:disabled){transform:scale(.97)}' +
+    'th[data-act=sort]:hover{color:var(--c-texto)}.tbl-w tbody tr:hover td{background:var(--c-activo)}' +
+    '@keyframes ent{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.enter .grid{animation:ent 220ms var(--ease) both}' +
+    '@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}button:active{transform:none!important}}';
 }
 
 /* Color estable por id de miembro: roles de memberRoles primero, después la paleta */

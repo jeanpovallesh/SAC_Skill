@@ -115,7 +115,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | `scripts/validate_bundle.py` (R1–R14, C17 y comprobaciones verificadas con la sonda) | Hecho; análisis estático, no sustituye probar en SAC |
 | `tests/test_validators.py`, `tests/test_variance.py` | 68 pruebas de validadores y prueba de punta a punta de `variance-table`: `python3 -I tests/test_validators.py` |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
-| `references/design-guidelines.md` | Versión 2: tokens, paleta corregida (contraste medido), componentes, iconos, estados y lista de revisión. **Alineación del runtime pendiente** (§11 de la guía) |
+| `references/design-guidelines.md` | Versión 2: tokens, paleta corregida (contraste medido), componentes, iconos, movimiento (§6.1), estados y lista de revisión. Runtime alineado; restos en §11 de la guía |
 | Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; `variance-table` (comparación entre versiones/miembros) ya disponible; faltan componentes de jerarquía, líneas, pirámide, `bar-compare`, otros modos de comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
 | `tests/make_fixture.py`, `tests/render_harness.py` (datos simulados y captura en Chromium) | Hecho |
 | Gráficos con ECharts (incluido en el JS) | Verificado en el tenant 2026-10-28 (`probe/echarts/`) |
@@ -161,4 +161,4 @@ Reglas:
 - **Precedencia:** contrato de SAC y D1–D11 > HTML de referencia del usuario > `design-guidelines.md` > estas skills.
 - **Se descarta lo que no aplica a un widget embebido:** navegación, barra lateral, encabezado, nombre del producto, fuentes web, CDN y cualquier recurso externo (`validate_bundle.py` lo rechaza, regla R-EXT).
 - **Sus propuestas se traducen a los tokens de la guía** (nombres fijos, §2) y a `theme` de la especificación; no se escribe CSS suelto fuera de los tokens. Lo que se decida con ellas se declara como supuesto en el resumen del paso 4.
-- La auditoría con `web-design-guidelines` y el criterio de movimiento (Emil Kowalski) se aplican por ahora **a petición del usuario**; su integración automática en el flujo está pendiente.
+- El criterio de movimiento (Emil Kowalski) ya está incorporado en la guía (§6.1) y en el runtime. La auditoría con `web-design-guidelines` se aplica por ahora **a petición del usuario**; su integración automática en el flujo está pendiente.

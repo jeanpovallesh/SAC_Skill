@@ -178,7 +178,27 @@ Todo valor visual sale de una variable CSS definida en `:host`. El generador esc
 - **Qué no se anima:** lo que el usuario hace con teclado, lo que se repite muchas veces por minuto (filtrar, ordenar, pasar el cursor por una tabla) y las cifras que se actualizan. Una animación no puede vaciar ni hacer parpadear el widget durante `loading`. 📘
 - Tooltips: aparecen en `hover` y en `focus`, se posicionan dentro del widget (el shadow DOM no puede salirse de su caja) y repiten el valor y la etiqueta. 📘
 - El widget no abre ventanas ni redirige; todo ocurre en su caja. Los eventos hacia la story (`events`) son explícitos. 📘
-- Las reglas finas de movimiento (curvas, duraciones por tipo de gesto, interrupción de transiciones) se amplían en una sección propia cuando se incorpore el criterio de movimiento (§12). ⚠
+- Las reglas finas de movimiento (curvas, duraciones, qué se anima y qué no) están en §6.1. ✅
+
+### 6.1 Movimiento (criterio de Emil Kowalski, adaptado a un widget de datos)
+
+Un widget de SAC se usa muchas veces al día y se redibuja entero con cada filtro. Por eso el criterio es **animar poco, y solo lo que responde al gesto del usuario**. Antes de añadir un movimiento: ¿cuántas veces lo verá?, ¿qué propósito tiene?, ¿qué curva?, ¿cuánto dura?
+
+| Qué | Decisión | Valor |
+|---|---|---|
+| Botones, segmentos, paginador, selector de filtro | Respuesta al pulsar y al pasar el cursor | `:hover` cambia fondo/borde/color en 140 ms; `:active` escala a 0,97 (nunca desde 0) |
+| Primera carga del widget | Entrada suave una sola vez | opacidad 0→1 y 4 px de desplazamiento, 220 ms, la clase se retira a los 300 ms |
+| Filas de tabla, cabeceras ordenables | **Sin transición** (se recorren decenas de veces) | el cambio de color es instantáneo |
+| Redibujo por filtro, orden, búsqueda o paginación | **No se anima** | ni fundidos ni parpadeo; se conserva el último render durante `loading` |
+| Gráficos (ECharts) | `animation:false` | los datos cambian con cada filtro; el resalte al pasar el cursor lo hace ECharts |
+| Cualquier gesto por teclado | **No se anima** | |
+| Panel desplegable de filtro | No se anima | se vuelve a crear con cada opción marcada; animarlo lo haría parpadear |
+
+- **Curva:** `--ease: cubic-bezier(.23, 1, .32, 1)` (ease-out fuerte). Nunca `ease-in`: arranca lento y la interfaz se siente torpe. Duración `--t: 140ms`; ninguna transición pasa de 300 ms.
+- **Propiedades:** se listan una a una (`background-color`, `border-color`, `color`, `transform`); nunca `transition: all`. Solo `transform` y `opacity` para movimiento.
+- **`prefers-reduced-motion: reduce`:** sin transiciones, sin animaciones y sin escala en `:active`; el estado final aparece de inmediato. ✅
+- **Prohibido:** rebotes, resortes, contadores que suben, barras que crecen, y cualquier animación que retrase leer un dato.
+- Un componente nuevo con movimiento propio debe justificar en una línea por qué lo necesita y cuántas veces lo verá el usuario.
 
 ---
 
@@ -284,24 +304,17 @@ Se repasa con el widget renderizado (`tests/render_harness.py`) y complementa a 
 
 ---
 
-## 11. Alineación pendiente del runtime 🔧
+## 11. Alineación del runtime
 
-Esta guía describe el diseño objetivo. Estos puntos de `templates/runtime/` todavía no lo cumplen y se aplican cuando se decida (no cambian la lógica de datos):
+El runtime (`templates/runtime/`) ya cumple esta guía en: paleta por defecto (§4), tokens `--c-control`, `--c-regla`, `--c-grilla`, `--c-texto-3`, `--c-activo`, `--fs-*`, `--fila`, `--ease`, `--t`; franja de KPI (§5.1); tablas (§5.3); leyendas de 8 px (§5.2); movimiento (§6.1). Quedan por alinear:
 
 | Dónde | Hoy | Objetivo |
 |---|---|---|
-| `30-ui.js` línea 5 (`SERIES`) | color 4 `#e17b00` (2.99:1) y color 7 `#a16207` | `#cc6600` y `#4d7c0f` (§4) |
-| `30-ui.js` `--c-borde` | `#c6c6cd` para tarjetas y controles | `--c-borde` `#e1e6ef` y `--c-control` `#c6c6cd` (§2.1) |
-| `30-ui.js` tokens nuevos | no existen | `--c-regla`, `--c-grilla`, `--c-texto-3`, `--c-activo`, `--fs-*`, `--fila` |
-| `30-ui.js` `--fuente-titulo` | `'Plus Jakarta Sans', Inter, …` | misma pila que `--fuente-cuerpo` (§2.2) |
-| `30-ui.js` `.kpi-v` | 700 / 32 px | 600 / `--fs-kpi` (28 px) (§3) |
-| `30-ui.js` `th` | fondo `--c-superficie-2`, sin tamaño propio | fondo de superficie, 12 px, línea inferior (§5.3) |
-| `30-ui.js` `.lg i`, `.li i` | cuadrados de 10 px | punto de 6–8 px (§5.2) |
-| `components/kpi-card*.js` | una tarjeta por KPI | franja dividida por líneas (§5.1) |
-| `35-charts.js` línea 7 | `aria-label` con el id técnico del componente | `aria-label` con el título del gráfico (§9) |
+| `35-charts.js` `aria-label` | id técnico del componente (ECharts añade su propia descripción) | título del gráfico (§9) |
 | Componentes nuevos de líneas y barras | aún no existen | nacer con `smooth:false`, `symbol:'none'`, `splitNumber:4`, sin eje Y y `aria` (§5.2) |
 | `components/*` | sin iconos | opción `icon` con el catálogo de §8 |
 | Estados | indicador de 2 px y último render ✅ | además, estructura gris al cargar sin contenido previo (§5.6) |
+| Franja de KPI | las celdas igualan la altura de la más alta | alinear arriba si se prefiere (§5.1) |
 
 Dos puntos del catálogo también deben alinearse: `widget-types.md` §2.8 repite colores con variante de brillo cuando hay más miembros que colores y §2.12 admite 8 segmentos de dona; con el color 8 reservado a «Otros» quedan 7 miembros con color propio, y la recomendación de legibilidad para donas es ≤ 5 partes (`topN` 6 por defecto hoy). `widget-types.md` §3 dice "título en mayúsculas pequeñas": coincide con los HTML de referencia, pero conviene fijar que es un único tratamiento para todo el widget (§3).
 
@@ -312,5 +325,5 @@ Dos puntos del catálogo también deben alinearse: `widget-types.md` §2.8 repit
 1. ⚠ Confirmar si el tenant permite fuentes web externas. (Scripts externos: sí, probado con ECharts por jsDelivr el 2026-10-28.)
 2. Definir el modo oscuro con valores concretos (tokens alternos) si algún cliente lo pide.
 3. Ajustar la paleta con la identidad visual de cada cliente (se pasa por `theme`).
-4. Sección de movimiento con curvas, duraciones por gesto e interrupción de transiciones, y su aplicación al runtime (punto 2 del plan de integración de skills de diseño).
+4. ✅ Movimiento (§6.1), aplicado al runtime.
 5. Paso de auditoría visual (renderizar con `tests/render_harness.py` y revisar con §9) dentro del flujo de `SKILL.md` (punto 3 del plan).
