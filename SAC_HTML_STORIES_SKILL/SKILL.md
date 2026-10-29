@@ -140,6 +140,7 @@ El validador de paquete hace análisis estático (expresiones regulares y conteo
 | Cómo se ve y se comporta un widget (tokens, tipografía, color, componentes, iconos, estados, lista de revisión visual) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |
 | Cómo se obtiene la metadata | `scripts/make_metadata_prompt.py <ID>` (prompt listo con el ID del modelo); `prompts/prompt-generar-metadata-modelo.md` queda como versión genérica |
+| Atajos de barra (`/sac-metadata`, `/sac-validar`, `/sac-tablero`, `/sac-generar`, `/sac-auditar`) | `commands/` |
 | Auditar el diseño de un widget generado | `scripts/audit_design.py` (prueba: `tests/test_audit.py`) |
 | Comprobar un comportamiento de SAC | `probe/` |
 

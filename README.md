@@ -47,7 +47,7 @@ Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
 ## Qué puedes pedir y qué comandos tienes
 
 ### El skill principal
-**SAC_HTML_STORIES_SKILL** tiene un único punto de entrada: se invoca por su nombre (`/SAC_HTML_STORIES_SKILL` en Claude Code; según cómo esté instalado puede aparecer en minúsculas con guiones, `sac-html-stories-skill`) o simplemente describiendo lo que quieres. No tiene subcomandos propios: dentro de la conversación se le pide en lenguaje natural, y estas son las cosas que sabe hacer.
+**SAC_HTML_STORIES_SKILL** tiene un único punto de entrada: se invoca por su nombre (`/SAC_HTML_STORIES_SKILL` en Claude Code; según cómo esté instalado puede aparecer en minúsculas con guiones, `sac-html-stories-skill`) o simplemente describiendo lo que quieres. Además trae cinco **atajos** (comandos de barra, carpeta `SAC_HTML_STORIES_SKILL/commands/`) para los pasos del flujo; todo lo demás se le pide en lenguaje natural. Estas son las cosas que sabe hacer.
 
 | Quieres… | Pídelo así (ejemplos) | Qué hace |
 |---|---|---|
@@ -62,6 +62,23 @@ Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
 | Resolver un problema en SAC | «El widget no muestra datos» | Activa la propiedad `diagnostico` y explica qué feeds faltan o no coinciden |
 
 Componentes disponibles hoy: tarjetas KPI (y variantes con comparación), dona de reparto, barras 100 % apiladas, tabla de detalle, matriz cruzada, matriz y mapa de burbujas, tabla de varianza y tabla dinámica. Los filtros de versión y de tiempo se incluyen siempre (D11).
+
+### Atajos de barra del skill
+| Comando | Qué hace | Argumento |
+|---|---|---|
+| `/sac-metadata` | Prepara el prompt para obtener la metadata del modelo | ID del modelo |
+| `/sac-validar` | Valida el JSON de metadata (M1–M18) | ruta al JSON |
+| `/sac-tablero` | Interpreta tu pedido y propone la especificación; **no genera** hasta que confirmes | descripción del tablero |
+| `/sac-generar` | Genera los tres archivos, los valida y audita el diseño | spec, metadata, `--base-url` |
+| `/sac-auditar` | Audita el diseño de un widget ya generado | ruta al `.js` y a la spec |
+
+Instalación (una vez), copiando los atajos junto al skill:
+
+```bash
+mkdir -p ~/.claude/commands && cp SAC_HTML_STORIES_SKILL/commands/*.md ~/.claude/commands/
+```
+
+Sin instalarlos el skill funciona igual: son solo accesos directos al mismo flujo.
 
 ### Comandos de terminal (opcionales)
 Todo lo anterior se puede ejecutar sin Claude, con `python3 -I`:
