@@ -52,7 +52,7 @@ metadata┘
 
 Aplican a todo pedido salvo que el usuario diga lo contrario (detalle en `intent-interpretation.md` §2):
 
-D1 el widget es solo el área de contenido · D2 los filtros del tablero son filtros internos sobre feeds · D3 los KPIs de datos inciertos son opcionales · D4 sin insights ni textos analíticos salvo petición · D5 los ejemplos son referencias · D6 todo modelo tiene tiempo y los saldos son semiaditivos · D7 comparar periodos solo si lo piden · D8 filtros de selección múltiple (`Periodo` simple por defecto) · D9 sin combinaciones duplicadas en captura · D10 las tablas pueden elegir jerarquía y mostrarla en árbol · D11 **todo tablero lleva siempre, aunque no se pida, un filtro de la dimensión de tipo `version` y otro de la de tipo `time`** (`python3 -I scripts/add_mandatory_filters.py <spec> <metadata>` los agrega; el validador lo exige: S15).
+D1 el widget es solo el área de contenido · D2 los filtros del tablero son filtros internos sobre feeds · D3 los KPIs de datos inciertos son opcionales · D4 sin insights ni textos analíticos salvo petición · D5 los ejemplos son referencias · D6 todo modelo tiene tiempo y los saldos son semiaditivos · D7 comparar periodos solo si lo piden · D8 filtros de selección múltiple (`Periodo` simple por defecto) · D9 sin combinaciones duplicadas en captura · D10 las tablas pueden elegir jerarquía y mostrarla en árbol · D11 **todo tablero lleva siempre, aunque no se pida, un filtro de selección múltiple de la dimensión de tipo `version` y otro de la de tipo `time`** (`python3 -I scripts/add_mandatory_filters.py <spec> <metadata>` los agrega; el validador lo exige: S15).
 
 ---
 

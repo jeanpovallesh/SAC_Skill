@@ -32,10 +32,10 @@ def patch(spec, meta):
         if not any(x.get('target') == name for x in filters):
             if t == 'version':
                 fl = {'id': fid(name), 'target': name, 'ui': 'combobox', 'by': ['id', 'description'],
-                      'multi': False, 'includeAll': False, 'default': 'first'}
+                      'multi': True, 'includeAll': False, 'default': 'first'}
             else:
                 fl = {'id': fid(name), 'target': name, 'ui': 'combobox', 'by': ['id', 'description'],
-                      'multi': False, 'includeAll': True, 'default': 'all'}
+                      'multi': True, 'includeAll': True, 'default': 'all'}
             filters.insert(0 if t == 'version' else min(1, len(filters)), fl)
             added.append(f'filtro {fl["id"]}')
     for i, f in enumerate(feeds):

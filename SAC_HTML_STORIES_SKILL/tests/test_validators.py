@@ -120,6 +120,9 @@ except ImportError:
 if vb:
     exec(open(os.path.join(ROOT, 'tests', 'test_bundle.py'), encoding='utf-8').read())
 
+_w = copy.deepcopy(s1)
+[x.__setitem__('multi', False) for x in _w['filters'] if x['target'] == 'Version']
+check('D11 versión de selección única -> aviso S15', any(x.startswith('S15') for x in vs.validate(_w, m1)[1]))
 # ---- D11: add_mandatory_filters es idempotente y deja la spec válida
 import importlib.util
 _sp = importlib.util.spec_from_file_location('amf', os.path.join(ROOT, 'scripts', 'add_mandatory_filters.py'))

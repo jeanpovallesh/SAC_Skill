@@ -136,8 +136,8 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
   ],
 
   "filters": [
-    { "id": "fVersion",  "target": "Version",       "ui": "combobox", "by": ["id", "description"], "multi": false, "includeAll": false, "default": "first" },
-    { "id": "fPeriodo",  "target": "Periodo",       "ui": "combobox", "by": ["id", "description"], "multi": false, "includeAll": true, "default": "all" },
+    { "id": "fVersion",  "target": "Version",       "ui": "combobox", "by": ["id", "description"], "multi": true, "includeAll": false, "default": "first" },
+    { "id": "fPeriodo",  "target": "Periodo",       "ui": "combobox", "by": ["id", "description"], "multi": true, "includeAll": true, "default": "all" },
     { "id": "fSede",     "target": "Sede",          "ui": "combobox", "by": ["id", "description"], "includeAll": true },
     { "id": "fContrato", "target": "Tipo_Contrato", "ui": "combobox", "by": ["id", "description"], "includeAll": true }
   ],

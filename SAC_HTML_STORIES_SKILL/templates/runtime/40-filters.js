@@ -66,11 +66,11 @@ function handleFilterAct(ctx, el) {
   if (a === 'fopt') {
     var kk = el.getAttribute('data-k');
     if (f.multi === false) { var had = cur.has(kk); cur.clear(); if (!had || f.includeAll === false) cur.add(kk); ui.open = false; }
-    else if (cur.has(kk)) cur.delete(kk); else cur.add(kk);
+    else if (cur.has(kk)) { if (!(f.includeAll === false && cur.size === 1)) cur.delete(kk); } else cur.add(kk);
     return true;
   }
   if (a === 'fq') { ui.q = el.value; ui.keepFocus = true; return true; }
   if (a === 'fall') { filterMembers(ctx.allRows, f, ctx.sel).forEach(function (m) { cur.add(m.key); }); return true; }
-  if (a === 'fclr') { cur.clear(); return true; }
+  if (a === 'fclr') { cur.clear(); if (f.includeAll === false) { var m0 = filterMembers(ctx.allRows, f, ctx.sel)[0]; if (m0) cur.add(m0.key); } return true; }
   return false;
 }

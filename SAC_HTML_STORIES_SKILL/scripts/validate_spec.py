@@ -170,8 +170,10 @@ def validate(spec, meta):
         for x in fl:
             if x.get('appliesTo'):
                 err('S15', f'D11: el filtro "{x.get("id")}" ({kind}) debe aplicar a todos los componentes (sin appliesTo)')
-            if d['type'] == 'version' and (x.get('multi') is not False or x.get('includeAll') is not False):
-                warn('S15', f'D11: el filtro "{x.get("id")}" de Versión debería ser de selección única y sin "Todos" (multi:false, includeAll:false): sumar versiones duplica cifras')
+            if x.get('multi') is False:
+                warn('S15', f'D11: el filtro "{x.get("id")}" ({kind}) debería ser de selección múltiple (multi:true): se necesita ver varias versiones/periodos a la vez (p. ej. Real vs Presupuesto)')
+            if d['type'] == 'version' and x.get('includeAll') is not False:
+                warn('S15', f'D11: el filtro "{x.get("id")}" de Versión debería llevar includeAll:false (sin "Todos") y un valor por defecto: sin selección se sumarían todas las versiones')
 
     # ---------- S6: ratios
     for m in spec['measures']:
