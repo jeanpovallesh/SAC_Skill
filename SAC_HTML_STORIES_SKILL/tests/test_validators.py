@@ -82,6 +82,9 @@ def neg_spec(name, base, meta, fn, rule):
 neg_spec('falta sección', s1, m1, lambda s: s.pop('feeds'), 'S0')
 neg_spec('feed inexistente', s1, m1, lambda s: s['feeds'][0].__setitem__('ref', 'Fantasma'), 'S1')
 neg_spec('propiedad de dimensión ausente', s2, m2, lambda s: s['feeds'][-1].__setitem__('of', 'Marca_Linea'), 'S1')
+neg_spec('D11 sin filtro de versión', s1, m1, lambda s: s['filters'].__setitem__(slice(None), [x for x in s['filters'] if x['target'] != 'Version']), 'S15')
+neg_spec('D11 sin feed de periodo', s1, m1, lambda s: (s['feeds'].__setitem__(slice(None), [f for f in s['feeds'] if f['ref'] != 'Periodo']), [f.__setitem__('index', i) for i, f in enumerate(s['feeds'])], s['filters'].__setitem__(slice(None), [x for x in s['filters'] if x['target'] != 'Periodo'])), 'S15')
+neg_spec('D11 filtro con appliesTo', s1, m1, lambda s: [x.__setitem__('appliesTo', ['kpiX']) for x in s['filters'] if x['target'] == 'Version'], 'S15')
 neg_spec('índices rotos', s1, m1, lambda s: s['feeds'][2].__setitem__('index', 7), 'S3')
 neg_spec('opcional antes de requerido', s1, m1, lambda s: s['feeds'][0].__setitem__('optional', True), 'S3')
 neg_spec('filtro sin feed', s1, m1, lambda s: s['filters'][0].__setitem__('target', 'Nada'), 'S4')
@@ -117,5 +120,20 @@ except ImportError:
 if vb:
     exec(open(os.path.join(ROOT, 'tests', 'test_bundle.py'), encoding='utf-8').read())
 
+# ---- D11: add_mandatory_filters es idempotente y deja la spec válida
+import importlib.util
+_sp = importlib.util.spec_from_file_location('amf', os.path.join(ROOT, 'scripts', 'add_mandatory_filters.py'))
+amf = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(amf)
+_s = copy.deepcopy(s1)
+_s['filters'] = [x for x in _s['filters'] if x['target'] not in ('Version', 'Periodo')]
+_s['feeds'] = [f for f in _s['feeds'] if f['ref'] not in ('Version', 'Periodo')]
+for _i, _f in enumerate(_s['feeds']):
+    _f['index'] = _i
+_a = amf.patch(_s, m1)
+_e, _w = vs.validate(_s, m1)
+check('D11 autocompletado deja la spec sin errores S15', not [x for x in _e if x.startswith('S15')])
+check('D11 autocompletado es idempotente', amf.patch(_s, m1) == [])
+
 print(f'\n{total - len(fails)}/{total} pruebas correctas')
 sys.exit(1 if fails else 0)
+

@@ -37,6 +37,7 @@ Aplican a todo pedido, salvo que el usuario diga lo contrario en ese pedido.
 | D8 | Los filtros internos admiten **selección múltiple** (por defecto activa; `Periodo` es de selección única salvo que el pedido hable de varios periodos o pida comparar) | Catálogo de componentes |
 | D9 | En captura, **no se duplican combinaciones** idénticas (comparación por ids) | Catálogo de componentes |
 | D10 | En las **tablas**, el usuario puede elegir una jerarquía y los datos se muestran **de forma jerárquica** (árbol expandible) | Catálogo de componentes |
+| D11 | **Filtros obligatorios de Versión y Tiempo**: aunque el pedido no los mencione, todo tablero lleva un filtro sobre la dimensión del modelo de tipo `version` y otro sobre la de tipo `time`, en todos los componentes (sin `appliesTo`). Versión: selección única, sin "Todos", por defecto el primer miembro (sumar versiones duplica cifras). Tiempo: selección única, con "Todos" por defecto (las medidas de saldo usan `timeAgg`). Se declara en `assumptions`. Se agregan con `scripts/add_mandatory_filters.py` | Pedido del usuario (2026-10-29) |
 
 ---
 

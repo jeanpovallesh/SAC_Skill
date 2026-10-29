@@ -152,6 +152,27 @@ def validate(spec, meta):
             if not tgt.get('hierarchy'):
                 err('C16', f'filtro "{fl.get("id")}": cascade exige un feed con hierarchy')
 
+    # ---------- S15 (D11): filtros obligatorios de Versión y Tiempo
+    for dname, d in dims.items():
+        if d.get('type') not in ('version', 'time'):
+            continue
+        kind = 'Versión' if d['type'] == 'version' else 'Tiempo'
+        fd = feed_refs.get(dname)
+        if fd is None:
+            err('S15', f'D11: falta el feed de la dimensión de {kind} "{dname}" (todo tablero la lleva como filtro obligatorio; python3 -I scripts/add_mandatory_filters.py)')
+            continue
+        if fd.get('optional'):
+            err('S15', f'D11: el feed "{dname}" ({kind}) no puede ser opcional')
+        fl = [x for x in filters if x.get('target') == dname]
+        if not fl:
+            err('S15', f'D11: falta el filtro de la dimensión de {kind} "{dname}"')
+            continue
+        for x in fl:
+            if x.get('appliesTo'):
+                err('S15', f'D11: el filtro "{x.get("id")}" ({kind}) debe aplicar a todos los componentes (sin appliesTo)')
+            if d['type'] == 'version' and (x.get('multi') is not False or x.get('includeAll') is not False):
+                warn('S15', f'D11: el filtro "{x.get("id")}" de Versión debería ser de selección única y sin "Todos" (multi:false, includeAll:false): sumar versiones duplica cifras')
+
     # ---------- S6: ratios
     for m in spec['measures']:
         if m.get('role') == 'ratio':

@@ -289,6 +289,7 @@ Los textos libres por fila (por ejemplo un "plan de pipeline" distinto en cada d
 - `by`: `id`, `description` o `property`. El selector busca por texto sobre lo que se indique (patrón del combobox con búsqueda en vivo).
 - Los filtros actúan sobre **todos los componentes**, salvo que se indique `appliesTo: [...]`.
 - `multi` ✅: `true` permite elegir varios miembros; dentro de un filtro rige "o" y entre filtros rige "y". Por defecto es `true` en filtros de dimensiones de contexto y `false` en `Periodo`. En dimensiones con jerarquía, `cascade: true` hace que elegir un nodo incluya a todos sus descendientes.
+- **D11 (obligatorios):** los filtros de la dimensión `version` y de la `time` del modelo existen siempre, aunque no se pidan. `multi: false` hace la selección única; `includeAll: false` quita "Todos" y `default: "first"` elige el primer miembro.
 - Un filtro cuyo feed falta (opcional no agregado) no se dibuja.
 - `ui`: `combobox` (selector con búsqueda en vivo, para muchos miembros) o `segmented` (botones en fila, para pocos miembros como periodos). `default` puede ser un id, `all` o `last` (último miembro de una dimensión ordenada). 📘
 
@@ -413,6 +414,7 @@ Restricciones al generar el JS 📘:
 | S6 | Toda `measure` `ratio` tiene `numerator` y `denominator` definidos como medidas |
 | S7 | Toda medida usada con filtros activos es `additive` o `ratio` (si es `non-additive`, el componente declara `hideWhenFiltered`) |
 | S8 | Toda propiedad tiene `appliesTo` y `default` |
+| S15 | **D11**: el modelo trae una dimensión `version` y una `time`; ambas están en `feeds` (requeridas, no opcionales) y cada una tiene un filtro sin `appliesTo`. El de versión debe ser `multi:false`, `includeAll:false` (aviso si no) |
 | S9 | `id`, `tag` y `prefix` son consistentes entre sí; el `tag` no lleva sufijo de versión |
 | S10 | `assumptions` no está vacío cuando hubo decisiones tomadas por el skill |
 | S11 | Cantidad de feeds ≤ 8; si no, se avisa |

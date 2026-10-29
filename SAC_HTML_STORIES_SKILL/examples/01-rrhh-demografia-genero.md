@@ -18,7 +18,7 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
 | "diferenciación de hombres y mujeres" | **Género** como serie: todos los componentes se dividen en M y H |
 | "por grupo etario" | Eje **Grupo etario** (ordenado) |
 | "por departamentos" | Eje **Departamento** |
-| Lo que el pedido no dice pero el tablero esperado incluye | KPIs de resumen, vista cruzada Departamento × Grupo etario, y filtros (Sede, Contrato, Periodo) |
+| Lo que el pedido no dice pero el tablero esperado incluye | KPIs de resumen, vista cruzada Departamento × Grupo etario, y filtros (Versión y Periodo siempre —D11—, más Sede y Contrato) |
 
 **Composición por defecto** para "diferenciación por A y por B":
 
@@ -32,7 +32,7 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
 | # | Decisión | Resultado |
 |---|---|---|
 | 1 | Alcance | Solo el **área de contenido**. Barra lateral, encabezado, perfil, logo y navegación los resuelve la story |
-| 2 | Filtros Sede, Contrato y Periodo | **Filtros internos del widget**: consumen feeds y se dibujan dentro del widget |
+| 2 | Filtros Versión, Periodo, Sede y Contrato | **Filtros internos del widget**: consumen feeds y se dibujan dentro del widget |
 | 3 | KPIs de liderazgo y retención | **Opcionales**: se muestran solo si el modelo aporta los elementos necesarios |
 | 4 | Observaciones, índices (Gini, Blau) y textos analíticos | **Fuera** del widget |
 
@@ -44,7 +44,7 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
 | Pirámide por grupo etario | Se conserva | Vista del eje 1 |
 | Barras apiladas por departamento | Se conservan | Vista del eje 2 |
 | Matriz cruzada con búsqueda | Se conserva | Vista cruzada |
-| Selectores Sede, Contrato, Periodo | Se conservan, como filtros internos | Decisión 2 |
+| Selectores Versión, Periodo, Sede, Contrato | Se conservan, como filtros internos | Decisión 2 |
 | Barra lateral, encabezado, perfil, logo, buscador global | Se descartan | Decisión 1 |
 | "Observación clave", Gini, Blau | Se descartan | Decisión 4 |
 | Pie legal ("Ley 15/2022", "último corte") | Se descarta | Texto de negocio fijo; el corte de nómina no sale de los datos |
@@ -79,10 +79,11 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
     { "index": 0, "role": "dimension", "ref": "Departamento",  "label": "Departamento" },
     { "index": 1, "role": "dimension", "ref": "Genero",        "label": "Género" },
     { "index": 2, "role": "dimension", "ref": "Grupo_Etario",  "label": "Grupo etario", "ordered": true },
-    { "index": 3, "role": "dimension", "ref": "Sede",          "label": "Sede",     "optional": true, "usedFor": ["filter"] },
-    { "index": 4, "role": "dimension", "ref": "Tipo_Contrato", "label": "Contrato", "optional": true, "usedFor": ["filter"] },
-    { "index": 5, "role": "dimension", "ref": "Periodo",       "label": "Periodo",  "optional": true, "usedFor": ["filter"] },
-    { "index": 6, "role": "dimension", "ref": "Nivel_Jerarquico", "label": "Nivel jerárquico", "optional": true }
+    { "index": 3, "role": "dimension", "ref": "Periodo",       "label": "Periodo",  "ordered": true, "usedFor": ["filter", "time"] },
+    { "index": 4, "role": "dimension", "ref": "Version",       "label": "Versión",  "usedFor": ["filter"] },
+    { "index": 5, "role": "dimension", "ref": "Sede",          "label": "Sede",     "optional": true, "usedFor": ["filter"] },
+    { "index": 6, "role": "dimension", "ref": "Tipo_Contrato", "label": "Contrato", "optional": true, "usedFor": ["filter"] },
+    { "index": 7, "role": "dimension", "ref": "Nivel_Jerarquico", "label": "Nivel jerárquico", "optional": true }
   ],
 
   "measures": [
@@ -135,9 +136,10 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
   ],
 
   "filters": [
+    { "id": "fVersion",  "target": "Version",       "ui": "combobox", "by": ["id", "description"], "multi": false, "includeAll": false, "default": "first" },
+    { "id": "fPeriodo",  "target": "Periodo",       "ui": "combobox", "by": ["id", "description"], "multi": false, "includeAll": true, "default": "all" },
     { "id": "fSede",     "target": "Sede",          "ui": "combobox", "by": ["id", "description"], "includeAll": true },
-    { "id": "fContrato", "target": "Tipo_Contrato", "ui": "combobox", "by": ["id", "description"], "includeAll": true },
-    { "id": "fPeriodo",  "target": "Periodo",       "ui": "combobox", "by": ["id", "description"], "includeAll": true }
+    { "id": "fContrato", "target": "Tipo_Contrato", "ui": "combobox", "by": ["id", "description"], "includeAll": true }
   ],
 
   "properties": [
@@ -166,7 +168,7 @@ Material visual de origen: HTML de referencia aportado por el usuario (no enlaza
     "Genero tiene dos miembros relevantes; sus ids se confirman al enlazar con el modelo.",
     "Edad promedio y retención se calculan como suma/suma desde Suma_Edad, Retenidos y Headcount_Inicial; si el modelo no los trae, esas tarjetas se omiten.",
     "Mujeres en liderazgo requiere la dimensión Nivel_Jerarquico y sus miembros de liderazgo; si no existe, la tarjeta se omite.",
-    "Los filtros Sede, Contrato y Periodo se aplican a todos los componentes y filtran las filas recibidas; solo ven los miembros que el binding devuelve.",
+    "Los filtros Versión, Periodo, Sede y Contrato se aplican (Versión y Periodo son obligatorios en todo tablero, D11) a todos los componentes y filtran las filas recibidas; solo ven los miembros que el binding devuelve.",
     "No se incluyen observaciones, índices estadísticos ni textos analíticos."
   ]
 }
@@ -179,10 +181,11 @@ Orden de los feeds en el Builder de SAC (generado desde `feeds`):
 1. Departamento
 2. Género
 3. Grupo etario
-4. Sede *(opcional)*
-5. Contrato *(opcional)*
-6. Periodo *(opcional)*
-7. Nivel jerárquico *(opcional)*
+4. Periodo *(obligatorio, D11)*
+5. Versión *(obligatorio, D11)*
+6. Sede *(opcional)*
+7. Contrato *(opcional)*
+8. Nivel jerárquico *(opcional)*
 
 Medidas: Headcount *(requerida)*, Suma_Edad, Retenidos, Headcount_Inicial *(opcionales)*.
 

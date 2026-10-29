@@ -21,6 +21,7 @@ function initFilterDefaults(allRows, sel, inited) {
     var s = new Set();
     var def = f.default;
     if (def === 'last') s.add(members[members.length - 1].key);
+    else if (def === 'first' || (!def && f.includeAll === false)) s.add(members[0].key);
     else if (def && def !== 'all') asArray(def).forEach(function (k) { s.add(memberKey(k)); });
     sel[f.id] = s;
   });
@@ -41,13 +42,14 @@ function renderFilters(ctx) {
       }).join('');
       return '<div class="f" role="group" aria-label="' + esc(label) + '"><label>' + esc(label) + '</label><div class="seg">' + btns + '</div></div>';
     }
-    var txt = cur.size === 0 ? 'Todos' : cur.size + ' de ' + members.length;
+    var single = f.multi === false;
+    var txt = cur.size === 0 ? 'Todos' : (single || cur.size === 1) ? (members.filter(function (m) { return cur.has(m.key); })[0] || { label: '' }).label : cur.size + ' de ' + members.length;
     var q = norm(ui.q);
     var opts = members.filter(function (m) { return !q || norm(m.label + ' ' + m.key).indexOf(q) >= 0; }).map(function (m) {
       return '<label class="op"><input type="checkbox" data-act="fopt" data-f="' + esc(f.id) + '" data-k="' + esc(m.key) + '"' + (cur.has(m.key) ? ' checked' : '') + '> ' + esc(m.label) + '</label>';
     }).join('');
     var panel = ui.open ? '<div class="pn"><input type="search" placeholder="Buscar…" aria-label="Buscar" data-act="fq" data-f="' + esc(f.id) + '" value="' + esc(ui.q) + '">' +
-      '<div class="acts"><button type="button" data-act="fall" data-f="' + esc(f.id) + '">Seleccionar todo</button><button type="button" data-act="fclr" data-f="' + esc(f.id) + '">Limpiar</button></div>' + opts + '</div>' : '';
+      (single ? '' : '<div class="acts"><button type="button" data-act="fall" data-f="' + esc(f.id) + '">Seleccionar todo</button><button type="button" data-act="fclr" data-f="' + esc(f.id) + '">Limpiar</button></div>') + opts + '</div>' : '';
     return '<div class="f"><label>' + esc(label) + '</label><button type="button" class="sel" aria-haspopup="listbox" aria-expanded="' + ui.open + '" data-act="ftog" data-f="' + esc(f.id) + '"><span>' + esc(txt) + '</span><span>▾</span></button>' + panel + '</div>';
   }).join('');
   return out ? '<div class="fbar">' + out + '</div>' : '';
@@ -61,7 +63,12 @@ function handleFilterAct(ctx, el) {
   var cur = ctx.sel[fid] || (ctx.sel[fid] = new Set());
   if (a === 'fseg') { var k = el.getAttribute('data-k'); cur.clear(); if (k) cur.add(k); return true; }
   if (a === 'ftog') { ui.open = !ui.open; return true; }
-  if (a === 'fopt') { var kk = el.getAttribute('data-k'); if (cur.has(kk)) cur.delete(kk); else cur.add(kk); return true; }
+  if (a === 'fopt') {
+    var kk = el.getAttribute('data-k');
+    if (f.multi === false) { var had = cur.has(kk); cur.clear(); if (!had || f.includeAll === false) cur.add(kk); ui.open = false; }
+    else if (cur.has(kk)) cur.delete(kk); else cur.add(kk);
+    return true;
+  }
   if (a === 'fq') { ui.q = el.value; ui.keepFocus = true; return true; }
   if (a === 'fall') { filterMembers(ctx.allRows, f, ctx.sel).forEach(function (m) { cur.add(m.key); }); return true; }
   if (a === 'fclr') { cur.clear(); return true; }

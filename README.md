@@ -24,6 +24,8 @@ Entrega a Claude el JSON validado y describe en lenguaje natural lo que quieres 
 - **Mapas:** de qué dimensión y propiedades salen latitud/longitud, y el país (contorno).
 - **Pivot tables:** filas, columnas y medidas de cada tabla (se configuran estrictamente como tú indiques).
 
+**Siempre, aunque no lo pidas:** todo tablero lleva un filtro de la dimensión de tipo *versión* (selección única, sin «Todos») y otro de la de tipo *tiempo* (regla D11). Si a una especificación le faltan, se agregan con `python3 -I SAC_HTML_STORIES_SKILL/scripts/add_mandatory_filters.py spec.json model-metadata-<ID>.json`.
+
 Claude produce una *especificación* (widget-spec) y la valida (`validate_spec.py`, S0–S14 y C1–C20).
 ```bash
 python3 -I SAC_HTML_STORIES_SKILL/scripts/validate_spec.py spec.json model-metadata-<ID>.json
