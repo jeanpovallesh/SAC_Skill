@@ -101,6 +101,7 @@ Si las pistas son contradictorias (por ejemplo "tablero" y "capturar"), el valor
 | "comparativo", "vs periodo anterior", "variación", "crecimiento", "contra el año pasado" | **Comparación** (sección 8) |
 | "top N", "los mayores", "ranking" | Orden y límite |
 | "por país / zona / región" | Dimensión geográfica (ver 5.2) |
+| "variación", "Real vs Presupuesto", "contra el plan/proyección/forecast", "desviación entre versiones", "comparar versiones" | **`variance-table`** con `comparison: {dimension: <la dimensión version>, mode: "versus-version"}` (D7: solo si se pide). El usuario elige Base y Comparar en el componente, entre las versiones marcadas en el filtro obligatorio de Versión; se pueden fijar `base`/`actual` iniciales con los ids de las versiones |
 | "jerarquía", "por niveles", "árbol", "consolidado", "desglosable", "expandible", "con subtotales" | **Tabla jerárquica** (`options.tree`) sobre la dimensión mencionada, con `hierarchy.selectable`. En una tabla sobre una dimensión que tiene jerarquías en el modelo, el skill propone `tree` aunque no se diga (D10) y lo declara en `assumptions` |
 | "seleccionar varias", "una o más", "múltiples" | Filtro con `multi: true` |
 

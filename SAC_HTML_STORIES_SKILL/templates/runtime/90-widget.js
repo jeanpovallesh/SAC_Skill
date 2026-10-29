@@ -72,8 +72,8 @@ class Widget extends HTMLElement {
     var el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
     this._focusQ = el && el.getAttribute('data-act') === 'q' ? el.getAttribute('data-comp') : null;
     if (!el || !this._last || this._last.state !== 'success') return;
-    if (e.type === 'change' && el.getAttribute('data-act') !== 'fopt') return;
-    if (e.type === 'click' && /^(fopt|q|fq)$/.test(el.getAttribute('data-act'))) return;
+    if (e.type === 'change' && !/^(fopt|vsel)$/.test(el.getAttribute('data-act'))) return;
+    if (e.type === 'click' && /^(fopt|q|fq|vsel)$/.test(el.getAttribute('data-act'))) return;
     var ctx = this._ctx(this._last), changed = false;
     var act = el.getAttribute('data-act');
     if (act === 'gsel') { changed = this._pick(el.getAttribute('data-g'), el.getAttribute('data-k')); }

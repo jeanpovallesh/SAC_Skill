@@ -304,7 +304,7 @@ Los textos libres por fila (por ejemplo un "plan de pipeline" distinto en cada d
 }
 ```
 
-- `mode`: `previous-period` (cada periodo contra el anterior de la dimensión ordenada), `same-period-last-year`, `selected-pair` (el usuario elige base y comparación con dos selectores internos) o `versus-version` (misma lógica sobre `Version`; ⚠ confirmar con el usuario).
+- `mode`: `previous-period` (cada periodo contra el anterior de la dimensión ordenada), `same-period-last-year`, `selected-pair` (el usuario elige base y comparación con dos selectores internos) o `versus-version` (misma lógica sobre `Version`). ✅ Implementados en el generador (`variance-table`): `versus-version` y `selected-pair`; `base` y `actual` (ids) fijan la selección inicial. El resto de modos y `bar-compare` están pendientes.
 - **Sin `comparison` no hay variaciones**: los componentes muestran un solo valor, contra la meta si existe. ✅
 - Requisitos: `Periodo` como feed requerido y ordenado (todos los modelos traen dimensión de tiempo ✅). El binding debe incluir ambos periodos; si llega solo uno, el widget avisa.
 - Cada periodo se reduce por separado (las semiaditivas aplican `timeAgg` dentro de cada periodo) y luego se calcula la diferencia.

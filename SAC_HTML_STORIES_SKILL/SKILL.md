@@ -113,10 +113,10 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | `schemas/model-metadata.schema.json` + `scripts/validate_model_json.py` (M1–M18) | Hecho |
 | `scripts/validate_spec.py` (S1–S14, C1–C16) | Hecho; probado con las especificaciones de los ejemplos 01 y 02 |
 | `scripts/validate_bundle.py` (R1–R14, C17 y comprobaciones verificadas con la sonda) | Hecho; análisis estático, no sustituye probar en SAC |
-| `tests/test_validators.py` | 56 pruebas: `python3 -I tests/test_validators.py` |
+| `tests/test_validators.py`, `tests/test_variance.py` | 68 pruebas de validadores y prueba de punta a punta de `variance-table`: `python3 -I tests/test_validators.py` |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
 | `references/design-guidelines.md` | Primer borrador |
-| Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; faltan componentes de jerarquía, líneas, pirámide, comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
+| Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; `variance-table` (comparación entre versiones/miembros) ya disponible; faltan componentes de jerarquía, líneas, pirámide, `bar-compare`, otros modos de comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
 | `tests/make_fixture.py`, `tests/render_harness.py` (datos simulados y captura en Chromium) | Hecho |
 | Gráficos con ECharts (incluido en el JS) | Verificado en el tenant 2026-10-28 (`probe/echarts/`) |
 | Mapas: ECharts `geo` (contorno incluido) y Leaflet con teselas externas | Verificado en el tenant 2026-10-28 (`probe/maps/`); componente de mapa y `pivot-table` pendientes |

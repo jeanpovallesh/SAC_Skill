@@ -285,6 +285,17 @@ def validate(spec, meta):
         if ctype in NEEDS_COMPARISON or opts.get('showDelta') or opts.get('variation'):
             if not cmp_ or cid not in as_list(cmp_.get('appliesTo')):
                 err('C11', f'{cid}: requiere "comparison" con el componente en appliesTo')
+        # C21: comparación entre miembros de una dimensión (variance-table)
+        if ctype == 'variance-table' and cmp_:
+            cdim = cmp_.get('dimension')
+            if cmp_.get('mode') not in ('versus-version', 'selected-pair'):
+                err('C21', f'{cid}: comparison.mode "{cmp_.get("mode")}" aún no está implementado en el generador (usar versus-version o selected-pair)')
+            if cdim not in feed_refs:
+                err('C21', f'{cid}: comparison.dimension "{cdim}" no está en feeds')
+            elif cmp_.get('mode') == 'versus-version' and dims.get(cdim, {}).get('type') != 'version':
+                err('C21', f'{cid}: versus-version exige una dimensión de tipo version en comparison.dimension')
+            if cdim in as_list(uses.get('rows')):
+                err('C21', f'{cid}: la dimensión de comparación "{cdim}" no puede ser también la de las filas')
         # C12
         lay = c.get('layout') or {}
         if 'span' in lay:

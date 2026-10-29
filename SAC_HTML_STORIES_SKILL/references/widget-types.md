@@ -480,9 +480,10 @@ Aún sin ejemplo; se definen para que el skill los pueda generar.
 |---|---|
 | **Propósito** | Tabla de variación |
 | **Usa** | `rows` · `measures` |
-| **Requiere** | `comparison` |
-| **Columnas** | Base · Actual · Δ · Δ% (en tasas, Δ en pt) |
-| **Opciones** | Las de `detail-table` |
+| **Requiere** | `comparison` con `mode: versus-version` (dimensión de tipo version) o `selected-pair` (cualquier otra dimensión, p. ej. Periodo); otros modos aún no están en el generador (C21) |
+| **Columnas** | Por medida: Base · Comparar · Δ · Δ% (en tasas, Δ en pt y sin Δ%) |
+| **Selectores** | «Base» y «Comparar» dentro del componente; ofrecen los miembros que dejan pasar los filtros del tablero, así que se eligen en el filtro obligatorio de Versión (D11) y, con menos de dos, el componente lo pide. Valores iniciales: `comparison.base` / `comparison.actual` (ids) o los dos primeros |
+| **Opciones** | `totalsRow`, `search`, `pageSize`, `compact` (como `detail-table`) ✅ |
 | **Dibujo** | Δ y Δ% con color y símbolo (▲/▼) según `goodDirection`; texto además del color |
 
 ### 6.3 `line-trend`
@@ -608,6 +609,7 @@ Un selector por dimensión del feed (mismo comportamiento que 7.2), usado para *
 | C8 | Toda propiedad referenciada por `status`, `target`, `yReference`, `badge` existe en `properties` con `default` |
 | C9 | Las medidas `non-additive` usadas junto a filtros activos tienen aviso declarado |
 | C10 | Ningún componente depende de una dimensión que no está en `feeds` |
+| C21 | `variance-table`: `comparison.mode` ∈ {versus-version, selected-pair}; `comparison.dimension` está en feeds, es de tipo version si el modo es versus-version y no es la dimensión de las filas |
 | C11 | `bar-compare`, `variance-table`, y las variaciones en cualquier tarjeta requieren `comparison` con el componente en `appliesTo` |
 | C12 | Suma de `span` por fila ≤ 12 |
 | C13 | `options.tree` solo en `detail-table` o `cross-matrix`, y su eje de filas es un feed con `hierarchy` |
