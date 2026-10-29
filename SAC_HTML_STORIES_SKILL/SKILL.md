@@ -44,7 +44,8 @@ metadata┘
 4. **Mostrar el resumen al usuario** (formato en `intent-interpretation.md` §11): orden de feeds, medidas, componentes, filtros, propiedades, supuestos y preguntas abiertas. **No generar hasta que confirme.**
 5. **Generar los tres archivos** desde la especificación, con el catálogo `references/widget-types.md` y las reglas de `references/sac-widget-contract.md`. Las decisiones visuales salen de `references/design-guidelines.md` y, si están disponibles, de las skills de diseño complementarias (sección 10).
 6. **Validar el paquete**: `python3 -I scripts/validate_bundle.py <manifiesto.json> <principal.js> <styling.js> --spec <spec.json>` (R1–R14 y C17). Corregir en la especificación y regenerar; no parchear los archivos.
-7. **Entregar** (sección 6): los tres archivos, la nota de instalación con el orden de feeds, y los supuestos.
+7. **Auditar el diseño**: `python3 -I scripts/audit_design.py <principal.js> <spec.json> --out <carpeta>` renderiza el widget con datos sintéticos a 320, 600 y 900 px y mide la lista de revisión de `design-guidelines.md` §9 (consola, desbordes, contraste, foco con teclado, descripción de gráficos, movimiento reducido, sombras y degradados). Un **fallo (F)** se corrige en la especificación o el `theme` y se regenera; un **aviso (A)** se declara como supuesto. Después se mira la captura de cada ancho para lo que no se mide (un color por miembro, variaciones, jerarquía).
+8. **Entregar** (sección 6): los tres archivos, la nota de instalación con el orden de feeds, y los supuestos.
 
 ---
 
@@ -139,6 +140,7 @@ El validador de paquete hace análisis estático (expresiones regulares y conteo
 | Cómo se ve y se comporta un widget (tokens, tipografía, color, componentes, iconos, estados, lista de revisión visual) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |
 | Cómo se obtiene la metadata | `scripts/make_metadata_prompt.py <ID>` (prompt listo con el ID del modelo); `prompts/prompt-generar-metadata-modelo.md` queda como versión genérica |
+| Auditar el diseño de un widget generado | `scripts/audit_design.py` (prueba: `tests/test_audit.py`) |
 | Comprobar un comportamiento de SAC | `probe/` |
 
 ---
@@ -153,7 +155,7 @@ El skill funciona completo solo con `references/design-guidelines.md` (**modo b�
 | `design-taste-frontend` | Evitar el aspecto genérico; su capítulo de pantallas de trabajo (tableros) |
 | `frontend-design` | Dirección estética: tipografía, color y composición |
 | `emil-design-eng`, `animate`, `review-animations` | Transiciones y microinteracciones |
-| `web-design-guidelines` | Auditar el widget renderizado (lista de revisión de la guía §9) |
+| `web-design-guidelines` | Revisar el código del runtime (`templates/runtime/`) cuando cambia; necesita acceso a la red para bajar sus reglas |
 
 Reglas:
 
@@ -161,4 +163,4 @@ Reglas:
 - **Precedencia:** contrato de SAC y D1–D11 > HTML de referencia del usuario > `design-guidelines.md` > estas skills.
 - **Se descarta lo que no aplica a un widget embebido:** navegación, barra lateral, encabezado, nombre del producto, fuentes web, CDN y cualquier recurso externo (`validate_bundle.py` lo rechaza, regla R-EXT).
 - **Sus propuestas se traducen a los tokens de la guía** (nombres fijos, §2) y a `theme` de la especificación; no se escribe CSS suelto fuera de los tokens. Lo que se decida con ellas se declara como supuesto en el resumen del paso 4.
-- El criterio de movimiento (Emil Kowalski) ya está incorporado en la guía (§6.1) y en el runtime. La auditoría con `web-design-guidelines` se aplica por ahora **a petición del usuario**; su integración automática en el flujo está pendiente.
+- El criterio de movimiento (Emil Kowalski) ya está incorporado en la guía (§6.1) y en el runtime. La auditoría de cada widget ya está en el flujo (paso 7, `scripts/audit_design.py`) y no depende de ninguna skill externa; `web-design-guidelines` queda para revisar el código del runtime y solo a petición del usuario.

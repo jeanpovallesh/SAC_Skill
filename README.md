@@ -56,14 +56,14 @@ Para una **mayor experiencia** en el diseño de los tableros se recomienda insta
 | `ui-ux-pro-max` | Estilos visuales, paletas, pares tipográficos, tipo de gráfico adecuado y reglas de UX y accesibilidad (requiere Python 3) | `npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max` |
 | `design-taste-frontend` | Criterio anti-genérico y reglas de pantallas de trabajo (dashboards, tablas, KPI, gráficos) | `npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend` |
 | `emil-design-eng`, `animate`, `review-animations` | Transiciones y microinteracciones fluidas | `npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng --skill animate --skill review-animations` |
-| `web-design-guidelines` | Auditoría de accesibilidad y UX sobre el widget ya generado | `npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines` |
+| `web-design-guidelines` | Revisión de accesibilidad y UX del código del runtime (la auditoría de cada widget la hace el propio skill) | `npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines` |
 
 Notas:
 
 - Los comandos instalan para **Claude Code**; añade `-g -a claude-code -y` para instalarlas globalmente (`~/.claude/skills`) sin preguntas. Se comprueba con `ls ~/.claude/skills`. Requiere Node.js.
 - **Revisa cada skill antes de usarla:** son de terceros y corren con los permisos del agente.
 - **Nada de esto cambia las reglas del skill.** Prevalecen siempre el contrato de SAC, las decisiones D1–D11 y el HTML de referencia que aportes; de las skills externas se descarta lo que no cabe en un widget embebido (navegación, fuentes web, recursos externos) y sus propuestas se traducen a los tokens de `design-guidelines.md`.
-- Estado de la integración: hoy el skill las consulta en el paso de diseño; el criterio de movimiento (Emil Kowalski) ya está incorporado en la guía y en el runtime; la auditoría con `web-design-guidelines` se aplica a petición y su integración automática en el flujo está pendiente.
+- Estado de la integración: hoy el skill las consulta en el paso de diseño; el criterio de movimiento (Emil Kowalski) ya está incorporado en la guía y en el runtime; la auditoría de cada widget (`scripts/audit_design.py`) ya forma parte del flujo y funciona sin skills externas; `web-design-guidelines` se usa a petición para revisar el código del runtime.
 
 ## Estructura
 

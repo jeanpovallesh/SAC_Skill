@@ -255,7 +255,7 @@ Un icono que falte en el catálogo no se inventa sobre la marcha: se usa una eti
 
 ## 9. Lista de revisión antes de entregar
 
-Se repasa con el widget renderizado (`tests/render_harness.py`) y complementa a la checklist de `sac-widget-contract.md` §7.
+Se repasa con el widget renderizado. `scripts/audit_design.py` mide lo medible (consola, desbordes, contraste de texto, texto de 12 px, foco con teclado, descripción de gráficos, `prefers-reduced-motion`, sombras, degradados, cifras a la derecha) y deja una captura por ancho; el resto se revisa mirando las capturas. Complementa a la checklist de `sac-widget-contract.md` §7.
 
 **Datos y texto**
 - [ ] Cada cifra tiene formato, unidad y decimales de su medida; ningún `NaN`, `undefined` ni `0` donde falta el dato.
@@ -326,4 +326,4 @@ Dos puntos del catálogo también deben alinearse: `widget-types.md` §2.8 repit
 2. Definir el modo oscuro con valores concretos (tokens alternos) si algún cliente lo pide.
 3. Ajustar la paleta con la identidad visual de cada cliente (se pasa por `theme`).
 4. ✅ Movimiento (§6.1), aplicado al runtime.
-5. Paso de auditoría visual (renderizar con `tests/render_harness.py` y revisar con §9) dentro del flujo de `SKILL.md` (punto 3 del plan).
+5. ✅ Auditoría de diseño en el flujo (`SKILL.md` paso 7, `scripts/audit_design.py`).
