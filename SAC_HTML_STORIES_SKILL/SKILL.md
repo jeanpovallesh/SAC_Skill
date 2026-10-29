@@ -42,7 +42,7 @@ metadata┘
 2. **Interpretar el pedido** (`references/intent-interpretation.md`): familia de widget, términos enlazados a ids del modelo, roles, composición, comparación solo si la piden (D7).
 3. **Escribir la especificación** (`references/widget-spec-schema.md`) y validarla: `python3 -I scripts/validate_spec.py <spec.json> <metadata.json>` (S1–S14 y reglas C de componentes).
 4. **Mostrar el resumen al usuario** (formato en `intent-interpretation.md` §11): orden de feeds, medidas, componentes, filtros, propiedades, supuestos y preguntas abiertas. **No generar hasta que confirme.**
-5. **Generar los tres archivos** desde la especificación, con el catálogo `references/widget-types.md` y las reglas de `references/sac-widget-contract.md`.
+5. **Generar los tres archivos** desde la especificación, con el catálogo `references/widget-types.md` y las reglas de `references/sac-widget-contract.md`. Las decisiones visuales salen de `references/design-guidelines.md` y, si están disponibles, de las skills de diseño complementarias (sección 10).
 6. **Validar el paquete**: `python3 -I scripts/validate_bundle.py <manifiesto.json> <principal.js> <styling.js> --spec <spec.json>` (R1–R14 y C17). Corregir en la especificación y regenerar; no parchear los archivos.
 7. **Entregar** (sección 6): los tres archivos, la nota de instalación con el orden de feeds, y los supuestos.
 
@@ -115,7 +115,7 @@ Antes de entregar, repasar la checklist de `sac-widget-contract.md` §7.
 | `scripts/validate_bundle.py` (R1–R14, C17 y comprobaciones verificadas con la sonda) | Hecho; análisis estático, no sustituye probar en SAC |
 | `tests/test_validators.py`, `tests/test_variance.py` | 68 pruebas de validadores y prueba de punta a punta de `variance-table`: `python3 -I tests/test_validators.py` |
 | `probe/` (widget sonda y pruebas) | Hecho; ítems 1–12 del contrato cerrados |
-| `references/design-guidelines.md` | Primer borrador |
+| `references/design-guidelines.md` | Versión 2: tokens, paleta corregida (contraste medido), componentes, iconos, estados y lista de revisión. **Alineación del runtime pendiente** (§11 de la guía) |
 | Generador: `scripts/generate_widget.py` + `templates/runtime/` (datos, motor, filtros, componentes) + `templates/vendor/` (ECharts 5.5.1 recortado) | **En curso**: ejemplo 02 completo; `variance-table` (comparación entre versiones/miembros) ya disponible; faltan componentes de jerarquía, líneas, pirámide, `bar-compare`, otros modos de comparación y captura (los tipos sin plantilla se muestran como "no disponible") |
 | `tests/make_fixture.py`, `tests/render_harness.py` (datos simulados y captura en Chromium) | Hecho |
 | Gráficos con ECharts (incluido en el JS) | Verificado en el tenant 2026-10-28 (`probe/echarts/`) |
@@ -136,7 +136,29 @@ El validador de paquete hace análisis estático (expresiones regulares y conteo
 | Componentes disponibles, opciones y C1–C18 | `references/widget-types.md` |
 | Formato del JSON del modelo y M1–M18 | `references/model-metadata-schema.md`, `schemas/model-metadata.schema.json` |
 | Ver un caso completo pedido → especificación | `examples/01-rrhh-demografia-genero.md`, `examples/02-scm-distribucion-zonas-canales.md` |
-| Cómo se ve y se comporta un widget (tokens, tipografía, color) | `references/design-guidelines.md` |
+| Cómo se ve y se comporta un widget (tokens, tipografía, color, componentes, iconos, estados, lista de revisión visual) | `references/design-guidelines.md` |
 | Estilo visual de referencia | `examples/reference-html/` |
 | Cómo se obtiene la metadata | `scripts/make_metadata_prompt.py <ID>` (prompt listo con el ID del modelo); `prompts/prompt-generar-metadata-modelo.md` queda como versión genérica |
 | Comprobar un comportamiento de SAC | `probe/` |
+
+---
+
+## 10. Skills de diseño complementarias (opcionales)
+
+El skill funciona completo solo con `references/design-guidelines.md` (**modo básico**). Si en la sesión están además disponibles estas skills, se consultan **a la vez** en el paso 5, como refuerzo de las decisiones visuales (**modo mejorado**). Si falta alguna se usan las que haya; si no hay ninguna, modo básico.
+
+| Skill | Aporta |
+|---|---|
+| `ui-ux-pro-max` | Estilos, paletas, pares tipográficos, tipo de gráfico adecuado y reglas de UX y accesibilidad |
+| `design-taste-frontend` | Evitar el aspecto genérico; su capítulo de pantallas de trabajo (tableros) |
+| `frontend-design` | Dirección estética: tipografía, color y composición |
+| `emil-design-eng`, `animate`, `review-animations` | Transiciones y microinteracciones |
+| `web-design-guidelines` | Auditar el widget renderizado (lista de revisión de la guía §9) |
+
+Reglas:
+
+- **No pedir ni mencionar su instalación durante un encargo.** Si faltan, se sigue en modo básico sin avisar; la recomendación para el usuario está en el `README.md` del repositorio.
+- **Precedencia:** contrato de SAC y D1–D11 > HTML de referencia del usuario > `design-guidelines.md` > estas skills.
+- **Se descarta lo que no aplica a un widget embebido:** navegación, barra lateral, encabezado, nombre del producto, fuentes web, CDN y cualquier recurso externo (`validate_bundle.py` lo rechaza, regla R-EXT).
+- **Sus propuestas se traducen a los tokens de la guía** (nombres fijos, §2) y a `theme` de la especificación; no se escribe CSS suelto fuera de los tokens. Lo que se decida con ellas se declara como supuesto en el resumen del paso 4.
+- La auditoría con `web-design-guidelines` y el criterio de movimiento (Emil Kowalski) se aplican por ahora **a petición del usuario**; su integración automática en el flujo está pendiente.

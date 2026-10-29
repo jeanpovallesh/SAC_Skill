@@ -44,6 +44,27 @@ Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
 2. En SAC: *Aplicaciones → Widgets personalizados → Crear*, pega la URL del manifiesto `.json`.
 3. Inserta el widget en la historia/aplicación, enlaza los datos (feeds de dimensiones, propiedades y medidas) y, si algo no se ve, activa la propiedad `diagnostico`.
 
+## Skills de diseño complementarias (recomendado, opcional)
+
+El skill funciona **completo por sí solo**: las decisiones visuales (tokens, paleta, tipografía, componentes, iconos, estados y lista de revisión) están en `SAC_HTML_STORIES_SKILL/references/design-guidelines.md`. Es el **modo básico** y no necesitas instalar nada.
+
+Para una **mayor experiencia** en el diseño de los tableros se recomienda instalar además estas skills y **tenerlas todas disponibles a la vez**: cuando conviven en la misma sesión, el skill las consulta juntas al diseñar y los tableros salen más cuidados (menos aspecto genérico, mejor criterio de color, tipografía y gráficos, accesibilidad y movimiento). Si falta alguna, se usan las que haya; si no hay ninguna, se trabaja en modo básico, sin avisos ni errores.
+
+| Skill | Qué aporta a los tableros | Instalación |
+|---|---|---|
+| `frontend-design` | Dirección estética antes de escribir código: tipografía, color, composición | `npx skills add https://github.com/anthropics/skills --skill frontend-design` |
+| `ui-ux-pro-max` | Estilos visuales, paletas, pares tipográficos, tipo de gráfico adecuado y reglas de UX y accesibilidad (requiere Python 3) | `npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max` |
+| `design-taste-frontend` | Criterio anti-genérico y reglas de pantallas de trabajo (dashboards, tablas, KPI, gráficos) | `npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend` |
+| `emil-design-eng`, `animate`, `review-animations` | Transiciones y microinteracciones fluidas | `npx skills add https://github.com/emilkowalski/skills --skill emil-design-eng --skill animate --skill review-animations` |
+| `web-design-guidelines` | Auditoría de accesibilidad y UX sobre el widget ya generado | `npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines` |
+
+Notas:
+
+- Los comandos instalan para **Claude Code**; añade `-g -a claude-code -y` para instalarlas globalmente (`~/.claude/skills`) sin preguntas. Se comprueba con `ls ~/.claude/skills`. Requiere Node.js.
+- **Revisa cada skill antes de usarla:** son de terceros y corren con los permisos del agente.
+- **Nada de esto cambia las reglas del skill.** Prevalecen siempre el contrato de SAC, las decisiones D1–D11 y el HTML de referencia que aportes; de las skills externas se descarta lo que no cabe en un widget embebido (navegación, fuentes web, recursos externos) y sus propuestas se traducen a los tokens de `design-guidelines.md`.
+- Estado de la integración: hoy el skill las consulta en el paso de diseño; la auditoría con `web-design-guidelines` y el criterio de movimiento se aplican a petición. Integrarlos de forma automática en el flujo está pendiente.
+
 ## Estructura
 
 | Carpeta | Contenido |

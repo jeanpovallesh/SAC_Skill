@@ -233,7 +233,7 @@ await ds.collapseNode('Entidad', { Entidad: idUnico });
 
 ## 3. Tarjetas KPI
 
-Una tarjeta tiene título (en mayúsculas pequeñas), valor principal, unidad opcional y, según el tipo, un detalle inferior. Los iconos son SVG en línea del catálogo de `design-guidelines.md` (por definir).
+Una tarjeta tiene título (en mayúsculas pequeñas), valor principal, unidad opcional y, según el tipo, un detalle inferior. Los iconos son SVG en línea del catálogo de `design-guidelines.md` §8 (de contorno, grises, nunca dentro de un círculo de color). El estilo de la tarjeta (franja, cifra, variación) está en `design-guidelines.md` §5.1.
 
 ### 3.1 `kpi-card`
 
@@ -626,7 +626,7 @@ Un selector por dimensión del feed (mismo comportamiento que 7.2), usado para *
 ## 10. Pendientes
 
 1. ⚠ Cerrar con la sonda: forma de las celdas de dimensión, propiedad y medida; `formatted` frente a `raw`; estado de carga del binding; orden de los miembros; llegada de jerarquías (nodos y padres).
-2. Definir `design-guidelines.md`: catálogo de iconos SVG, tokens de espaciado y tipografía, y comportamiento dentro de los contenedores de SAC.
+2. ~~Definir `design-guidelines.md`~~ Hecho (versión 2): catálogo de iconos (§8), tokens de color, espaciado y tipografía (§2–§4), componentes (§5), maquetación en contenedores de SAC (§7). Queda alinear el runtime con la guía (§11 de la guía) y los puntos de §2.8 y §2.12 que ella señala.
 3. ⚠ Jerarquías (2.13 y 5.3): confirmar con la sonda cómo llegan nodos, padres y niveles; cómo se aplica la jerarquía elegida (A, B o C); y si expandir un nodo exige pedir más datos al origen.
 4. Definir el comportamiento de jerarquías en gráficos (hoy solo se usan hojas o un nivel fijo).
 5. Definir la jerarquía de **tiempo** en columnas (Año › Trimestre › Mes) en matrices.
