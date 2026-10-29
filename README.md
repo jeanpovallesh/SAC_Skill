@@ -44,6 +44,55 @@ Resultado: `<tag>.json`, `<tag>.js`, `<tag>_styling.js`.
 2. En SAC: *Aplicaciones → Widgets personalizados → Crear*, pega la URL del manifiesto `.json`.
 3. Inserta el widget en la historia/aplicación, enlaza los datos (feeds de dimensiones, propiedades y medidas) y, si algo no se ve, activa la propiedad `diagnostico`.
 
+## Qué puedes pedir y qué comandos tienes
+
+### El skill principal
+**SAC_HTML_STORIES_SKILL** tiene un único punto de entrada: se invoca por su nombre (`/SAC_HTML_STORIES_SKILL` en Claude Code; según cómo esté instalado puede aparecer en minúsculas con guiones, `sac-html-stories-skill`) o simplemente describiendo lo que quieres. No tiene subcomandos propios: dentro de la conversación se le pide en lenguaje natural, y estas son las cosas que sabe hacer.
+
+| Quieres… | Pídelo así (ejemplos) | Qué hace |
+|---|---|---|
+| Obtener la metadata del modelo | «Dame el prompt para sacar la metadata del modelo `<ID>`» | Prepara el prompt para Claude Code con el MCP de SAC (`make_metadata_prompt.py`) |
+| Validar la metadata | «Valida este JSON del modelo» | Reglas M1–M18 y esquema (`validate_model_json.py`) |
+| Crear un tablero | «Hazme un tablero con KPIs de volumen y margen, dona por canal y tabla de detalle» | Interpreta el pedido, hace las preguntas necesarias, escribe y valida la especificación (S1–S14, C) y **espera tu confirmación** antes de generar |
+| Generar el widget | «Confirmado, genéralo» | Produce `<tag>.json`, `<tag>.js` y `<tag>_styling.js` y los valida (R1–R14, C17) |
+| Auditar el diseño | «Audita el diseño del widget» | Renderiza a 320, 600 y 900 px y mide contraste, desbordes, foco, accesibilidad y movimiento reducido (`audit_design.py`); deja capturas |
+| Seguir tu referencia visual | «Que se vea como este HTML» (adjunto) | Extrae colores, tipografía y estructura del HTML y los traduce al `theme` y los tokens |
+| Comparar versiones | «Compara Real contra Presupuesto» | Tabla de varianza con Base/Comparar, Δ y Δ% (`variance-table`, regla D11) |
+| Cambiar lo ya generado | «Cambia la paleta», «quita la tabla», «añade un filtro de zona» | Se modifica la especificación y se regenera; los archivos no se parchean a mano |
+| Resolver un problema en SAC | «El widget no muestra datos» | Activa la propiedad `diagnostico` y explica qué feeds faltan o no coinciden |
+
+Componentes disponibles hoy: tarjetas KPI (y variantes con comparación), dona de reparto, barras 100 % apiladas, tabla de detalle, matriz cruzada, matriz y mapa de burbujas, tabla de varianza y tabla dinámica. Los filtros de versión y de tiempo se incluyen siempre (D11).
+
+### Comandos de terminal (opcionales)
+Todo lo anterior se puede ejecutar sin Claude, con `python3 -I`:
+
+| Comando | Para qué |
+|---|---|
+| `SAC_HTML_STORIES_SKILL/scripts/make_metadata_prompt.py <ID>` | Prompt para obtener la metadata |
+| `SAC_HTML_STORIES_SKILL/scripts/validate_model_json.py <metadata.json>` | Validar la metadata |
+| `SAC_HTML_STORIES_SKILL/scripts/validate_spec.py <spec.json> <metadata.json>` | Validar la especificación |
+| `SAC_HTML_STORIES_SKILL/scripts/generate_widget.py <spec.json> <metadata.json> --out <carpeta>` | Generar los tres archivos |
+| `SAC_HTML_STORIES_SKILL/scripts/validate_bundle.py <tag>.json <tag>.js <tag>_styling.js --spec <spec.json>` | Validar el paquete |
+| `SAC_HTML_STORIES_SKILL/scripts/audit_design.py <tag>.js <spec.json> --out <carpeta>` | Auditar el diseño |
+| `SAC_HTML_STORIES_SKILL/tests/test_validators.py`, `test_variance.py`, `test_audit.py` | Pruebas del repositorio |
+
+### Comandos de las skills de diseño complementarias
+Si las instalas (sección siguiente), cada una añade su propio comando. Se pueden invocar a mano en cualquier momento, y el skill principal las consulta por su cuenta cuando están disponibles:
+
+| Comando | Qué hace |
+|---|---|
+| `/frontend-design` | Dirección estética: tipografía, color y composición con carácter propio |
+| `/ui-ux-pro-max` | Estilos, paletas, pares tipográficos, tipo de gráfico adecuado y reglas de UX y accesibilidad |
+| `/design-taste-frontend` | Evita el aspecto genérico; incluye criterio para tableros y pantallas de trabajo |
+| `/web-design-guidelines` | Revisa código de interfaz contra las Web Interface Guidelines (accesibilidad y UX) |
+| `/emil-design-eng` | Criterio de Emil Kowalski sobre pulido de interfaz y decisiones de animación |
+| `/animate` | Construye una animación desde cero decidiendo propósito, curva, duración e interrupción |
+| `/review-animations` | Critica el movimiento ya existente |
+| `/improve-animations` | Audita el movimiento de todo un código y entrega un plan priorizado (no modifica nada) |
+| `/find-animation-opportunities` | Busca dónde falta animación y propone valores exactos (solo lectura) |
+
+> Ojo: en un widget de datos casi todo el movimiento se descarta a propósito (ver `design-guidelines.md` §6.1). Estas skills proponen; el skill principal decide qué se aplica.
+
 ## Skills de diseño complementarias (recomendado, opcional)
 
 El skill funciona **completo por sí solo**: las decisiones visuales (tokens, paleta, tipografía, componentes, iconos, estados y lista de revisión) están en `SAC_HTML_STORIES_SKILL/references/design-guidelines.md`. Es el **modo básico** y no necesitas instalar nada.
